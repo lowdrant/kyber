@@ -44,6 +44,8 @@
 /* Private variables ---------------------------------------------------------*/
 ADC_HandleTypeDef hadc1;
 
+SPI_HandleTypeDef hspi1;
+
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
@@ -60,6 +62,7 @@ static void MX_ADC1_Init(void);
 static void MX_TIM1_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_TIM3_Init(void);
+static void MX_SPI1_Init(void);
 /* USER CODE BEGIN PFP */
 float Period2Ticks(float);
 void Saber_TurnOn(void);
@@ -118,6 +121,7 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM2_Init();
   MX_TIM3_Init();
+  MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start(&htim2);  // TODO: does this start the timer?
   // TODO: turn off ADCs
@@ -157,7 +161,7 @@ int main(void)
 	  } else if (STATE == SABER_EXTEND) {
 	    lastTick_EXTEND = uwTick;
 	    if (uwTick - lastTick_EXTEND > ticks_EXTEND) {  // exiting sequence
-	      HAL_GPIO_WritePin(SOLENOID_GPIO_Port, SOLENOID_Pin, SOLENOID_LATCH);
+//	      HAL_GPIO_WritePin(SOLENOID_GPIO_Port, SOLENOID_Pin, SOLENOID_LATCH);
 	      STATE = SABER_ON;
 	    } else {  // entering sequence
 	      Saber_TurnOn();
@@ -166,7 +170,7 @@ int main(void)
     // Saber Retraction Sequence
 	  } else if (STATE == SABER_RETRACT) {
         if (mtrTorque > TORQUE_LATCH) {  // exiting sequence
-            HAL_GPIO_WritePin(SOLENOID_GPIO_Port, SOLENOID_Pin, SOLENOID_LATCH);
+//            HAL_GPIO_WritePin(SOLENOID_GPIO_Port, SOLENOID_Pin, SOLENOID_LATCH);
             STATE = SABER_OFF;
         } else {  // entering sequence
             Saber_TurnOff();  // TODO: do only once with non-time-based motor control
@@ -277,7 +281,7 @@ static void MX_ADC1_Init(void)
   }
   /** Configure Regular Channel
   */
-  sConfig.Channel = ADC_CHANNEL_4;
+  sConfig.Channel = ADC_CHANNEL_1;
   sConfig.Rank = ADC_REGULAR_RANK_1;
   sConfig.SamplingTime = ADC_SAMPLINGTIME_COMMON_1;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
@@ -287,6 +291,46 @@ static void MX_ADC1_Init(void)
   /* USER CODE BEGIN ADC1_Init 2 */
 
   /* USER CODE END ADC1_Init 2 */
+
+}
+
+/**
+  * @brief SPI1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_SPI1_Init(void)
+{
+
+  /* USER CODE BEGIN SPI1_Init 0 */
+
+  /* USER CODE END SPI1_Init 0 */
+
+  /* USER CODE BEGIN SPI1_Init 1 */
+
+  /* USER CODE END SPI1_Init 1 */
+  /* SPI1 parameter configuration*/
+  hspi1.Instance = SPI1;
+  hspi1.Init.Mode = SPI_MODE_MASTER;
+  hspi1.Init.Direction = SPI_DIRECTION_2LINES;
+  hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
+  hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
+  hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
+  hspi1.Init.NSS = SPI_NSS_SOFT;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
+  hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  hspi1.Init.CRCPolynomial = 7;
+  hspi1.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
+  hspi1.Init.NSSPMode = SPI_NSS_PULSE_ENABLE;
+  if (HAL_SPI_Init(&hspi1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN SPI1_Init 2 */
+
+  /* USER CODE END SPI1_Init 2 */
 
 }
 
@@ -340,10 +384,11 @@ static void MX_TIM1_Init(void)
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
   sConfigOC.Pulse = 0;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
   sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
-  if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_4) != HAL_OK)
+  if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
   {
     Error_Handler();
   }
@@ -385,7 +430,6 @@ static void MX_TIM2_Init(void)
 
   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
-  TIM_OC_InitTypeDef sConfigOC = {0};
 
   /* USER CODE BEGIN TIM2_Init 1 */
 
@@ -405,28 +449,15 @@ static void MX_TIM2_Init(void)
   {
     Error_Handler();
   }
-  if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
-  {
-    Error_Handler();
-  }
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
   if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
   {
     Error_Handler();
   }
-  sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 0;
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
-  {
-    Error_Handler();
-  }
   /* USER CODE BEGIN TIM2_Init 2 */
 
   /* USER CODE END TIM2_Init 2 */
-  HAL_TIM_MspPostInit(&htim2);
 
 }
 
@@ -488,12 +519,13 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOF_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(SOLENOID_GPIO_Port, SOLENOID_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(CS_HBRIDGE_GPIO_Port, CS_HBRIDGE_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, MTR_DIR_Pin|LED_PWR_Pin|LED_HBEAT_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, CS_ACC_Pin|LED_PWR_Pin|LED_HBEAT_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : BTN_Pin */
   GPIO_InitStruct.Pin = BTN_Pin;
@@ -501,15 +533,15 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(BTN_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : SOLENOID_Pin */
-  GPIO_InitStruct.Pin = SOLENOID_Pin;
+  /*Configure GPIO pin : CS_HBRIDGE_Pin */
+  GPIO_InitStruct.Pin = CS_HBRIDGE_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(SOLENOID_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(CS_HBRIDGE_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : MTR_DIR_Pin LED_PWR_Pin LED_HBEAT_Pin */
-  GPIO_InitStruct.Pin = MTR_DIR_Pin|LED_PWR_Pin|LED_HBEAT_Pin;
+  /*Configure GPIO pins : CS_ACC_Pin LED_PWR_Pin LED_HBEAT_Pin */
+  GPIO_InitStruct.Pin = CS_ACC_Pin|LED_PWR_Pin|LED_HBEAT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -538,7 +570,7 @@ float Period2Ticks(float T)
 void Saber_TurnOn(void)
 {
   HAL_GPIO_WritePin(LED_PWR_GPIO_Port, LED_PWR_Pin, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(SOLENOID_GPIO_Port, SOLENOID_Pin, SOLENOID_RELEASE);
+//  HAL_GPIO_WritePin(SOLENOID_GPIO_Port, SOLENOID_Pin, SOLENOID_RELEASE);
   // TODO: turn on accelerometer ADCs
   // TODO: startup noise
 }
@@ -551,8 +583,7 @@ void Saber_TurnOn(void)
 void Saber_TurnOff(void)
 {
   HAL_GPIO_WritePin(LED_PWR_GPIO_Port, LED_PWR_Pin, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(SOLENOID_GPIO_Port, SOLENOID_Pin, SOLENOID_RELEASE);
-  // TODO: turn off accelerometer ADCs
+//  HAL_GPIO_WritePin(SOLENOID_GPIO_Port, SOLENOID_Pin, SOLENOID_RELEASE);
   // TODO: shutdown noise
 }
 

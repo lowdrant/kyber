@@ -96,28 +96,22 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define BTN_Pin GPIO_PIN_15
 #define BTN_GPIO_Port GPIOC
-#define SOLENOID_Pin GPIO_PIN_2
-#define SOLENOID_GPIO_Port GPIOF
-#define SPKR_PWM_Pin GPIO_PIN_0
-#define SPKR_PWM_GPIO_Port GPIOA
-#define MTR_DIR_Pin GPIO_PIN_1
-#define MTR_DIR_GPIO_Port GPIOA
+#define CS_HBRIDGE_Pin GPIO_PIN_2
+#define CS_HBRIDGE_GPIO_Port GPIOF
+#define CS_ACC_Pin GPIO_PIN_0
+#define CS_ACC_GPIO_Port GPIOA
+#define ADC_BATT_V_Pin GPIO_PIN_1
+#define ADC_BATT_V_GPIO_Port GPIOA
 #define ADC_MTR_I_Pin GPIO_PIN_2
 #define ADC_MTR_I_GPIO_Port GPIOA
 #define LED_PWR_Pin GPIO_PIN_3
 #define LED_PWR_GPIO_Port GPIOA
-#define ADC_ACC_Z_Pin GPIO_PIN_4
-#define ADC_ACC_Z_GPIO_Port GPIOA
-#define ADC_ACC_Y_Pin GPIO_PIN_5
-#define ADC_ACC_Y_GPIO_Port GPIOA
-#define ADC_ACC_X_Pin GPIO_PIN_6
-#define ADC_ACC_X_GPIO_Port GPIOA
-#define ADC_BATT_V_Pin GPIO_PIN_7
-#define ADC_BATT_V_GPIO_Port GPIOA
-#define MTR_PWM_Pin GPIO_PIN_11
-#define MTR_PWM_GPIO_Port GPIOA
+#define PWMN_MTR_Pin GPIO_PIN_0
+#define PWMN_MTR_GPIO_Port GPIOB
 #define LED_HBEAT_Pin GPIO_PIN_12
 #define LED_HBEAT_GPIO_Port GPIOA
+#define PWM_MTR_Pin GPIO_PIN_3
+#define PWM_MTR_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
