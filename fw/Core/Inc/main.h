@@ -28,7 +28,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32l0xx_hal.h"
+#include "stm32g0xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -81,6 +81,7 @@ typedef enum
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
+
 /* USER CODE END EM */
 
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
@@ -93,30 +94,30 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define BTN_Pin GPIO_PIN_14
+#define BTN_Pin GPIO_PIN_15
 #define BTN_GPIO_Port GPIOC
-#define LED_PWR_Pin GPIO_PIN_15
-#define LED_PWR_GPIO_Port GPIOC
-#define MTR_DIR_Pin GPIO_PIN_0
+#define SOLENOID_Pin GPIO_PIN_2
+#define SOLENOID_GPIO_Port GPIOF
+#define SPKR_PWM_Pin GPIO_PIN_0
+#define SPKR_PWM_GPIO_Port GPIOA
+#define MTR_DIR_Pin GPIO_PIN_1
 #define MTR_DIR_GPIO_Port GPIOA
-#define PWM_SPKR_Pin GPIO_PIN_1
-#define PWM_SPKR_GPIO_Port GPIOA
-#define PWM_MTR_Pin GPIO_PIN_2
-#define PWM_MTR_GPIO_Port GPIOA
-#define ADC_MTR_I_Pin GPIO_PIN_3
+#define ADC_MTR_I_Pin GPIO_PIN_2
 #define ADC_MTR_I_GPIO_Port GPIOA
-#define ADC_BATT_V_Pin GPIO_PIN_4
-#define ADC_BATT_V_GPIO_Port GPIOA
-#define ADC_ACC_Z_Pin GPIO_PIN_5
+#define LED_PWR_Pin GPIO_PIN_3
+#define LED_PWR_GPIO_Port GPIOA
+#define ADC_ACC_Z_Pin GPIO_PIN_4
 #define ADC_ACC_Z_GPIO_Port GPIOA
-#define ADC_ACC_Y_Pin GPIO_PIN_6
+#define ADC_ACC_Y_Pin GPIO_PIN_5
 #define ADC_ACC_Y_GPIO_Port GPIOA
-#define ADC_ACC_X_Pin GPIO_PIN_7
+#define ADC_ACC_X_Pin GPIO_PIN_6
 #define ADC_ACC_X_GPIO_Port GPIOA
-#define LED_HBEAT_Pin GPIO_PIN_9
+#define ADC_BATT_V_Pin GPIO_PIN_7
+#define ADC_BATT_V_GPIO_Port GPIOA
+#define MTR_PWM_Pin GPIO_PIN_11
+#define MTR_PWM_GPIO_Port GPIOA
+#define LED_HBEAT_Pin GPIO_PIN_12
 #define LED_HBEAT_GPIO_Port GPIOA
-#define SOLENOID_Pin GPIO_PIN_10
-#define SOLENOID_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

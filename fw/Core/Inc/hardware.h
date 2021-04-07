@@ -8,7 +8,7 @@
 
 #ifndef INC_HARDWARE_H_
 #define INC_HARDWARE_H_
-#include "stm32l0xx_hal.h"
+#include "stm32g0xx_hal.h"
 
 /**
  * @defgroup Hardware_Sensitive_GPIO  Represent system on/off in a GPIO-friendly way
