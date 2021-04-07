@@ -53,26 +53,11 @@ typedef enum
 /** @defgroup Program_Timing  Execution period (seconds) of subroutines
   * @{
   */
-/**
-  * @brief  LED Heartbeat Period
-  */
-#define T_HBEAT (float) 1
-/**
-  * @brief  Acceleration Update Period
-  */
-#define T_ACC (float) 0.1
-/**
-  * @brief  Battery Voltage Update Period
-  */
-#define T_BATT 600
-/**
- * @brief  Saber Extension Time
- */
-#define T_EXTEND (float) 0.1
-/**
- * @brief  Saber Retraction Time
- */
-#define T_RETRACT (float) 0.3
+#define T_HBEAT (float) 0.6      // LED Heartbeat Period
+#define T_ACC (float) 0.1      // Accelerometer Update Period
+#define T_BATT (float) 600     // Voltage Update Period
+#define T_EXTEND (float) 0.1   // Saber Extension Time
+#define T_RETRACT (float) 0.3  // Saber Retraction Time
 /**
   * @}
   */

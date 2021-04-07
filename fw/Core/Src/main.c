@@ -45,6 +45,8 @@ I2C_HandleTypeDef hi2c1;
 
 /* USER CODE BEGIN PV */
 uint32_t ticksPerSec;  // for timing: stm32l0xx_hal.h, period2ticks
+HAL_StatusTypeDef out = HAL_OK;
+float xacc,yacc,zacc;
 //uint32_t ticks_HBEAT = (uint32_t) Period2Ticks(T_HBEAT);
 //uint32_t ticks_ACC = (uint32_t) Period2Ticks(T_ACC);
 //uint16_t accX,accY,accZ;
@@ -55,7 +57,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 /* USER CODE BEGIN PFP */
-float Period2Ticks(float);
+static inline float Period2Ticks(float);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -70,8 +72,8 @@ float Period2Ticks(float);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-  float xacc, yacc, zacc;
-  uint8_t accRaw[10] = {0,0,0,0,0,0,0,0,0,0};
+  uint8_t lightFlag = 0;
+  static uint8_t accRaw[10] = {0,0,0,0,0,0,0,0,0,0};
   static uint8_t d[1] = {ACC_X_MSB_ADDR};
   /* USER CODE END 1 */
 
@@ -108,35 +110,44 @@ int main(void)
   MX_GPIO_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
-  HAL_GPIO_WritePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin, GPIO_PIN_RESET);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  uint8_t hbeatState = GPIO_PIN_SET;
   uint32_t lastTick_HBEAT = uwTick;  // reset ticks
   uint32_t lastTick_ACC = uwTick;
   while (1) {
     // Heartbeat
     if (uwTick - lastTick_HBEAT > ticks_HBEAT) {
-      HAL_GPIO_WritePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin, hbeatState);
-      hbeatState ^= GPIO_PIN_SET;
+      HAL_GPIO_TogglePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin);
       lastTick_HBEAT = uwTick;
     }
 
+    // Switch Lights
+    if (lightFlag) {
+      HAL_GPIO_TogglePin(LED_PWR_GPIO_Port, LED_PWR_Pin);
+      lightFlag = 0;
+    }
+
 	  // Accelerometer
+    /*
     if (uwTick - lastTick_ACC > ticks_ACC) {
+      out = HAL_OK;
       __disable_irq();
-      HAL_I2C_Master_Transmit(&ACC_I2C, ACC_ADDR<<1, d, 1, HAL_MAX_DELAY);
-      HAL_I2C_Master_Receive(&ACC_I2C, ACC_ADDR<<1, accRaw, 10, HAL_MAX_DELAY);
+      out |= HAL_I2C_Master_Transmit(&ACC_I2C, ACC_ADDR<<1, d, 1, HAL_MAX_DELAY);
+      out |= HAL_I2C_Master_Receive(&ACC_I2C, ACC_ADDR<<1, accRaw, 10, HAL_MAX_DELAY);
+      if (out != HAL_OK) {  // check for errors before re-enabling interrupts
+        Error_Handler();
+      }
       __enable_irq();
       xacc = ACC2G(accRaw);
       yacc = ACC2G(accRaw+2);
       zacc = ACC2G(accRaw+4);
       lastTick_ACC = uwTick;
     }
+    */
   }
-  /* USER CODE END WHILE */
+    /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
   /* USER CODE END 3 */
@@ -229,12 +240,15 @@ static void MX_I2C1_Init(void)
   }
   /* USER CODE BEGIN I2C1_Init 2 */
   // Set accelerometer to active
+  // TODO
+  /*
   static uint8_t d[2] = {ACC_CTRL_REG1, 1};
   __disable_irq();
   if (HAL_I2C_Master_Transmit(&ACC_I2C, ACC_ADDR<<1, d, 2, HAL_MAX_DELAY) != HAL_OK) {
     Error_Handler();
   }
   __enable_irq();
+  */
   /* USER CODE END I2C1_Init 2 */
 
 }
@@ -275,8 +289,8 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : BTN_Pin */
   GPIO_InitStruct.Pin = BTN_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(BTN_GPIO_Port, &GPIO_InitStruct);
 
 }
@@ -284,12 +298,22 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 
 /**
+  * @brief  EXTI line detection callbacks.
+  * @param  GPIO_Pin Specifies the pins connected to the EXTI line.
+  * @retval None
+  */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  uint8_t asdf = 0;
+}
+
+/**
  * @brief Convert Period to Number of System Ticks
  * @note User must decide how to round number of ticks
  * @param T execution period in seconds
  * @retval Execution period in system ticks
  */
-float Period2Ticks(float T)
+static inline float Period2Ticks(float T)
 {
 	return T * ticksPerSec;
 }
