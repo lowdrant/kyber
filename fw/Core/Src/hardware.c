@@ -19,3 +19,12 @@ HAL_StatusTypeDef ReadAcc(uint8_t acc[6])
   __enable_irq();
   return out;
 }
+
+/**
+ * @brief convert accelerometer counts pair to gs
+ * @param d pointer to {MSB,LSB} accelerometer counts array
+ */
+float ACC2G(uint8_t* d)
+{
+  return ((float) ( ((*d)<<4) + (*(d+1)) )) / COUNTS_PER_G;
+}

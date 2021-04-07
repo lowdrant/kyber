@@ -56,7 +56,7 @@ typedef enum
 /**
   * @brief  LED Heartbeat Period
   */
-#define T_HBEAT (float) 0.5
+#define T_HBEAT (float) 1
 /**
   * @brief  Acceleration Update Period
   */
@@ -92,12 +92,12 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define BTN_Pin GPIO_PIN_14
-#define BTN_GPIO_Port GPIOC
+#define LED_HBEAT_Pin GPIO_PIN_14
+#define LED_HBEAT_GPIO_Port GPIOC
 #define LED_PWR_Pin GPIO_PIN_7
 #define LED_PWR_GPIO_Port GPIOA
-#define LED_HBEAT_Pin GPIO_PIN_1
-#define LED_HBEAT_GPIO_Port GPIOB
+#define BTN_Pin GPIO_PIN_1
+#define BTN_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

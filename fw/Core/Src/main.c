@@ -17,6 +17,7 @@
   ******************************************************************************
   */
 /* USER CODE END Header */
+
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
@@ -44,8 +45,6 @@ I2C_HandleTypeDef hi2c1;
 
 /* USER CODE BEGIN PV */
 uint32_t ticksPerSec;  // for timing: stm32l0xx_hal.h, period2ticks
-uint8_t accRaw[6] = {0,0,0,0,0,0};
-uint8_t d[1] = {ACC_X_MSB_ADDR};
 //uint32_t ticks_HBEAT = (uint32_t) Period2Ticks(T_HBEAT);
 //uint32_t ticks_ACC = (uint32_t) Period2Ticks(T_ACC);
 //uint16_t accX,accY,accZ;
@@ -71,6 +70,9 @@ float Period2Ticks(float);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+  float xacc, yacc, zacc;
+  uint8_t accRaw[10] = {0,0,0,0,0,0,0,0,0,0};
+  static uint8_t d[1] = {ACC_X_MSB_ADDR};
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -98,15 +100,15 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-  const uint32_t ticks_HBEAT = (uint32_t) Period2Ticks(T_HBEAT);
-  const uint32_t ticks_ACC = (uint32_t) Period2Ticks(T_ACC);
+  uint32_t ticks_HBEAT = (uint32_t) Period2Ticks(T_HBEAT);
+  uint32_t ticks_ACC = (uint32_t) Period2Ticks(T_ACC);
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
-  // TODO: turn off ADCs
+  HAL_GPIO_WritePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin, GPIO_PIN_RESET);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -114,25 +116,27 @@ int main(void)
   uint8_t hbeatState = GPIO_PIN_SET;
   uint32_t lastTick_HBEAT = uwTick;  // reset ticks
   uint32_t lastTick_ACC = uwTick;
-  while (1)
-  {
-	  // Heartbeat
-	  if (uwTick - lastTick_HBEAT > ticks_HBEAT) {
-		  HAL_GPIO_WritePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin, hbeatState);
-		  hbeatState ^= GPIO_PIN_SET;
-		  lastTick_HBEAT = uwTick;
-	  }
+  while (1) {
+    // Heartbeat
+    if (uwTick - lastTick_HBEAT > ticks_HBEAT) {
+      HAL_GPIO_WritePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin, hbeatState);
+      hbeatState ^= GPIO_PIN_SET;
+      lastTick_HBEAT = uwTick;
+    }
 
 	  // Accelerometer
-//    if (uwTick - lastTick_ACC > ticks_ACC) {
-//      __disable_irq();
-//      HAL_I2C_Master_Transmit(&ACC_I2C, ACC_ADDR<<1, d, 8, 1);
-//      HAL_I2C_Master_Receive(&ACC_I2C, ACC_ADDR<<1, accRaw, 6, 1);
-//      __enable_irq();
-//      lastTick_ACC = uwTick;
-//    }
+    if (uwTick - lastTick_ACC > ticks_ACC) {
+      __disable_irq();
+      HAL_I2C_Master_Transmit(&ACC_I2C, ACC_ADDR<<1, d, 1, HAL_MAX_DELAY);
+      HAL_I2C_Master_Receive(&ACC_I2C, ACC_ADDR<<1, accRaw, 10, HAL_MAX_DELAY);
+      __enable_irq();
+      xacc = ACC2G(accRaw);
+      yacc = ACC2G(accRaw+2);
+      zacc = ACC2G(accRaw+4);
+      lastTick_ACC = uwTick;
+    }
   }
-    /* USER CODE END WHILE */
+  /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
   /* USER CODE END 3 */
@@ -148,11 +152,10 @@ void SystemClock_Config(void)
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
-  /** Configure the main internal regulator output voltage
+  /** Configure the main internal regulator output voltage 
   */
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
-  /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
+  /** Initializes the CPU, AHB and APB busses clocks 
   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_MSI;
   RCC_OscInitStruct.MSIState = RCC_MSI_ON;
@@ -163,7 +166,7 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  /** Initializes the CPU, AHB and APB buses clocks
+  /** Initializes the CPU, AHB and APB busses clocks 
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
@@ -212,13 +215,13 @@ static void MX_I2C1_Init(void)
   {
     Error_Handler();
   }
-  /** Configure Analogue filter
+  /** Configure Analogue filter 
   */
   if (HAL_I2CEx_ConfigAnalogFilter(&hi2c1, I2C_ANALOGFILTER_ENABLE) != HAL_OK)
   {
     Error_Handler();
   }
-  /** Configure Digital filter
+  /** Configure Digital filter 
   */
   if (HAL_I2CEx_ConfigDigitalFilter(&hi2c1, 0) != HAL_OK)
   {
@@ -226,10 +229,12 @@ static void MX_I2C1_Init(void)
   }
   /* USER CODE BEGIN I2C1_Init 2 */
   // Set accelerometer to active
-  uint8_t d[8] = {0,0,0,0,0,0,0,1};
-  if (HAL_I2C_Master_Transmit(&ACC_I2C, ACC_ADDR<<1, d, 8, 1) != HAL_OK) {
+  static uint8_t d[2] = {ACC_CTRL_REG1, 1};
+  __disable_irq();
+  if (HAL_I2C_Master_Transmit(&ACC_I2C, ACC_ADDR<<1, d, 2, HAL_MAX_DELAY) != HAL_OK) {
     Error_Handler();
   }
+  __enable_irq();
   /* USER CODE END I2C1_Init 2 */
 
 }
@@ -249,30 +254,30 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED_PWR_GPIO_Port, LED_PWR_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : BTN_Pin */
-  GPIO_InitStruct.Pin = BTN_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(BTN_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : LED_PWR_Pin */
-  GPIO_InitStruct.Pin = LED_PWR_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LED_PWR_GPIO_Port, &GPIO_InitStruct);
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(LED_PWR_GPIO_Port, LED_PWR_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : LED_HBEAT_Pin */
   GPIO_InitStruct.Pin = LED_HBEAT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LED_HBEAT_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : LED_PWR_Pin */
+  GPIO_InitStruct.Pin = LED_PWR_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LED_PWR_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : BTN_Pin */
+  GPIO_InitStruct.Pin = BTN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(BTN_GPIO_Port, &GPIO_InitStruct);
 
 }
 
@@ -300,6 +305,7 @@ void Error_Handler(void)
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
+  HAL_GPIO_WritePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin, GPIO_PIN_SET);
   while (1)
   {
   }
@@ -315,7 +321,7 @@ void Error_Handler(void)
   * @retval None
   */
 void assert_failed(uint8_t *file, uint32_t line)
-{
+{ 
   /* USER CODE BEGIN 6 */
   /* User can add his own implementation to report the file name and line number,
      ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
