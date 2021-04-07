@@ -22,7 +22,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <math.h>
+#include <stdint.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,7 +46,8 @@ ADC_HandleTypeDef hadc;
 TIM_HandleTypeDef htim2;
 
 /* USER CODE BEGIN PV */
-
+// Timing Flags
+uint32_t ticksPerSec;  // stm32l0xx_hal.h, period2ticks
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -54,7 +56,7 @@ static void MX_GPIO_Init(void);
 static void MX_ADC_Init(void);
 static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
-
+uint32_t period2ticks(float);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -69,7 +71,17 @@ static void MX_TIM2_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+  // Timing
+	if (uwTickFreq == HAL_TICK_FREQ_10HZ) {  // determine tick frequency - stm32l0xx_hal.h
+	  ticksPerSec = 10;
+	} else if (uwTickFreq == HAL_TICK_FREQ_100HZ) {
+	  ticksPerSec = 100;
+  } else if (uwTickFreq == HAL_TICK_FREQ_1KHZ) {
+    ticksPerSec = 1000;
+  } else {
+    Error_Handler();
+  }
+	const uint32_t ticks_HBEAT = round(period2ticks(0.5));
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -93,13 +105,20 @@ int main(void)
   MX_ADC_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-
+  HAL_TIM_Base_Start(&htim2);  // TODO: does this start the timer?
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  uint32_t lastTick_HBEAT = uwTick;  // reset ticks
   while (1)
   {
+	  // Heartbeat
+	  if (uwTick - lastTick_HBEAT > ticks_HBEAT) {
+		  HAL_GPIO_WritePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin, hbeatState);
+		  hbeatState ^= GPIO_PIN_SET;
+		  lastTick_HBEAT = uwTick;
+	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -333,6 +352,17 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+/**
+ * @brief Convert Period to Number of System Ticks
+ * @note User must decide how to round number of ticks
+ * @param T execution period in seconds
+ * @retval Execution period in system ticks
+ */
+float period2ticks(float T)
+{
+	return T * ticksPerSec;
+}
 
 /* USER CODE END 4 */
 
