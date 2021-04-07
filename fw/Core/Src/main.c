@@ -24,6 +24,7 @@
 /* USER CODE BEGIN Includes */
 #include <math.h>
 #include <stdint.h>
+#include "hardware.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -46,8 +47,8 @@ ADC_HandleTypeDef hadc;
 TIM_HandleTypeDef htim2;
 
 /* USER CODE BEGIN PV */
-// Timing Flags
-uint32_t ticksPerSec;  // stm32l0xx_hal.h, period2ticks
+uint32_t ticksPerSec;  // for timing: stm32l0xx_hal.h, period2ticks
+volatile SABER_ExecState STATE = SABER_OFF;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -56,7 +57,10 @@ static void MX_GPIO_Init(void);
 static void MX_ADC_Init(void);
 static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
-uint32_t period2ticks(float);
+float Period2Ticks(float);
+void Saber_TurnOn(void);
+void Saber_TurnOff(void);
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -71,7 +75,7 @@ uint32_t period2ticks(float);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-  // Timing
+  // Setup Timing
 	if (uwTickFreq == HAL_TICK_FREQ_10HZ) {  // determine tick frequency - stm32l0xx_hal.h
 	  ticksPerSec = 10;
 	} else if (uwTickFreq == HAL_TICK_FREQ_100HZ) {
@@ -81,7 +85,11 @@ int main(void)
   } else {
     Error_Handler();
   }
-	const uint32_t ticks_HBEAT = round(period2ticks(0.5));
+	const uint32_t ticks_HBEAT = round(Period2Ticks(T_HBEAT));
+	const uint32_t ticks_ACC = round(Period2Ticks(T_ACC));
+	const uint32_t ticks_BATT = round(Period2Ticks(T_BATT));
+	const uint32_t ticks_EXTEND = round(Period2Ticks(T_EXTEND));
+	const uint32_t ticks_RETRACT = round(Period2Ticks(T_RETRACT));
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -97,7 +105,7 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+  float mtrTorque = 0;
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -106,11 +114,16 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start(&htim2);  // TODO: does this start the timer?
+  // TODO: turn off ADCs
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  uint8_t hbeatState = GPIO_PIN_SET;
   uint32_t lastTick_HBEAT = uwTick;  // reset ticks
+  uint32_t lastTick_BATT = uwTick;
+  uint32_t lastTick_EXTEND = uwTick;
+  uint32_t lastTick_ACC = uwTick;
   while (1)
   {
 	  // Heartbeat
@@ -119,10 +132,50 @@ int main(void)
 		  hbeatState ^= GPIO_PIN_SET;
 		  lastTick_HBEAT = uwTick;
 	  }
-    /* USER CODE END WHILE */
 
-    /* USER CODE BEGIN 3 */
+	  // Battery Check
+	  if (uwTick - lastTick_BATT > ticks_BATT) {
+	    // TODO: read battery ADC
+	    // STATE = SABER_LOW_BATT;
+	    lastTick_BATT = uwTick;
+	  }
+
+	  // State Active Behavior
+	  if (STATE == SABER_ON) {
+	    // TODO: hum
+	    if (uwTick > lastTick_ACC) {
+	      // todo: read accelerometers
+	    }
+
+    // Saber Extension Sequence
+	  } else if (STATE == SABER_EXTEND) {
+	    lastTick_EXTEND = uwTick;
+	    if (uwTick - lastTick_EXTEND > ticks_EXTEND) {  // exiting sequence
+	      HAL_GPIO_WritePin(SOLENOID_GPIO_Port, SOLENOID_Pin, SOLENOID_LATCH);
+	      STATE = SABER_ON;
+	    } else {  // entering sequence
+	      Saber_TurnOn();
+	    }
+
+    // Saber Retraction Sequence
+	  } else if (STATE == SABER_RETRACT) {
+        if (mtrTorque > TORQUE_LATCH) {  // exiting sequence
+            HAL_GPIO_WritePin(SOLENOID_GPIO_Port, SOLENOID_Pin, SOLENOID_LATCH);
+            STATE = SABER_OFF;
+        } else {  // entering sequence
+            Saber_TurnOff();  // TODO: do only once with non-time-based motor control
+        }
+	    // TODO: turn on impedance control (useful for detecting spring latch
+	    // TODO: switch states when mtr current above thresh
+
+    // Saber Low-Battery Behavior
+	  } else if (STATE == SABER_LOW_BATT) {
+	    // TODO
+	  }
+    /* USER CODE END WHILE */
   }
+    /* USER CODE BEGIN 3 */
+
   /* USER CODE END 3 */
 }
 
@@ -329,11 +382,11 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, MTR_DIR_Pin|LED_HBEAT_Pin|SOLENOID_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : IN_BTN_Pin */
-  GPIO_InitStruct.Pin = IN_BTN_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  /*Configure GPIO pin : BTN_Pin */
+  GPIO_InitStruct.Pin = BTN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(IN_BTN_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(BTN_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : LED_PWR_Pin */
   GPIO_InitStruct.Pin = LED_PWR_Pin;
@@ -359,9 +412,57 @@ static void MX_GPIO_Init(void)
  * @param T execution period in seconds
  * @retval Execution period in system ticks
  */
-float period2ticks(float T)
+float Period2Ticks(float T)
 {
 	return T * ticksPerSec;
+}
+
+/**
+ * @brief Saber Turn-On Sequence
+ * @param None
+ * @retval None
+ */
+void Saber_TurnOn(void)
+{
+  HAL_GPIO_WritePin(LED_PWR_GPIO_Port, LED_PWR_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(SOLENOID_GPIO_Port, SOLENOID_Pin, SOLENOID_RELEASE);
+  // TODO: turn on accelerometer ADCs
+  // TODO: startup noise
+}
+
+/**
+ * @brief Saber Turn-Off Sequence
+ * @param None
+ * @retval None
+ */
+void Saber_TurnOff(void)
+{
+  HAL_GPIO_WritePin(LED_PWR_GPIO_Port, LED_PWR_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(SOLENOID_GPIO_Port, SOLENOID_Pin, SOLENOID_RELEASE);
+  // TODO: turn off accelerometer ADCs
+  // TODO: shutdown noise
+}
+
+/**
+ * @brief Change Saber State when BTN_Pin Pressed
+ * @note Transitions are to SABER_EXTEND or SABER_RETRACT
+ * @note Probably should not be called by user.
+ * @retval None
+ */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  if (GPIO_Pin == BTN_Pin) {
+    if (STATE != SABER_LOW_BATT) {
+      if (STATE & (SABER_OFF|SABER_RETRACT)) {
+        STATE = SABER_EXTEND;
+      } else if (STATE & (SABER_EXTEND|SABER_ON)) {
+        STATE = SABER_RETRACT;
+      }
+    }
+  }
+  else {
+    // TODO: low battery noise
+  }
 }
 
 /* USER CODE END 4 */

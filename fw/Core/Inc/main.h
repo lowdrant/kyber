@@ -37,11 +37,45 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-
+typedef enum
+{
+  SABER_OFF = 0U,
+  SABER_EXTEND,
+  SABER_ON,
+  SABER_RETRACT,
+  SABER_LOW_BATT
+} SABER_ExecState;
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
+
+/** @defgroup Program_Timing  Execution period (seconds) of subroutines
+  * @{
+  */
+/**
+  * @brief  LED Heartbeat Period
+  */
+#define T_HBEAT 0.5
+/**
+  * @brief  Acceleration Update Period
+  */
+#define T_ACC 0.1
+/**
+  * @brief  Battery Voltage Update Period
+  */
+#define T_BATT 600
+/**
+ * @brief  Saber Extension Time
+ */
+#define T_EXTEND 0.1
+/**
+ * @brief  Saber Retraction Time
+ */
+#define T_RETRACT 0.3
+/**
+  * @}
+  */
 
 /* USER CODE END EC */
 
@@ -59,8 +93,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define IN_BTN_Pin GPIO_PIN_14
-#define IN_BTN_GPIO_Port GPIOC
+#define BTN_Pin GPIO_PIN_14
+#define BTN_GPIO_Port GPIOC
 #define LED_PWR_Pin GPIO_PIN_15
 #define LED_PWR_GPIO_Port GPIOC
 #define MTR_DIR_Pin GPIO_PIN_0
