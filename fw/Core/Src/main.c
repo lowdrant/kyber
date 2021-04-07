@@ -41,22 +41,34 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc;
+
 I2C_HandleTypeDef hi2c1;
 
 /* USER CODE BEGIN PV */
-uint32_t ticksPerSec;  // for timing: stm32l0xx_hal.h, period2ticks
+
+SABER_ExecState SaberState = SABER_OFF;
+
+// Communication
 HAL_StatusTypeDef out = HAL_OK;
 float xacc,yacc,zacc;
-//uint32_t ticks_HBEAT = (uint32_t) Period2Ticks(T_HBEAT);
-//uint32_t ticks_ACC = (uint32_t) Period2Ticks(T_ACC);
-//uint16_t accX,accY,accZ;
+
+// Global Timing
+uint32_t ticksPerSec;  // for timing: stm32l0xx_hal.h, period2ticks
+uint32_t lastTick_DEBOUNCE = 0;
+uint32_t ticksDEBOUNCE;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
+static void MX_ADC_Init(void);
 /* USER CODE BEGIN PFP */
+static inline void nextState_USER(void);
+static inline void execSaberExtend(void);
+static inline void execSaberRetract(void);
 static inline float Period2Ticks(float);
 /* USER CODE END PFP */
 
@@ -72,9 +84,9 @@ static inline float Period2Ticks(float);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-  uint8_t lightFlag = 0;
-  static uint8_t accRaw[10] = {0,0,0,0,0,0,0,0,0,0};
-  static uint8_t d[1] = {ACC_X_MSB_ADDR};
+  __disable_irq();  // wait for setup
+  static const uint8_t accRaw[10] = {0,0,0,0,0,0,0,0,0,0};
+  static const uint8_t d[1] = {ACC_X_MSB_ADDR};
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -103,19 +115,26 @@ int main(void)
 
   /* USER CODE BEGIN SysInit */
   uint32_t ticks_HBEAT = (uint32_t) Period2Ticks(T_HBEAT);
-  uint32_t ticks_ACC = (uint32_t) Period2Ticks(T_ACC);
+  // uint32_t ticks_ACC = (uint32_t) Period2Ticks(T_ACC);
+  uint32_t ticks_BATT = (uint32_t) Period2Ticks(T_BATT);
+  ticksDEBOUNCE = (uint32_t) Period2Ticks(T_DEBOUNCE);
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_I2C1_Init();
+  MX_ADC_Init();
   /* USER CODE BEGIN 2 */
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  uint32_t lastTick_HBEAT = uwTick;  // reset ticks
-  uint32_t lastTick_ACC = uwTick;
+  uint32_t lastTick_HBEAT = 0;  // reset ticks
+  uint32_t lastTick_BATT = 0;
+  uint32_t counts_BATT = 0;
+  float v_BATT;
+  HAL_ADC_Start(&hadc);
+  __enable_irq();  // start program
   while (1) {
     // Heartbeat
     if (uwTick - lastTick_HBEAT > ticks_HBEAT) {
@@ -123,10 +142,40 @@ int main(void)
       lastTick_HBEAT = uwTick;
     }
 
-    // Switch Lights
-    if (lightFlag) {
-      HAL_GPIO_TogglePin(LED_PWR_GPIO_Port, LED_PWR_Pin);
-      lightFlag = 0;
+    // Battery ADC
+    if (uwTick - lastTick_BATT > ticks_BATT) {
+      out = HAL_ADC_PollForConversion(&hadc,1);
+      if (out == HAL_OK) {  // want non-blocking
+        counts_BATT = HAL_ADC_GetValue(&hadc);
+        v_BATT = counts2batt(counts_BATT);
+        HAL_ADC_Start(&hadc);
+        lastTick_BATT = uwTick;
+        if (v_BATT < BATT_V_LOW) {
+          SaberState = SABER_LOW_BATT;
+        }
+      }
+    }
+
+    // State Behavior
+    switch (SaberState) {
+      case SABER_OFF:
+        break;
+      case SABER_EXTEND:
+        execSaberExtend();
+        SaberState = SABER_ON;
+        break;
+      case SABER_RETRACT:
+        execSaberRetract();
+        SaberState = SABER_OFF;
+        break;
+      case SABER_ON:
+        break;  // TOD: accelerometer noises
+      case SABER_LOW_BATT:
+//        HAL_NVIC_DisableIRQ(EXTI0_1_IRQn);
+        break;  // TODO
+      default:
+        Error_Handler();
+        break;
     }
 
 	  // Accelerometer
@@ -196,6 +245,60 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief ADC Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC_Init(void)
+{
+
+  /* USER CODE BEGIN ADC_Init 0 */
+
+  /* USER CODE END ADC_Init 0 */
+
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN ADC_Init 1 */
+
+  /* USER CODE END ADC_Init 1 */
+  /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
+  */
+  hadc.Instance = ADC1;
+  hadc.Init.OversamplingMode = DISABLE;
+  hadc.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV1;
+  hadc.Init.Resolution = ADC_RESOLUTION_12B;
+  hadc.Init.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+  hadc.Init.ScanConvMode = ADC_SCAN_DIRECTION_FORWARD;
+  hadc.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc.Init.ContinuousConvMode = DISABLE;
+  hadc.Init.DiscontinuousConvMode = DISABLE;
+  hadc.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc.Init.DMAContinuousRequests = DISABLE;
+  hadc.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  hadc.Init.Overrun = ADC_OVR_DATA_PRESERVED;
+  hadc.Init.LowPowerAutoWait = DISABLE;
+  hadc.Init.LowPowerFrequencyMode = DISABLE;
+  hadc.Init.LowPowerAutoPowerOff = DISABLE;
+  if (HAL_ADC_Init(&hadc) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel to be converted. 
+  */
+  sConfig.Channel = ADC_CHANNEL_4;
+  sConfig.Rank = ADC_RANK_CHANNEL_NUMBER;
+  if (HAL_ADC_ConfigChannel(&hadc, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC_Init 2 */
+
+  /* USER CODE END ADC_Init 2 */
+
 }
 
 /**
@@ -282,7 +385,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : LED_PWR_Pin */
   GPIO_InitStruct.Pin = LED_PWR_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LED_PWR_GPIO_Port, &GPIO_InitStruct);
@@ -292,6 +395,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(BTN_GPIO_Port, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
 
 }
 
@@ -304,8 +411,77 @@ static void MX_GPIO_Init(void)
   */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-  uint8_t asdf = 0;
+//  btnPresses++;
+  __disable_irq();
+  switch (GPIO_Pin) {
+    case BTN_Pin:
+      if (uwTick-lastTick_DEBOUNCE > ticksDEBOUNCE) {
+        nextState_USER();
+        lastTick_DEBOUNCE = uwTick;
+      }
+      break;
+  }
+  __enable_irq();
 }
+
+/** @defgroup Exec_Saber_State  Saber state subroutines.
+  * @{
+  */
+
+/**
+  * @brief  Advance saber state from user input.
+  * @retval None
+  */
+static inline void nextState_USER(void)
+{
+  switch (SaberState) {
+    case SABER_LOW_BATT:
+      break;
+    case SABER_OFF:
+      SaberState = SABER_EXTEND;
+      break;
+    case SABER_EXTEND:
+      SaberState = SABER_RETRACT;
+      break;
+    case SABER_ON:
+      SaberState = SABER_RETRACT;
+      break;
+    case SABER_RETRACT:  // TODO: it won't just jump like this, will it?
+      SaberState = SABER_EXTEND;
+      break;
+    default:
+      Error_Handler();
+      break;
+  }
+}
+
+/**
+  * @brief  Execute Saber Extension Sequence
+  * @retval None
+  *
+  * TODO: blink lights
+  * TODO: play extension noise
+  */
+static inline void execSaberExtend(void)
+{
+  HAL_GPIO_WritePin(LED_PWR_GPIO_Port, LED_PWR_Pin, GPIO_PIN_SET);
+}
+
+/**
+  * @brief  Execute Saber Retraction Sequence
+  * @retval None
+  *
+  * TODO: blink lights
+  * TODO: play retraction noise
+  */
+static inline void execSaberRetract(void)
+{
+  HAL_GPIO_WritePin(LED_PWR_GPIO_Port, LED_PWR_Pin, GPIO_PIN_RESET);
+}
+
+/**
+  * @}
+  */
 
 /**
  * @brief Convert Period to Number of System Ticks
@@ -317,6 +493,8 @@ static inline float Period2Ticks(float T)
 {
 	return T * ticksPerSec;
 }
+
+
 
 /* USER CODE END 4 */
 

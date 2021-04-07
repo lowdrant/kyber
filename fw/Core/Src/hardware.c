@@ -28,3 +28,13 @@ float ACC2G(uint8_t* d)
 {
   return ((float) ( ((*d)<<4) + (*(d+1)) )) / COUNTS_PER_G;
 }
+
+float counts2volt(uint32_t counts)
+{
+  return (float) VOLTS_PER_COUNT * counts;
+}
+
+float counts2batt(uint32_t counts)
+{
+  return BATT_V_PER_V * counts2volt(counts);
+}

@@ -50,17 +50,12 @@ typedef enum
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
 
-/** @defgroup Program_Timing  Execution period (seconds) of subroutines
-  * @{
-  */
-#define T_HBEAT (float) 0.6      // LED Heartbeat Period
-#define T_ACC (float) 0.1      // Accelerometer Update Period
-#define T_BATT (float) 600     // Voltage Update Period
-#define T_EXTEND (float) 0.1   // Saber Extension Time
-#define T_RETRACT (float) 0.3  // Saber Retraction Time
-/**
-  * @}
-  */
+// Program Timing
+#define T_HBEAT (float) 5         // LED Heartbeat Period
+#define T_ACC (float) 0.1           // Accelerometer Update Period
+#define T_BATT (float) 600          // Voltage Update Period
+#define T_EXTEND (float) 0.1        // Saber Extension Time
+#define T_RETRACT (float) 0.3       // Saber Retraction Time
 
 /* USER CODE END EC */
 
@@ -79,10 +74,13 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define LED_HBEAT_Pin GPIO_PIN_14
 #define LED_HBEAT_GPIO_Port GPIOC
+#define ADC_BATT_Pin GPIO_PIN_4
+#define ADC_BATT_GPIO_Port GPIOA
 #define LED_PWR_Pin GPIO_PIN_7
 #define LED_PWR_GPIO_Port GPIOA
 #define BTN_Pin GPIO_PIN_1
 #define BTN_GPIO_Port GPIOB
+#define BTN_EXTI_IRQn EXTI0_1_IRQn
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
