@@ -55,6 +55,8 @@ fw/.settings/
 fw/*.pdf
 fw/*.txt
 fw/*.metadata
+*.cfg
+*.debug
 *.launch
 *.s
 *.ld

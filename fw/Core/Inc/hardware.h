@@ -8,53 +8,23 @@
 
 #ifndef INC_HARDWARE_H_
 #define INC_HARDWARE_H_
-#include "stm32g0xx_hal.h"
+#include "stm32l0xx_hal.h"
 
-/**
- * @defgroup Hardware_Sensitive_GPIO  Represent system on/off in a GPIO-friendly way
- * @{
- */
-#define SOLENOID_LATCH GPIO_PIN_SET
-#define SOLENOID_RELEASE GPIO_PIN_RESET
-/**
- * @}
- */
-
-
-/** @defgroup Conversion_Factors  Convert ADC reading to physical information
+/** @defgroup  Accelerometer IO  MMA8452 Addresses & Helper Functions
   * @{
   */
-/**
- * @brief ADC counts per volt (3.3/4095)
- * @note 12-bit ADC, Vref=3V3
- */
-#define COUNTS_PER_VOLT ((float) 0.0008058608)
-/**
- * @brief Accelerometer counts per g
- */
-#define VOLTS_PER_G (1)  // TODO: macro?
-/**
- * @brief Torque to latch spring (Nm)
- */
-#define TORQUE_LATCH 1
-/**
- * @}
- */
-
-/**
- * @defgroup Conversion_Functions
- * @{
- */
-/**
- * @brief ADC Counts to Volts
- * @note 12-bit ADC, Vref=3V3
- * @param ADC Counts
- * @retval Volts
- */
-#define COUNTS2VOLTS(C) ((C)*COUNTS_PER_VOLT)
-
-float Current2Torque(float);
-
+extern I2C_HandleTypeDef hi2c1;
+#define ACC_I2C hi2c1
+#define ACC_ADDR 0x1D
+#define ACC_W_BIT 0b1
+#define ACC_R_BIT 0b0
+#define ACC_X_MSB_ADDR 0x01
+#define ACC_CTRL_REG1 0x2A
+#define ACC_CTRL_REG2 0x2B
+#define ACC_CTRL_REG3 0x2C
+#define ACC_CTRL_REG4 0x2D
+#define ACC_CTRL_REG5 0x2E
+HAL_StatusTypeDef ReadAcc(uint8_t*);
 /**
  * @}
  */

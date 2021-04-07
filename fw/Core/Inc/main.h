@@ -28,7 +28,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32g0xx_hal.h"
+#include "stm32l0xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -56,11 +56,11 @@ typedef enum
 /**
   * @brief  LED Heartbeat Period
   */
-#define T_HBEAT 0.5
+#define T_HBEAT (float) 0.5
 /**
   * @brief  Acceleration Update Period
   */
-#define T_ACC 0.1
+#define T_ACC (float) 0.1
 /**
   * @brief  Battery Voltage Update Period
   */
@@ -68,11 +68,11 @@ typedef enum
 /**
  * @brief  Saber Extension Time
  */
-#define T_EXTEND 0.1
+#define T_EXTEND (float) 0.1
 /**
  * @brief  Saber Retraction Time
  */
-#define T_RETRACT 0.3
+#define T_RETRACT (float) 0.3
 /**
   * @}
   */
@@ -84,8 +84,6 @@ typedef enum
 
 /* USER CODE END EM */
 
-void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
-
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
@@ -94,24 +92,12 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define BTN_Pin GPIO_PIN_15
+#define BTN_Pin GPIO_PIN_14
 #define BTN_GPIO_Port GPIOC
-#define CS_HBRIDGE_Pin GPIO_PIN_2
-#define CS_HBRIDGE_GPIO_Port GPIOF
-#define CS_ACC_Pin GPIO_PIN_0
-#define CS_ACC_GPIO_Port GPIOA
-#define ADC_BATT_V_Pin GPIO_PIN_1
-#define ADC_BATT_V_GPIO_Port GPIOA
-#define ADC_MTR_I_Pin GPIO_PIN_2
-#define ADC_MTR_I_GPIO_Port GPIOA
-#define LED_PWR_Pin GPIO_PIN_3
+#define LED_PWR_Pin GPIO_PIN_7
 #define LED_PWR_GPIO_Port GPIOA
-#define PWMN_MTR_Pin GPIO_PIN_0
-#define PWMN_MTR_GPIO_Port GPIOB
-#define LED_HBEAT_Pin GPIO_PIN_12
-#define LED_HBEAT_GPIO_Port GPIOA
-#define PWM_MTR_Pin GPIO_PIN_3
-#define PWM_MTR_GPIO_Port GPIOB
+#define LED_HBEAT_Pin GPIO_PIN_1
+#define LED_HBEAT_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
