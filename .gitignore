@@ -1,6 +1,8 @@
 # general gitignore
 *.odc  # libreoffice calc tmp files
 hw/*.odc
+hw/sims/*.log
+hw/sims/*.raw
 
 #-----------------------------------------------------------------------------
 # LTspice gitignore
