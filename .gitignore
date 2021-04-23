@@ -50,6 +50,7 @@ fp-info-cache
 # STM32CubeMX gitignore
 #-----------------------------------------------------------------------------
 
+*.metadata/
 *.settings/
 *.mxproject
 *.cproject

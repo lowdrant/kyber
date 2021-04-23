@@ -1,0 +1,290 @@
+*$
+* LM5109B 
+*****************************************************************************
+* (C) Copyright 2016 Texas Instruments Incorporated. All rights reserved.
+*****************************************************************************
+** This model is designed as an aid for customers of Texas Instruments.
+** TI and its licensors and suppliers make no warranties, either expressed
+** or implied, with respect to this model, including the warranties of
+** merchantability or fitness for a particular purpose. The model is
+** provided solely on an "as is" basis. The entire risk as to its quality
+** and performance is with the customer.
+*****************************************************************************
+*
+** Released by: WEBENCH Design Center, Texas Instruments Inc.
+* Part: LM5109B 
+* Date: 08MAR2016 
+* Model Type: Transient
+* Simulator: PSpice
+* Simulator Version: 16.2.0.p001
+* EVM Order Number: NA
+* EVM User's Guide: NA
+* Data sheet: SNVS477C–FEBRUARY 2007–REVISED JANUARY 2016
+*
+* Model Version: Final 1.00
+*
+*****************************************************************************
+*
+* Updates:
+*
+* Final 1.00
+* Release to Web
+*
+*****************************************************************************
+*
+* Model Usage Notes:
+*
+* A. Features have been modelled
+*	1. Output timing characteristics
+*	2. UVLO for High side & Low side driver  
+*	3. Peak Source & Sink Current for VDD = VHB = 12V
+*	4. HI,LI-Input Thresholds vs VDD supply voltage 
+*
+* B. Features haven't been modelled
+*	1. Quiescent Current vs Supply Voltage
+*	2. Temperature dependent characteristics 
+*	3. Frequency dependent plots 
+*
+*****************************************************************************
+.SUBCKT LM5109B_TRANS VDD HI LI VSS HB HO HS LO  
+C_U3A_C1         U3A_N16789866 HB  5p  
+C_U3A_C3         HO U3A_N16789866  10p  
+E_U3A_E1         U3A_N16790231 HO VALUE { IF(V(GATE_HD, 0) > 0.5, 5, -5) }
+R_U3A_R1         U3A_N16790231 U3A_N16789866  151  
+M_U3A_M2         HS U3A_N08192 HO HO PMOS01           
+X_U3A_U10         HS HO d_d1 
+R_U3A_R2         U3A_N16789868 U3A_N08192  150  
+C_U3A_C2         HS U3A_N08192  5p  
+X_U3A_U9         HO HB d_d1 
+C_U3A_C5         HO HB  10pF  
+C_U3A_C6         HO U3A_N08192  10p  
+C_U3A_C4         HS HO  10pF  
+M_U3A_M1         HB U3A_N16789866 HO HO NMOS01           
+E_U3A_E2         HO U3A_N16789868 VALUE { IF(V(GATE_HD, 0) > 0.5, -5, 5) }
+X_U1         VDD_INT VDD_TH VDD_UVLO COMP_BASIC_GEN PARAMS: VDD=1 VSS=0
++  VTHRESH=0.5
+C_U3B_C1         U3B_N16789866 VDD  5p  
+C_U3B_C3         LO U3B_N16789866  10p  
+E_U3B_E1         U3B_N16790231 LO VALUE { IF(V(GATE_LD, 0) > 0.5, 5, -5) }
+R_U3B_R1         U3B_N16790231 U3B_N16789866  151  
+M_U3B_M2         VSS U3B_N16789871 LO LO PMOS01           
+X_U3B_U10         VSS LO d_d1 
+R_U3B_R2         U3B_N16789868 U3B_N16789871  150  
+C_U3B_C2         VSS U3B_N16789871  5p  
+X_U3B_U9         LO VDD d_d1 
+C_U3B_C5         LO VDD  10pF  
+C_U3B_C6         LO U3B_N16789871  10p  
+C_U3B_C4         VSS LO  10pF  
+M_U3B_M1         VDD U3B_N16789866 LO LO NMOS01           
+E_U3B_E2         LO U3B_N16789868 VALUE { IF(V(GATE_LD, 0) > 0.5, -5, 5) }
+E_E2         VDD_INT 0 VDD VSS 1
+E_ABM1         VDD_TH 0 VALUE { IF ( V(VDD_UVLO) < 0.5, 6.7, 6.2 )    }
+C_U7_C1         U7_N14683769 0  1n IC=0 
+X_U7_U46         GATE_LD N18200399 U7_N14683159 NOR2_BASIC_GEN PARAMS: VDD=1
++  VSS=0 VTHRESH=500E-3
+X_U7_U43         U7_N14683769 GATE_LD BUF_BASIC_GEN PARAMS: VDD=1 VSS=0
++  VTHRESH=0.5
+X_U7_U48         U7_N147032561 U7_N14683769 d_d1 
+V_U7_V6         U7_N147032561 0 80m
+X_U7_S2    U7_N14683147 0 U7_N14683887 U7_N14683769 TON_TOFF_U7_S2 
+G_U7_ABM2I1         U7_N14683173 U7_N14683769 VALUE { IF(V(N18200399) > 0.5,
++  22.8m,0)    }
+X_U7_U44         N18200399 GATE_LD U7_N14683147 AND2_BASIC_GEN PARAMS: VDD=1
++  VSS=0 VTHRESH=500E-3
+G_U7_ABM2I2         U7_N14683769 0 VALUE { IF(V(N18200399) < 0.5, 26.5m, 0)   
++  }
+V_U7_V4         U7_N14683887 0 1Vdc
+X_U7_S1    U7_N14683159 0 U7_N14683769 0 TON_TOFF_U7_S1 
+V_U7_V5         U7_N14683173 0 1Vdc
+X_U7_U47         U7_N14683769 U7_N14683173 d_d1
+X_U17         N18187886 N18187850 N18200399 N18208809 srlatchrhp_basic_gen
++  PARAMS: VDD=1 VSS=0 VTHRESH=0.5
+X_U5_U5         LI U5_THRISE U5_HYS N18187886 COMPHYS_BASIC_GEN PARAMS: VDD=1
++  VSS=0 VTHRESH=0.5
+R_U5_Rin         LI VSS  200k  
+E_U5_E1         U5_THRISE VSS TABLE { V(VDD, VSS) } 
++ ((8,1.861)(9,1.87)(10,1.878)(11,1.886)(12,1.895)(13,1.899)(14,1.908)
++(15,1.913)(16,1.915))
+E_U5_E2         U5_HYS VSS TABLE { V(VDD, VSS) } 
++ ( (8,53m)(9,51m)(10,48m)(11,49m)(12,51m)(13,49m)(14,52m)(15,50m)(16,47m) )
+X_U33         N18188010 N18187855 N18187850 OR2_BASIC_GEN PARAMS: VDD=1 VSS=0
++  VTHRESH=500E-3
+X_U15         VDD_UVLO N18188010 INV_BASIC_GEN PARAMS: VDD=1 VSS=0
++  VTHRESH=500E-3
+X_U13         N18187886 N18187855 INV_BASIC_GEN PARAMS: VDD=1 VSS=0
++  VTHRESH=500E-3
+X_U16         N18187973 N18187939 N18203660 N18187960 srlatchrhp_basic_gen
++  PARAMS: VDD=1 VSS=0 VTHRESH=0.5
+R_Rss         0 VSS  1 TC=0,0 
+X_U12         N18187973 N18187942 INV_BASIC_GEN PARAMS: VDD=1 VSS=0
++  VTHRESH=500E-3
+X_U1_U5         HI U1_THRISE U1_HYS N18187973 COMPHYS_BASIC_GEN PARAMS: VDD=1
++  VSS=0 VTHRESH=0.5
+R_U1_Rin         HI VSS  200k  
+E_U1_E1         U1_THRISE VSS TABLE { V(VDD, VSS) } 
++ ((8,1.861)(9,1.87)(10,1.878)(11,1.886)(12,1.895)(13,1.899)(14,1.908)
++(15,1.913)(16,1.915))
+E_U1_E2         U1_HYS VSS TABLE { V(VDD, VSS) } 
++ ( (8,53m)(9,51m)(10,48m)(11,49m)(12,51m)(13,49m)(14,52m)(15,50m)(16,47m) )
+X_U34         VDD_UVLO VHBHS_UVLO UVLO NAND2_BASIC_GEN PARAMS: VDD=1 VSS=0
++  VTHRESH=500E-3
+X_U6         HB_INT HB_TH VHBHS_UVLO COMP_BASIC_GEN PARAMS: VDD=1 VSS=0
++  VTHRESH=0.5
+X_U32         UVLO N18187942 N18187939 OR2_BASIC_GEN PARAMS: VDD=1 VSS=0
++  VTHRESH=500E-3
+C_U2_C1         U2_N14683769 0  1n IC=0 
+X_U2_U46         GATE_HD N18203660 U2_N14683159 NOR2_BASIC_GEN PARAMS: VDD=1
++  VSS=0 VTHRESH=500E-3
+X_U2_U43         U2_N14683769 GATE_HD BUF_BASIC_GEN PARAMS: VDD=1 VSS=0
++  VTHRESH=0.5
+X_U2_U48         U2_N147032561 U2_N14683769 d_d1 
+V_U2_V6         U2_N147032561 0 80m
+X_U2_S2    U2_N14683147 0 U2_N14683887 U2_N14683769 TON_TOFF_U2_S2 
+G_U2_ABM2I1         U2_N14683173 U2_N14683769 VALUE { IF(V(N18203660) > 0.5,
++  22.8m,0)    }
+X_U2_U44         N18203660 GATE_HD U2_N14683147 AND2_BASIC_GEN PARAMS: VDD=1
++  VSS=0 VTHRESH=500E-3
+G_U2_ABM2I2         U2_N14683769 0 VALUE { IF(V(N18203660) < 0.5, 26.5m, 0)   
++  }
+V_U2_V4         U2_N14683887 0 1Vdc
+X_U2_S1    U2_N14683159 0 U2_N14683769 0 TON_TOFF_U2_S1 
+V_U2_V5         U2_N14683173 0 1Vdc
+X_U2_U47         U2_N14683769 U2_N14683173 d_d1 
+E_ABM5         HB_TH 0 VALUE { IF ( V(VHBHS_UVLO) < 0.5, 6.6, 6.2)    }
+E_E6         HB_INT 0 HB HS 1
+.ENDS LM5109B_TRANS
+*$
+.SUBCKT TON_TOFF_U7_S2 1 2 3 4  
+S_U7_S2         3 4 1 2 _U7_S2
+RS_U7_S2         1 2 1G
+.MODEL         _U7_S2 VSWITCH Roff=100e6 Ron=1m Voff=0.2 Von=0.8
+.ENDS TON_TOFF_U7_S2
+*$
+.SUBCKT TON_TOFF_U7_S1 1 2 3 4  
+S_U7_S1         3 4 1 2 _U7_S1
+RS_U7_S1         1 2 1G
+.MODEL         _U7_S1 VSWITCH Roff=100e6 Ron=1m Voff=0.2 Von=0.8
+.ENDS TON_TOFF_U7_S1
+*$
+.SUBCKT TON_TOFF_U2_S2 1 2 3 4  
+S_U2_S2         3 4 1 2 _U2_S2
+RS_U2_S2         1 2 1G
+.MODEL         _U2_S2 VSWITCH Roff=100e6 Ron=1m Voff=0.2 Von=0.8
+.ENDS TON_TOFF_U2_S2
+*$
+.SUBCKT TON_TOFF_U2_S1 1 2 3 4  
+S_U2_S1         3 4 1 2 _U2_S1
+RS_U2_S1         1 2 1G
+.MODEL         _U2_S1 VSWITCH Roff=100e6 Ron=1m Voff=0.2 Von=0.8
+.ENDS TON_TOFF_U2_S1
+*$
+.SUBCKT INV_BASIC_GEN A  Y PARAMS: VDD=1 VSS=0 VTHRESH=0.5 
+E_ABMGATE    YINT 0 VALUE {{IF(V(A) > {VTHRESH} , 
++ {VSS},{VDD})}}
+RINT YINT Y 1
+CINT Y 0 1n
+.ENDS INV_BASIC_GEN
+*$
+.SUBCKT OR2_BASIC_GEN A B Y PARAMS: VDD=1 VSS=0 VTHRESH=0.5 
+E_ABMGATE    YINT 0 VALUE {{IF(V(A) > {VTHRESH}  |  
++ V(B) > {VTHRESH},{VDD},{VSS})}}
+RINT YINT Y 1
+CINT Y 0 1n
+.ENDS OR2_BASIC_GEN
+*$
+**Reset has higher priority in this latch
+.SUBCKT SRLATCHRHP_BASIC_GEN S R Q QB PARAMS: VDD=1 VSS=0 VTHRESH=0.5 
+GQ 0 Qint VALUE = {IF(V(R) > {VTHRESH},-5,IF(V(S)>{VTHRESH},5, 0))}
+CQint Qint 0 1n
+RQint Qint 0 1000MEG
+D_D10 Qint MY5 D_D1
+V1 MY5 0 {VDD}
+D_D11 MYVSS Qint D_D1
+V2 MYVSS 0 {VSS} 
+EQ Qqq 0 Qint 0 1
+X3 Qqq Qqqd1 BUF_BASIC_GEN PARAMS: VDD={VDD} VSS={VSS} VTHRESH={VTHRESH}
+RQq Qqqd1 Q 1
+EQb Qbr 0 VALUE = {IF( V(Q) > {VTHRESH}, {VSS},{VDD})}
+RQb Qbr QB 1 
+Cdummy1 Q 0 1n 
+Cdummy2 QB 0 1n
+.IC V(Qint) {VSS}
+.MODEL D_D1 D (IS=1e-15 TT=10p Rs=0.05 N=0.1)
+.ENDS SRLATCHRHP_BASIC_GEN
+*$
+.SUBCKT D_D1 1 2
+D1 1 2 DD1
+.MODEL DD1 D (IS=1e-15 TT=10p Rs=0.001 N=0.1 )
+.ENDS D_D1
+*$
+.SUBCKT BUF_BASIC_GEN A  Y PARAMS: VDD=1 VSS=0 VTHRESH=0.5 
+E_ABMGATE    YINT 0 VALUE {{IF(V(A) > {VTHRESH} , 
++ {VDD},{VSS})}}
+RINT YINT Y 1
+CINT Y 0 1n
+.ENDS BUF_BASIC_GEN
+*$
+.SUBCKT COMP_BASIC_GEN INP INM Y PARAMS: VDD=1 VSS=0 VTHRESH=0.5	
+E_ABM Yint 0 VALUE {IF (V(INP) > 
++ V(INM), {VDD},{VSS})}
+R1 Yint Y 1
+C1 Y 0 1n
+.ENDS COMP_BASIC_GEN
+*$
+.SUBCKT NAND2_BASIC_GEN A B Y PARAMS: VDD=1 VSS=0 VTHRESH=0.5 
+E_ABMGATE    YINT 0 VALUE {{IF(V(A) > {VTHRESH}  &  
++ V(B) > {VTHRESH},{VSS},{VDD})}}
+RINT YINT Y 1
+CINT Y 0 1n
+.ENDS NAND2_BASIC_GEN
+*$
+.MODEL NMOS01 NMOS (VTO = 2 KP = 0.22 LAMBDA  = 0.001)
+*$
+.MODEL PMOS01 PMOS (VTO = -2 KP = 0.22 LAMBDA  = 0.001)
+*$
+.SUBCKT AND2_BASIC_GEN A B Y PARAMS: VDD=1 VSS=0 VTHRESH=0.5 
+E_ABMGATE    YINT 0 VALUE {{IF(V(A) > {VTHRESH}  &  
++ V(B) > {VTHRESH},{VDD},{VSS})}}
+RINT YINT Y 1
+CINT Y 0 1n
+.ENDS AND2_BASIC_GEN
+*$
+.SUBCKT COMPHYS_BASIC_GEN INP INM HYS OUT PARAMS: VDD=1 VSS=0 VTHRESH=0.5	
+EIN INP1 INM1 INP INM 1 
+EHYS INP1 INP2 VALUE { IF( V(1) > {VTHRESH},-V(HYS),0) }
+EOUT OUT 0 VALUE { IF( V(INP2)>V(INM1), {VDD} ,{VSS}) }
+R1 OUT 1 1
+C1 1 0 5n
+RINP1 INP1 0 1K
+.ENDS COMPHYS_BASIC_GEN
+*$
+.SUBCKT POWERMOS G D S PARAMS: RDSON=16m Ciss=1375p Crss=70p Coss=340p VSP=3.5 RG=1
+* This is a simple model for Power MOSFET.
+* The parameters modeled are
+* - RDSon,
+* - Input Capacitance,
+* - Reverse capacitance,
+* - Output capacitance,
+* - Switching point voltage (Gate voltage where the FET starts switching),
+* - Gate Resistance
+C_C1         S Da  {Coss} IC=0
+R_R1         Da D  10
+C_C2         Ga D  {Crss}  IC=0
+R_R2         G Ga {RG}
+C_C3         Ga S  {Ciss} IC=0
+D_D1         S Db Dbreak
+R_R3         Db D 1m
+S_switchM         D S Ga S _switchM
+RS_switchM         Ga S 100Meg
+.MODEL         _switchM VSWITCH Roff=100e6 Ron={RDSON} Voff=1.1 Von={VSP}
+.model Dbreak D Is=1e-14 Cjo=.1pF Rs=.1
+.ENDS POWERMOS
+*$
+.SUBCKT NOR2_BASIC_GEN A B Y PARAMS: VDD=1 VSS=0 VTHRESH=0.5 
+E_ABMGATE    YINT 0 VALUE {{IF(V(A) > {VTHRESH}  |  
++ V(B) > {VTHRESH},{VSS},{VDD})}}
+RINT YINT Y 1
+CINT Y 0 1n
+.ENDS NOR2_BASIC_GEN
+*$
+
