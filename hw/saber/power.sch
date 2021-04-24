@@ -109,51 +109,16 @@ Wire Wire Line
 Connection ~ 4750 4800
 Wire Wire Line
 	4750 4800 5000 4800
-$Comp
-L power:GNDPWR #PWR?
-U 1 1 6083B694
-P 4750 4850
-F 0 "#PWR?" H 4750 4650 50  0001 C CNN
-F 1 "GNDPWR" H 4754 4696 50  0000 C CNN
-F 2 "" H 4750 4800 50  0001 C CNN
-F 3 "" H 4750 4800 50  0001 C CNN
-	1    4750 4850
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	4500 4000 4500 4050
-$Comp
-L Device:R R?
-U 1 1 6083C402
-P 5400 3850
-F 0 "R?" H 5470 3896 50  0000 L CNN
-F 1 "1k" H 5470 3805 50  0000 L CNN
-F 2 "" V 5330 3850 50  0001 C CNN
-F 3 "~" H 5400 3850 50  0001 C CNN
-	1    5400 3850
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	5000 4000 5000 4100
-Connection ~ 5000 4100
-Wire Wire Line
-	5000 4100 5000 4200
-Wire Wire Line
-	5400 4000 5400 4100
 Text Notes 4450 2850 0    50   ~ 0
 Undervoltage Protection
-Connection ~ 5400 4100
-Wire Wire Line
-	5000 4100 5400 4100
 Wire Wire Line
 	4500 3700 4500 3600
-Wire Wire Line
-	5400 3600 5400 3700
 Wire Wire Line
 	4500 3600 5000 3600
 Wire Wire Line
 	5000 3700 5000 3600
-Connection ~ 5000 3600
 $Comp
 L Device:C C?
 U 1 1 6084839D
@@ -189,17 +154,6 @@ Wire Wire Line
 Connection ~ 9100 4000
 Wire Wire Line
 	9100 4050 9100 4000
-$Comp
-L power:GND #PWR?
-U 1 1 6084BF0D
-P 9100 4050
-F 0 "#PWR?" H 9100 3800 50  0001 C CNN
-F 1 "GND" H 9105 3877 50  0000 C CNN
-F 2 "" H 9100 4050 50  0001 C CNN
-F 3 "" H 9100 4050 50  0001 C CNN
-	1    9100 4050
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	9400 3600 9650 3600
 Wire Wire Line
@@ -208,29 +162,16 @@ Wire Wire Line
 	8550 3600 8800 3600
 Wire Wire Line
 	8550 4000 9100 4000
-Wire Wire Line
-	5000 3600 5400 3600
-Text Notes 3000 3500 0    50   ~ 0
+Text Notes 2900 3500 0    50   ~ 0
 PMOS needs to be able to supply system current (>12A)
 Text HLabel 1450 3600 0    50   Input ~ 0
-VBATT
+VBATT+
 Wire Wire Line
 	1450 3600 2050 3600
 Text Notes 6650 2850 0    50   ~ 0
 Surge Current Protection
 Text Notes 8950 2850 0    50   ~ 0
 3V3 Reg
-$Comp
-L power:GNDPWR #PWR?
-U 1 1 608EB186
-P 2250 4500
-F 0 "#PWR?" H 2250 4300 50  0001 C CNN
-F 1 "GNDPWR" H 2254 4346 50  0000 C CNN
-F 2 "" H 2250 4450 50  0001 C CNN
-F 3 "" H 2250 4450 50  0001 C CNN
-	1    2250 4500
-	1    0    0    -1  
-$EndComp
 $Comp
 L Device:R R?
 U 1 1 608EB1F9
@@ -258,12 +199,7 @@ Wire Wire Line
 Wire Wire Line
 	2250 3900 2250 4100
 Wire Wire Line
-	5400 3600 5750 3600
-Connection ~ 5400 3600
-Wire Wire Line
-	5950 4100 5950 3900
-Wire Wire Line
-	5400 4100 5950 4100
+	5600 4100 5600 3900
 Connection ~ 8550 3600
 Wire Wire Line
 	7350 3600 7650 3600
@@ -315,17 +251,6 @@ Wire Wire Line
 Wire Wire Line
 	8950 5800 8950 5850
 $Comp
-L power:GND #PWR?
-U 1 1 60958B60
-P 8950 5850
-F 0 "#PWR?" H 8950 5600 50  0001 C CNN
-F 1 "GND" H 8955 5677 50  0000 C CNN
-F 2 "" H 8950 5850 50  0001 C CNN
-F 3 "" H 8950 5850 50  0001 C CNN
-	1    8950 5850
-	1    0    0    -1  
-$EndComp
-$Comp
 L Device:R R?
 U 1 1 60958B66
 P 9300 5300
@@ -351,17 +276,6 @@ Wire Wire Line
 	9300 5450 9300 5500
 Wire Wire Line
 	9300 5800 9300 5850
-$Comp
-L power:GND #PWR?
-U 1 1 60958B76
-P 9300 5850
-F 0 "#PWR?" H 9300 5600 50  0001 C CNN
-F 1 "GND" H 9305 5677 50  0000 C CNN
-F 2 "" H 9300 5850 50  0001 C CNN
-F 3 "" H 9300 5850 50  0001 C CNN
-	1    9300 5850
-	1    0    0    -1  
-$EndComp
 $Comp
 L power:+3V3 #PWR?
 U 1 1 60958B7C
@@ -406,12 +320,12 @@ $EndComp
 $Comp
 L Device:Q_PMOS_GDS Q?
 U 1 1 6085B759
-P 5950 3700
-F 0 "Q?" V 6293 3700 50  0000 C CNN
-F 1 "DMP3028LK3-13" V 6202 3700 50  0000 C CNN
-F 2 "" H 6150 3800 50  0001 C CNN
-F 3 "https://www.diodes.com/assets/Datasheets/DMP3028LK3.pdf" H 5950 3700 50  0001 C CNN
-	1    5950 3700
+P 5600 3700
+F 0 "Q?" V 5943 3700 50  0000 C CNN
+F 1 "DMP3028LK3-13" V 5852 3700 50  0000 C CNN
+F 2 "" H 5800 3800 50  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/DMP3028LK3.pdf" H 5600 3700 50  0001 C CNN
+	1    5600 3700
 	0    1    -1   0   
 $EndComp
 $Comp
@@ -425,20 +339,40 @@ F 3 "https://www.diodes.com/assets/Datasheets/BZT52B15LP.pdf" H 2550 3850 50  00
 	1    2550 3850
 	0    1    1    0   
 $EndComp
-Text Notes 1500 5350 0    50   ~ 0
+Text Notes 1500 5450 0    50   ~ 0
 PMOS Vgs happens to be over-sized by 2x\nZener left in schematic for future-proofing
 Text Notes 5100 4600 0    50   ~ 0
 low-current drain follower
-Text Notes 4100 5350 0    50   ~ 0
+Text Notes 4100 5450 0    50   ~ 0
 divider allows bring-up tuning of cut-out voltage\nsims indicate divider not needed for BZT52C8V2S-7-F
 Connection ~ 7650 3600
 Wire Wire Line
 	6600 3150 10200 3150
 Wire Wire Line
-	6150 3600 6600 3600
-Connection ~ 6600 3600
-Wire Wire Line
 	4500 3600 2550 3600
 Connection ~ 4500 3600
 Connection ~ 2550 3600
+Connection ~ 5000 3600
+Wire Wire Line
+	5000 4000 5000 4100
+Wire Wire Line
+	5000 3600 5400 3600
+Wire Wire Line
+	5000 4100 5600 4100
+Connection ~ 5000 4100
+Wire Wire Line
+	5000 4100 5000 4200
+Wire Wire Line
+	5800 3600 6600 3600
+Connection ~ 6600 3600
+Text HLabel 2250 4500 3    50   Input ~ 0
+VBATT-
+Text HLabel 9100 4050 3    50   Input ~ 0
+VBATT-
+Text HLabel 4750 4850 3    50   Input ~ 0
+VBATT-
+Text HLabel 8950 5850 3    50   Input ~ 0
+VBATT-
+Text HLabel 9300 5850 3    50   Input ~ 0
+VBATT-
 $EndSCHEMATC

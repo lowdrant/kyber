@@ -40,19 +40,6 @@ F 3 "http://www.st.com/st-web-ui/static/active/en/resource/technical/document/da
 	-1   0    0    -1  
 $EndComp
 $Comp
-L Connector:Conn_01x05_Male J?
-U 1 1 608E4D17
-P 1900 4400
-AR Path="/608E4D17" Ref="J?"  Part="1" 
-AR Path="/608DACE2/608E4D17" Ref="J?"  Part="1" 
-F 0 "J?" H 2006 4778 50  0000 C CNN
-F 1 "pin header" H 2000 4700 50  0000 C CNN
-F 2 "" H 1900 4400 50  0001 C CNN
-F 3 "https://www.st.com/resource/en/user_manual/dm00244518-stm32-nucleo144-boards-mb1137-stmicroelectronics.pdf" H 1900 4400 50  0001 C CNN
-	1    1900 4400
-	1    0    0    -1  
-$EndComp
-$Comp
 L power:+3V3 #PWR?
 U 1 1 608E4D1E
 P 5800 3550
@@ -91,68 +78,10 @@ F 3 "" H 5850 5200 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	5850 5200 5850 5150
-Text Label 6400 3850 0    50   ~ 0
-NRST
-Text Label 5300 4850 2    50   ~ 0
-SWDIO
-Text Label 5300 4950 2    50   ~ 0
-SWCLK
-Wire Wire Line
-	5300 4950 5350 4950
-Wire Wire Line
-	5300 4850 5350 4850
 Wire Wire Line
 	6400 3850 6350 3850
-$Comp
-L power:+3V3 #PWR?
-U 1 1 608E4D39
-P 2650 4150
-AR Path="/608E4D39" Ref="#PWR?"  Part="1" 
-AR Path="/608DACE2/608E4D39" Ref="#PWR?"  Part="1" 
-F 0 "#PWR?" H 2650 4000 50  0001 C CNN
-F 1 "+3V3" H 2665 4323 50  0000 C CNN
-F 2 "" H 2650 4150 50  0001 C CNN
-F 3 "" H 2650 4150 50  0001 C CNN
-	1    2650 4150
-	1    0    0    -1  
-$EndComp
-Text Label 2250 4300 0    50   ~ 0
-SWCLK
-Text Label 2250 4500 0    50   ~ 0
-SWDIO
-Wire Wire Line
-	2250 4300 2100 4300
-Wire Wire Line
-	2250 4500 2100 4500
-Text Label 2250 4600 0    50   ~ 0
-NRST
-Wire Wire Line
-	2250 4600 2100 4600
-$Comp
-L power:GND #PWR?
-U 1 1 608E4D45
-P 2650 4450
-AR Path="/608E4D45" Ref="#PWR?"  Part="1" 
-AR Path="/608DACE2/608E4D45" Ref="#PWR?"  Part="1" 
-F 0 "#PWR?" H 2650 4200 50  0001 C CNN
-F 1 "GND" H 2655 4277 50  0000 C CNN
-F 2 "" H 2650 4450 50  0001 C CNN
-F 3 "" H 2650 4450 50  0001 C CNN
-	1    2650 4450
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	2100 4400 2650 4400
-Wire Wire Line
-	2650 4400 2650 4450
-Wire Wire Line
-	2100 4200 2650 4200
-Wire Wire Line
-	2650 4200 2650 4150
 Text Notes 1700 3100 0    50   ~ 0
-Programming Header
-Text Notes 1400 5700 0    50   ~ 0
-pinout for 144pin nucleo user manual, p19\nsymbol docs link to said user manual
+Decoupling Caps
 $Comp
 L Device:R R?
 U 1 1 60916090
@@ -351,4 +280,14 @@ Wire Wire Line
 	10050 3900 10050 4050
 Text Notes 5100 5700 0    50   ~ 0
 All pinnames should match in .ioc file 
+Text HLabel 6400 3850 2    50   Input ~ 0
+NRST
+Text HLabel 4900 4850 0    50   Input ~ 0
+SWDIO
+Text HLabel 4900 4950 0    50   Input ~ 0
+SWCLK
+Wire Wire Line
+	4900 4950 5350 4950
+Wire Wire Line
+	4900 4850 5350 4850
 $EndSCHEMATC
