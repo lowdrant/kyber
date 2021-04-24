@@ -1,0 +1,10 @@
+*SRC=MMSZ5236BS;DI_MMSZ5236BS;Diodes;Zener <=10V; 7.50V  0.500W   Diodes Inc. 500 mW Zener
+*SYM=HZEN
+.SUBCKT DI_MMSZ5236BS  1 2
+*        Terminals    A   K
+D1 1 2 DF
+DZ 3 1 DR
+VZ 2 3 5.21
+.MODEL DF D ( IS=27.5p RS=33.8 N=1.10
++ CJO=58.2p VJ=0.750 M=0.330 TT=50.1n )
+.MODEL DR D ( IS=5.49f RS=2.12 N=3.00 )

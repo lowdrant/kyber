@@ -1,0 +1,11 @@
+*SRC=BZT52C8V2;DI_BZT52C8V2;Diodes;Zener <=10V; 8.20V  0.500W   Diodes Inc. -
+*SYM=HZEN
+.SUBCKT DI_BZT52C8V2  1 2
+*        Terminals    A   K
+D1 1 2 DF
+DZ 3 1 DR
+VZ 2 3 6.59
+.MODEL DF D ( IS=25.1p RS=33.6 N=1.10
++ CJO=38.4p VJ=0.750 M=0.330 TT=50.1n )
+.MODEL DR D ( IS=5.02f RS=3.45 N=2.23 )
+.ENDS
