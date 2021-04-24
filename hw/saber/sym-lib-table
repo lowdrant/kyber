@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name saber)(type Legacy)(uri /home/lowdrant/git/saber/hw/saber/saber.lib)(options "")(descr ""))
+)

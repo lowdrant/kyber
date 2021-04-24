@@ -64,6 +64,8 @@ typedef enum
 
 /* USER CODE END EM */
 
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
+
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
@@ -72,12 +74,22 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define LED_HBEAT_Pin GPIO_PIN_14
-#define LED_HBEAT_GPIO_Port GPIOC
-#define ADC_BATT_Pin GPIO_PIN_4
-#define ADC_BATT_GPIO_Port GPIOA
-#define LED_PWR_Pin GPIO_PIN_7
-#define LED_PWR_GPIO_Port GPIOA
+#define SIG_LED_Pin GPIO_PIN_14
+#define SIG_LED_GPIO_Port GPIOC
+#define ADC_imtr_Pin GPIO_PIN_0
+#define ADC_imtr_GPIO_Port GPIOA
+#define PWM_MTR_Pin GPIO_PIN_1
+#define PWM_MTR_GPIO_Port GPIOA
+#define INA_Pin GPIO_PIN_2
+#define INA_GPIO_Port GPIOA
+#define INB_Pin GPIO_PIN_3
+#define INB_GPIO_Port GPIOA
+#define ADC_VBATT_Pin GPIO_PIN_4
+#define ADC_VBATT_GPIO_Port GPIOA
+#define PWM_SPKR_Pin GPIO_PIN_5
+#define PWM_SPKR_GPIO_Port GPIOA
+#define LED_HBEAT_Pin GPIO_PIN_7
+#define LED_HBEAT_GPIO_Port GPIOA
 #define BTN_Pin GPIO_PIN_1
 #define BTN_GPIO_Port GPIOB
 #define BTN_EXTI_IRQn EXTI0_1_IRQn
