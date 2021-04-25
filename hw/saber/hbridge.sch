@@ -24,32 +24,6 @@ Text HLabel 5100 3700 0    50   Input ~ 0
 INA
 Text HLabel 5100 3900 0    50   Input ~ 0
 INB
-$Comp
-L saber:VNHD7008AY U?
-U 1 1 609467F4
-P 4750 3600
-AR Path="/60835C30/609467F4" Ref="U?"  Part="1" 
-AR Path="/609455AB/609467F4" Ref="U?"  Part="1" 
-F 0 "U?" H 8200 4050 50  0000 C CNN
-F 1 "VNHD7008AY" H 8400 3950 50  0000 C CNN
-F 2 "" H 4750 3600 50  0001 C CNN
-F 3 "https://www.st.com/resource/en/datasheet/vnhd7008ay.pdf" H 4750 3600 50  0001 C CNN
-	1    4750 3600
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:Q_NMOS_DGS Q?
-U 1 1 609467FB
-P 6400 4450
-AR Path="/60835C30/609467FB" Ref="Q?"  Part="1" 
-AR Path="/609455AB/609467FB" Ref="Q?"  Part="1" 
-F 0 "Q?" H 6600 4350 50  0000 L CNN
-F 1 "Q_NMOS_DGS" H 6600 4250 50  0000 L CNN
-F 2 "" H 6600 4550 50  0001 C CNN
-F 3 "~" H 6400 4450 50  0001 C CNN
-	1    6400 4450
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	6200 4450 6150 4450
 Wire Wire Line
@@ -60,32 +34,6 @@ Wire Wire Line
 	6150 4700 6500 4700
 Wire Wire Line
 	6500 4700 6500 4650
-$Comp
-L Device:Q_NMOS_DGS Q?
-U 1 1 60946807
-P 7550 4450
-AR Path="/60835C30/60946807" Ref="Q?"  Part="1" 
-AR Path="/609455AB/60946807" Ref="Q?"  Part="1" 
-F 0 "Q?" H 7750 4350 50  0000 L CNN
-F 1 "Q_NMOS_DGS" H 7750 4450 50  0000 L CNN
-F 2 "" H 7750 4550 50  0001 C CNN
-F 3 "~" H 7550 4450 50  0001 C CNN
-	1    7550 4450
-	-1   0    0    1   
-$EndComp
-$Comp
-L Device:Q_NMOS_DGS Q?
-U 1 1 6094680E
-P 6950 2950
-AR Path="/60835C30/6094680E" Ref="Q?"  Part="1" 
-AR Path="/609455AB/6094680E" Ref="Q?"  Part="1" 
-F 0 "Q?" V 7293 2950 50  0000 C CNN
-F 1 "Q_NMOS_DGS" V 7202 2950 50  0000 C CNN
-F 2 "" H 7150 3050 50  0001 C CNN
-F 3 "~" H 6950 2950 50  0001 C CNN
-	1    6950 2950
-	0    1    -1   0   
-$EndComp
 Wire Wire Line
 	5100 3500 5150 3500
 Wire Wire Line
@@ -269,20 +217,6 @@ F 3 "https://media.digikey.com/pdf/Data%20Sheets/Diodes%20PDFs/BZT52C2V0S-BZT52C
 	0    -1   1    0   
 $EndComp
 $Comp
-L Device:Q_NMOS_GDS Q?
-U 1 1 60A0C7C2
-P 2800 3650
-AR Path="/60835C0E/60A0C7C2" Ref="Q?"  Part="1" 
-AR Path="/60A0C7C2" Ref="Q?"  Part="1" 
-AR Path="/609455AB/60A0C7C2" Ref="Q?"  Part="1" 
-F 0 "Q?" H 3006 3696 50  0000 L CNN
-F 1 "2N7002" H 3006 3605 50  0000 L CNN
-F 2 "" H 3000 3750 50  0001 C CNN
-F 3 "https://rocelec.widen.net/view/pdf/orqxwkxkq1/ONSM-S-A0003544006-1.pdf" H 2800 3650 50  0001 C CNN
-	1    2800 3650
-	1    0    0    -1  
-$EndComp
-$Comp
 L Device:R R?
 U 1 1 60A0C7C9
 P 2900 3100
@@ -304,7 +238,7 @@ AR Path="/60835C0E/60A0C7D0" Ref="R?"  Part="1"
 AR Path="/60A0C7D0" Ref="R?"  Part="1" 
 AR Path="/609455AB/60A0C7D0" Ref="R?"  Part="1" 
 F 0 "R?" H 2481 3404 50  0000 R CNN
-F 1 "FUTURE PROOFING" H 2481 3495 50  0000 R CNN
+F 1 "0" H 2481 3495 50  0000 R CNN
 F 2 "" V 2480 3450 50  0001 C CNN
 F 3 "~" H 2550 3450 50  0001 C CNN
 	1    2550 3450
@@ -390,44 +324,11 @@ L Device:D_Schottky D?
 U 1 1 60B3B341
 P 9750 4000
 F 0 "D?" V 9704 4079 50  0000 L CNN
-F 1 "D_Schottky" V 9795 4079 50  0000 L CNN
+F 1 "SBR10E45P5-7" V 9795 4079 50  0000 L CNN
 F 2 "" H 9750 4000 50  0001 C CNN
-F 3 "~" H 9750 4000 50  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/SBR10E45P5.pdf" H 9750 4000 50  0001 C CNN
 	1    9750 4000
 	0    -1   1    0   
-$EndComp
-$Comp
-L Device:D_Schottky D?
-U 1 1 60B3B4AF
-P 9750 4500
-F 0 "D?" V 9704 4579 50  0000 L CNN
-F 1 "D_Schottky" V 9795 4579 50  0000 L CNN
-F 2 "" H 9750 4500 50  0001 C CNN
-F 3 "~" H 9750 4500 50  0001 C CNN
-	1    9750 4500
-	0    -1   1    0   
-$EndComp
-$Comp
-L Device:D_Schottky D?
-U 1 1 60B3CB15
-P 10350 4000
-F 0 "D?" V 10304 4079 50  0000 L CNN
-F 1 "D_Schottky" V 10395 4079 50  0000 L CNN
-F 2 "" H 10350 4000 50  0001 C CNN
-F 3 "~" H 10350 4000 50  0001 C CNN
-	1    10350 4000
-	0    1    1    0   
-$EndComp
-$Comp
-L Device:D_Schottky D?
-U 1 1 60B3E159
-P 10350 4500
-F 0 "D?" V 10304 4579 50  0000 L CNN
-F 1 "D_Schottky" V 10395 4579 50  0000 L CNN
-F 2 "" H 10350 4500 50  0001 C CNN
-F 3 "~" H 10350 4500 50  0001 C CNN
-	1    10350 4500
-	0    1    1    0   
 $EndComp
 Text Notes 6800 2400 0    50   ~ 0
 HBridge
@@ -467,23 +368,23 @@ Connection ~ 6650 2850
 $Comp
 L Device:LED D?
 U 1 1 60BFEEFB
-P 3450 4000
-F 0 "D?" V 3488 4078 50  0000 L CNN
-F 1 "LED" V 3397 4078 50  0000 L CNN
-F 2 "" H 3450 4000 50  0001 C CNN
-F 3 "~" H 3450 4000 50  0001 C CNN
-	1    3450 4000
+P 3550 4150
+F 0 "D?" V 3588 4228 50  0000 L CNN
+F 1 "150060RS75000" V 3497 4228 50  0000 L CNN
+F 2 "" H 3550 4150 50  0001 C CNN
+F 3 "https://www.we-online.de/katalog/datasheet/150060RS75000.pdf" H 3550 4150 50  0001 C CNN
+	1    3550 4150
 	0    1    -1   0   
 $EndComp
 $Comp
 L Device:R R?
 U 1 1 60BFF003
-P 3450 3650
-F 0 "R?" H 3520 3696 50  0000 L CNN
-F 1 "1K" H 3520 3605 50  0000 L CNN
-F 2 "" V 3380 3650 50  0001 C CNN
-F 3 "~" H 3450 3650 50  0001 C CNN
-	1    3450 3650
+P 3550 3800
+F 0 "R?" H 3620 3846 50  0000 L CNN
+F 1 "1K" H 3620 3755 50  0000 L CNN
+F 2 "" V 3480 3800 50  0001 C CNN
+F 3 "~" H 3550 3800 50  0001 C CNN
+	1    3550 3800
 	1    0    0    -1  
 $EndComp
 Connection ~ 2900 5700
@@ -584,19 +485,124 @@ Wire Wire Line
 Wire Wire Line
 	3400 2850 6650 2850
 Wire Wire Line
-	3200 3350 3450 3350
-Connection ~ 3200 3350
-Connection ~ 3450 5700
-Wire Wire Line
-	3450 5700 6200 5700
-Wire Wire Line
-	2900 5700 3450 5700
-Wire Wire Line
-	3450 3500 3450 3350
-Wire Wire Line
-	3450 4150 3450 5700
-Wire Wire Line
-	3450 3800 3450 3850
-Text Notes 3500 3500 0    50   ~ 0
+	3550 3950 3550 4000
+Text Notes 3350 3300 0    50   ~ 0
 Undervoltage-On LED
+$Comp
+L Device:Q_NMOS_GDS Q?
+U 1 1 60E4E76B
+P 6950 2950
+F 0 "Q?" V 7293 2950 50  0000 C CNN
+F 1 "DMTH4005SK3Q" V 7202 2950 50  0000 C CNN
+F 2 "" H 7150 3050 50  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/DMTH4005SK3Q.pdf" H 6950 2950 50  0001 C CNN
+	1    6950 2950
+	0    -1   -1   0   
+$EndComp
+$Comp
+L saber:VNHD7008AY U?
+U 1 1 609467F4
+P 4750 3600
+AR Path="/60835C30/609467F4" Ref="U?"  Part="1" 
+AR Path="/609455AB/609467F4" Ref="U?"  Part="1" 
+F 0 "U?" H 8200 4050 50  0000 C CNN
+F 1 "VNHD7008AY" H 8400 3950 50  0000 C CNN
+F 2 "" H 4750 3600 50  0001 C CNN
+F 3 "https://www.st.com/resource/en/datasheet/vnhd7008ay.pdf" H 4750 3600 50  0001 C CNN
+	1    4750 3600
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:Q_NMOS_GDS Q?
+U 1 1 60E51F9A
+P 6400 4450
+F 0 "Q?" H 6600 4550 50  0000 L CNN
+F 1 "DMTH4005SK3Q" H 6600 4450 50  0000 L CNN
+F 2 "" H 6600 4550 50  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/DMTH4005SK3Q.pdf" H 6400 4450 50  0001 C CNN
+	1    6400 4450
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:Q_NMOS_GDS Q?
+U 1 1 60E59F39
+P 7550 4450
+F 0 "Q?" H 7750 4350 50  0000 L CNN
+F 1 "DMTH4005SK3Q" H 7750 4250 50  0000 L CNN
+F 2 "" H 7750 4550 50  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/DMTH4005SK3Q.pdf" H 7550 4450 50  0001 C CNN
+	1    7550 4450
+	-1   0    0    -1  
+$EndComp
+$Comp
+L Device:Q_NMOS_GSD Q?
+U 1 1 60ECDA76
+P 2800 3650
+AR Path="/60835C30/60ECDA76" Ref="Q?"  Part="1" 
+AR Path="/609455AB/60ECDA76" Ref="Q?"  Part="1" 
+F 0 "Q?" H 3006 3696 50  0000 L CNN
+F 1 "SSM3K337R" H 3006 3605 50  0000 L CNN
+F 2 "" H 3000 3750 50  0001 C CNN
+F 3 "https://toshiba.semicon-storage.com/info/docget.jsp?did=14758&prodName=SSM3K337R" H 2800 3650 50  0001 C CNN
+	1    2800 3650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3200 3350 3550 3350
+Connection ~ 3200 3350
+$Comp
+L Device:D_Schottky D?
+U 1 1 60EDFB2E
+P 9750 4500
+F 0 "D?" V 9704 4579 50  0000 L CNN
+F 1 "SBR10E45P5-7" V 9795 4579 50  0000 L CNN
+F 2 "" H 9750 4500 50  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/SBR10E45P5.pdf" H 9750 4500 50  0001 C CNN
+	1    9750 4500
+	0    -1   1    0   
+$EndComp
+$Comp
+L Device:D_Schottky D?
+U 1 1 60EE22CC
+P 10350 4500
+F 0 "D?" V 10304 4579 50  0000 L CNN
+F 1 "SBR10E45P5-7" V 10395 4579 50  0000 L CNN
+F 2 "" H 10350 4500 50  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/SBR10E45P5.pdf" H 10350 4500 50  0001 C CNN
+	1    10350 4500
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:D_Schottky D?
+U 1 1 60EE71EA
+P 10350 4000
+F 0 "D?" V 10304 4079 50  0000 L CNN
+F 1 "SBR10E45P5-7" V 10395 4079 50  0000 L CNN
+F 2 "" H 10350 4000 50  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/SBR10E45P5.pdf" H 10350 4000 50  0001 C CNN
+	1    10350 4000
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:Jumper_NC_Small JP?
+U 1 1 60F24C08
+P 3550 3500
+F 0 "JP?" V 3504 3574 50  0000 L CNN
+F 1 "Jumper_NC_Small" V 3595 3574 50  0000 L CNN
+F 2 "" H 3550 3500 50  0001 C CNN
+F 3 "~" H 3550 3500 50  0001 C CNN
+	1    3550 3500
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	3550 3400 3550 3350
+Wire Wire Line
+	2900 5700 3550 5700
+Wire Wire Line
+	3550 3600 3550 3650
+Wire Wire Line
+	3550 4300 3550 5700
+Connection ~ 3550 5700
+Wire Wire Line
+	3550 5700 6200 5700
 $EndSCHEMATC
