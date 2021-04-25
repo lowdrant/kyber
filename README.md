@@ -38,7 +38,7 @@ Current resolution: standardize on D2PAK for its ubiquity
 
 ### Subcircuits
 #### Reverse Polarity Protection
-Either diode or PMOS circuit. Leaning towards PMOS to reduce size & I<sup>2</sup>R losses. This will help prevent the Big Dumb<sup>TM</sup> since I plan to use terminal blocks for my main connector.
+Use the built-in protection of the hbridge. Need to characterise I<sup>2</sup>R losses. This will help prevent the Big Dumb<sup>TM</sup> since I plan to use terminal blocks for my main connector.
 #### Low-Voltage Shutoff
 Simple Zener-NMOS-PMOS circuit I designed for a student club a while back. Zener triggers NMOS, which in turn drives the PMOS. It has decent switching characteristics. PMOS here should match the RPP PMOS. 
 
