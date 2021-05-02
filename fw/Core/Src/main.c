@@ -46,6 +46,7 @@ ADC_HandleTypeDef hadc;
 I2C_HandleTypeDef hi2c1;
 
 TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim22;
 
 /* USER CODE BEGIN PV */
 
@@ -53,7 +54,6 @@ SABER_ExecState SaberState = SABER_OFF;
 
 // Communication
 HAL_StatusTypeDef out = HAL_OK;
-float xacc,yacc,zacc;
 
 // Global Timing
 uint32_t ticksPerSec;  // for timing: stm32l0xx_hal.h, period2ticks
@@ -68,11 +68,13 @@ static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_ADC_Init(void);
 static void MX_TIM2_Init(void);
+static void MX_TIM22_Init(void);
 /* USER CODE BEGIN PFP */
 static inline void nextState_USER(void);
 static inline void execSaberExtend(void);
 static inline void execSaberRetract(void);
-static inline float Period2Ticks(float);
+static inline uint32_t Period2Ticks(float);
+static inline uint16_t accVal(uint8_t*);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -89,7 +91,7 @@ int main(void)
   /* USER CODE BEGIN 1 */
   __disable_irq();  // wait for setup
   static const uint8_t accRaw[10] = {0,0,0,0,0,0,0,0,0,0};
-  static const uint8_t d[1] = {ACC_X_MSB_ADDR};
+  static const uint8_t accTxPacket[1] = {ACC_X_MSB_ADDR};
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -98,6 +100,13 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
+  /* USER CODE END Init */
+
+  /* Configure the system clock */
+  SystemClock_Config();
+
+  /* USER CODE BEGIN SysInit */
+  // Timing Configuration
   switch (uwTickFreq) {
     case HAL_TICK_FREQ_10HZ :
       ticksPerSec = 10;
@@ -111,16 +120,9 @@ int main(void)
     default :
       Error_Handler();
   }
-  /* USER CODE END Init */
-
-  /* Configure the system clock */
-  SystemClock_Config();
-
-  /* USER CODE BEGIN SysInit */
-  uint32_t ticks_HBEAT = (uint32_t) Period2Ticks(T_HBEAT);
-  // uint32_t ticks_ACC = (uint32_t) Period2Ticks(T_ACC);
-  uint32_t ticks_BATT = (uint32_t) Period2Ticks(T_BATT);
-  ticksDEBOUNCE = (uint32_t) Period2Ticks(T_DEBOUNCE);
+  uint32_t ticks_HBEAT = Period2Ticks(T_HBEAT);
+  uint32_t ticks_ACC = Period2Ticks(T_ACC);
+  ticksDEBOUNCE = Period2Ticks(T_DEBOUNCE);
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -128,38 +130,18 @@ int main(void)
   MX_I2C1_Init();
   MX_ADC_Init();
   MX_TIM2_Init();
+  MX_TIM22_Init();
   /* USER CODE BEGIN 2 */
+  uint16_t xacc,yacc,zacc;
+  uint32_t lastTick_HBEAT = 0;  // reset ticks
+  uint32_t lastTick_ACC = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  uint32_t lastTick_HBEAT = 0;  // reset ticks
-  uint32_t lastTick_BATT = 0;
-  uint32_t counts_BATT = 0;
-  float v_BATT;
   HAL_ADC_Start(&hadc);
   __enable_irq();  // start program
   while (1) {
-    // Heartbeat
-    if (uwTick - lastTick_HBEAT > ticks_HBEAT) {
-      HAL_GPIO_TogglePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin);
-      lastTick_HBEAT = uwTick;
-    }
-
-    // Battery ADC
-    if (uwTick - lastTick_BATT > ticks_BATT) {
-      out = HAL_ADC_PollForConversion(&hadc,1);
-      if (out == HAL_OK) {  // want non-blocking
-        counts_BATT = HAL_ADC_GetValue(&hadc);
-        v_BATT = counts2batt(counts_BATT);
-        HAL_ADC_Start(&hadc);
-        lastTick_BATT = uwTick;
-        if (v_BATT < BATT_V_LOW) {
-          SaberState = SABER_LOW_BATT;
-        }
-      }
-    }
-
     // State Behavior
     switch (SaberState) {
       case SABER_OFF:
@@ -173,32 +155,31 @@ int main(void)
         SaberState = SABER_OFF;
         break;
       case SABER_ON:
-        break;  // TOD: accelerometer noises
-      case SABER_LOW_BATT:
-//        HAL_NVIC_DisableIRQ(EXTI0_1_IRQn);
-        break;  // TODO
+        break;  // TODO: accelerometer noises
       default:
         Error_Handler();
         break;
     }
 
+    // Heartbeat
+    if (uwTick - lastTick_HBEAT > ticks_HBEAT) {
+      HAL_GPIO_TogglePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin);
+      lastTick_HBEAT = uwTick;
+    }
+
 	  // Accelerometer
-    /*
-    if (uwTick - lastTick_ACC > ticks_ACC) {
+    if ( (uwTick - lastTick_ACC > ticks_ACC) ) {
       out = HAL_OK;
       __disable_irq();
-      out |= HAL_I2C_Master_Transmit(&ACC_I2C, ACC_ADDR<<1, d, 1, HAL_MAX_DELAY);
+      out |= HAL_I2C_Master_Transmit(&ACC_I2C, ACC_ADDR<<1, accTxPacket, 1, HAL_MAX_DELAY);
       out |= HAL_I2C_Master_Receive(&ACC_I2C, ACC_ADDR<<1, accRaw, 10, HAL_MAX_DELAY);
-      if (out != HAL_OK) {  // check for errors before re-enabling interrupts
-        Error_Handler();
-      }
+      if (out != HAL_OK) {Error_Handler();}
       __enable_irq();
-      xacc = ACC2G(accRaw);
-      yacc = ACC2G(accRaw+2);
-      zacc = ACC2G(accRaw+4);
+      xacc = accVal(accRaw);
+      yacc = accVal(accRaw+2);
+      zacc = accVal(accRaw+4);
       lastTick_ACC = uwTick;
     }
-    */
   }
     /* USER CODE END WHILE */
 
@@ -293,15 +274,8 @@ static void MX_ADC_Init(void)
   }
   /** Configure for the selected ADC regular channel to be converted. 
   */
-  sConfig.Channel = ADC_CHANNEL_0;
-  sConfig.Rank = ADC_RANK_CHANNEL_NUMBER;
-  if (HAL_ADC_ConfigChannel(&hadc, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Configure for the selected ADC regular channel to be converted. 
-  */
   sConfig.Channel = ADC_CHANNEL_4;
+  sConfig.Rank = ADC_RANK_CHANNEL_NUMBER;
   if (HAL_ADC_ConfigChannel(&hadc, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -421,6 +395,55 @@ static void MX_TIM2_Init(void)
 }
 
 /**
+  * @brief TIM22 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM22_Init(void)
+{
+
+  /* USER CODE BEGIN TIM22_Init 0 */
+
+  /* USER CODE END TIM22_Init 0 */
+
+  TIM_Encoder_InitTypeDef sConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM22_Init 1 */
+
+  /* USER CODE END TIM22_Init 1 */
+  htim22.Instance = TIM22;
+  htim22.Init.Prescaler = 0;
+  htim22.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim22.Init.Period = 0;
+  htim22.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim22.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
+  sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
+  sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
+  sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
+  sConfig.IC1Filter = 0;
+  sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
+  sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
+  sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
+  sConfig.IC2Filter = 0;
+  if (HAL_TIM_Encoder_Init(&htim22, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim22, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM22_Init 2 */
+
+  /* USER CODE END TIM22_Init 2 */
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -435,10 +458,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(SIG_LED_GPIO_Port, SIG_LED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, SIG_LED_Pin|SIG_SOL_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, INA_Pin|INB_Pin|LED_HBEAT_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, INA_Pin|LED_HBEAT_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : SIG_LED_Pin */
   GPIO_InitStruct.Pin = SIG_LED_Pin;
@@ -447,12 +470,25 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(SIG_LED_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : INA_Pin INB_Pin LED_HBEAT_Pin */
-  GPIO_InitStruct.Pin = INA_Pin|INB_Pin|LED_HBEAT_Pin;
+  /*Configure GPIO pin : SIG_SOL_Pin */
+  GPIO_InitStruct.Pin = SIG_SOL_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(SIG_SOL_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : INA_Pin LED_HBEAT_Pin */
+  GPIO_InitStruct.Pin = INA_Pin|LED_HBEAT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : INB_Pin */
+  GPIO_InitStruct.Pin = INB_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(INB_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : BTN_Pin */
   GPIO_InitStruct.Pin = BTN_Pin;
@@ -467,7 +503,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+// ***************************************************************************
 /**
   * @brief  EXTI line detection callbacks.
   * @param  GPIO_Pin Specifies the pins connected to the EXTI line.
@@ -528,7 +564,7 @@ static inline void nextState_USER(void)
   */
 static inline void execSaberExtend(void)
 {
-  HAL_GPIO_WritePin(LED_PWR_GPIO_Port, LED_PWR_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(SIG_LED_GPIO_Port, SIG_LED_Pin, GPIO_PIN_SET);
 }
 
 /**
@@ -540,7 +576,7 @@ static inline void execSaberExtend(void)
   */
 static inline void execSaberRetract(void)
 {
-  HAL_GPIO_WritePin(LED_PWR_GPIO_Port, LED_PWR_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(SIG_LED_GPIO_Port, SIG_LED_Pin, GPIO_PIN_RESET);
 }
 
 /**
@@ -549,17 +585,27 @@ static inline void execSaberRetract(void)
 
 /**
  * @brief Convert Period to Number of System Ticks
- * @note User must decide how to round number of ticks
  * @param T execution period in seconds
  * @retval Execution period in system ticks
  */
-static inline float Period2Ticks(float T)
+static inline uint32_t Period2Ticks(float T)
 {
-	return T * ticksPerSec;
+	return (uint32_t)(T * ticksPerSec);
 }
 
 
+/**
+ * @brief Convert I2C Data to Accelerometer Reading
+ * @note See hardware.h accelerometer section for details.
+ * @param d length-2 uint8 accelerometer data
+ * @retval Acceleration in counts
+ */
+static inline uint16_t accVal(uint8_t*d)
+{
+  return ((*d)<<ACC_BIT0_SHIFT) + (*(d+1)<<ACC_BIT1_SHIFT);
+}
 
+// ***************************************************************************
 /* USER CODE END 4 */
 
 /**
@@ -571,9 +617,18 @@ void Error_Handler(void)
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
-  HAL_GPIO_WritePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin, GPIO_PIN_SET);
   while (1)
   {
+    // Turn off motor
+    HAL_GPIO_WritePin(PWM_MTR_GPIO_Port,PWM_MTR_Pin,GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(INA_GPIO_Port,INA_Pin,GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(INB_GPIO_Port,INB_Pin,GPIO_PIN_RESET);
+    // Disable speaker
+    HAL_GPIO_WritePin(PWM_SPKR_GPIO_Port,PWM_SPKR_Pin,GPIO_PIN_RESET);
+    // Disable power led
+    HAL_GPIO_WritePin(SIG_LED_GPIO_Port,SIG_LED_Pin,GPIO_PIN_RESET);
+    // Turn on hbeat led
+    HAL_GPIO_WritePin(LED_HBEAT_GPIO_Port,LED_HBEAT_Pin,GPIO_PIN_SET);
   }
   /* USER CODE END Error_Handler_Debug */
 }

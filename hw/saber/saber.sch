@@ -21,16 +21,16 @@ F0 "micro" 50
 F1 "micro.sch" 50
 F2 "SDA" B R 7450 3500 50 
 F3 "SCL" O R 7450 3600 50 
-F4 "imtr" I L 6300 3650 50 
+F4 "ADC_imtr" I L 6300 3650 50 
 F5 "SIG_LED" O L 6300 5100 50 
 F6 "INA" O L 6300 3300 50 
 F7 "INB" O L 6300 3500 50 
 F8 "PWM_MTR" B L 6300 3100 50 
 F9 "PWM_SPKR" O L 6300 5200 50 
 F10 "SIG_SOL" O L 6300 5000 50 
-F11 "BTN" I L 6300 4300 50 
-F12 "ENC_A" I L 6300 4375 50 
-F13 "ENC_B" I L 6300 4450 50 
+F11 "BTN" I L 6300 4400 50 
+F12 "ENC_A" I L 6300 4475 50 
+F13 "ENC_B" I L 6300 4550 50 
 $EndSheet
 Text Label 2000 3900 0    50   ~ 0
 MOT+
@@ -76,8 +76,8 @@ Text Label 3650 4750 2    50   ~ 0
 SOL+
 Text Label 3650 4850 2    50   ~ 0
 SOL-
-Text Notes 6850 2400 0    118  ~ 0
-TODOs\n- reverse polarity diodes on UV ckt?\n- Size hbridge caps\n- Re-pick MCU pins for layout
+Text Notes 6875 2200 0    118  ~ 0
+TODOs\n- reverse polarity diodes on UV ckt?\n- Size hbridge caps
 $Comp
 L Device:R R1
 U 1 1 6084D9B8
@@ -1101,61 +1101,61 @@ Wire Wire Line
 Wire Wire Line
 	1950 4800 2450 4800
 Wire Wire Line
-	2450 4300 2450 4800
-Wire Wire Line
-	2525 5100 2525 4375
+	2525 5100 2525 4475
 Wire Wire Line
 	1950 5100 2525 5100
 Wire Wire Line
-	2600 4450 2600 5200
-Wire Wire Line
 	1950 5200 2600 5200
 Wire Wire Line
-	2450 4300 4500 4300
+	2450 4400 4500 4400
 Wire Wire Line
-	2525 4375 4975 4375
+	2525 4475 4975 4475
 $Comp
 L Connector:TestPoint TP6
 U 1 1 609AD6E9
-P 4500 4300
-F 0 "TP6" H 4558 4420 50  0000 L CNN
-F 1 "TestPoint" H 4558 4329 50  0000 L CNN
-F 2 "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical" H 4700 4300 50  0001 C CNN
-F 3 "~" H 4700 4300 50  0001 C CNN
-	1    4500 4300
+P 4500 4400
+F 0 "TP6" H 4558 4520 50  0000 L CNN
+F 1 "TestPoint" H 4558 4429 50  0000 L CNN
+F 2 "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical" H 4700 4400 50  0001 C CNN
+F 3 "~" H 4700 4400 50  0001 C CNN
+	1    4500 4400
 	1    0    0    -1  
 $EndComp
 $Comp
 L Connector:TestPoint TP7
 U 1 1 609AD78D
-P 4975 4375
-F 0 "TP7" H 5033 4495 50  0000 L CNN
-F 1 "TestPoint" H 5033 4404 50  0000 L CNN
-F 2 "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical" H 5175 4375 50  0001 C CNN
-F 3 "~" H 5175 4375 50  0001 C CNN
-	1    4975 4375
+P 4975 4475
+F 0 "TP7" H 5033 4595 50  0000 L CNN
+F 1 "TestPoint" H 5033 4504 50  0000 L CNN
+F 2 "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical" H 5175 4475 50  0001 C CNN
+F 3 "~" H 5175 4475 50  0001 C CNN
+	1    4975 4475
 	1    0    0    -1  
 $EndComp
-Connection ~ 4500 4300
+Connection ~ 4500 4400
 Wire Wire Line
-	4500 4300 6300 4300
-Connection ~ 4975 4375
+	4500 4400 6300 4400
+Connection ~ 4975 4475
 Wire Wire Line
-	4975 4375 6300 4375
+	4975 4475 6300 4475
 Wire Wire Line
-	2600 4450 5450 4450
+	2600 4550 5450 4550
 $Comp
 L Connector:TestPoint TP8
 U 1 1 609ADAD7
-P 5450 4450
-F 0 "TP8" H 5508 4570 50  0000 L CNN
-F 1 "TestPoint" H 5508 4479 50  0000 L CNN
-F 2 "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical" H 5650 4450 50  0001 C CNN
-F 3 "~" H 5650 4450 50  0001 C CNN
-	1    5450 4450
+P 5450 4550
+F 0 "TP8" H 5508 4670 50  0000 L CNN
+F 1 "TestPoint" H 5508 4579 50  0000 L CNN
+F 2 "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical" H 5650 4550 50  0001 C CNN
+F 3 "~" H 5650 4550 50  0001 C CNN
+	1    5450 4550
 	1    0    0    -1  
 $EndComp
-Connection ~ 5450 4450
+Connection ~ 5450 4550
 Wire Wire Line
-	5450 4450 6300 4450
+	5450 4550 6300 4550
+Wire Wire Line
+	2450 4400 2450 4800
+Wire Wire Line
+	2600 4550 2600 5200
 $EndSCHEMATC
