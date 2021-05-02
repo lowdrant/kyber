@@ -1,5 +1,4 @@
 EESchema Schematic File Version 4
-LIBS:saber-cache
 EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
@@ -65,8 +64,6 @@ Wire Wire Line
 	2550 4700 2550 4800
 Text Notes 900  2350 0    118  ~ 0
 Seems safe to drive NMOS with GPIO directly\nSims also show 20kHz waveform well-preserved\n\nDMTH4005SK3Q-13 Cin: 120pF\n              GPIO Zout: 50 Ohms\n                   Imax: 16 mA\n\nSafety factor of 6.4 with these FETs;\nno need for 0-ohm jumpers
-Wire Wire Line
-	2550 5200 2550 5250
 Connection ~ 2550 5200
 Wire Wire Line
 	2250 5450 2200 5450
@@ -159,7 +156,7 @@ L Device:Q_NMOS_GSD Q8
 U 1 1 60ECA31A
 P 8850 5450
 F 0 "Q8" H 9056 5496 50  0000 L CNN
-F 1 "SSM3K337R" H 9056 5405 50  0000 L CNN
+F 1 "PSMN3R0-30MLC,115" H 9056 5405 50  0000 L CNN
 F 2 "" H 9050 5550 50  0001 C CNN
 F 3 "https://toshiba.semicon-storage.com/info/docget.jsp?did=14758&prodName=SSM3K337R" H 8850 5450 50  0001 C CNN
 	1    8850 5450
@@ -170,21 +167,10 @@ L Device:Q_NMOS_GSD Q7
 U 1 1 60ECB138
 P 5750 5450
 F 0 "Q7" H 5956 5496 50  0000 L CNN
-F 1 "SSM3K337R" H 5956 5405 50  0000 L CNN
+F 1 "PSMN3R0-30MLC,115" H 5956 5405 50  0000 L CNN
 F 2 "" H 5950 5550 50  0001 C CNN
 F 3 "https://toshiba.semicon-storage.com/info/docget.jsp?did=14758&prodName=SSM3K337R" H 5750 5450 50  0001 C CNN
 	1    5750 5450
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:Q_NMOS_GSD Q6
-U 1 1 60ECB426
-P 2450 5450
-F 0 "Q6" H 2656 5496 50  0000 L CNN
-F 1 "SSM3K337R" H 2656 5405 50  0000 L CNN
-F 2 "" H 2650 5550 50  0001 C CNN
-F 3 "https://toshiba.semicon-storage.com/info/docget.jsp?did=14758&prodName=SSM3K337R" H 2450 5450 50  0001 C CNN
-	1    2450 5450
 	1    0    0    -1  
 $EndComp
 $Bitmap
@@ -934,4 +920,17 @@ F 3 "https://www.diodes.com/assets/Datasheets/SBR10E45P5.pdf" H 8950 5000 50  00
 	1    8950 5000
 	0    -1   1    0   
 $EndComp
+$Comp
+L Device:Q_NMOS_SGD Q6
+U 1 1 608E6940
+P 2450 5450
+F 0 "Q6" H 2655 5496 50  0000 L CNN
+F 1 "PSMN3R0-30MLC,115" H 2655 5405 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:LFPAK33" H 2650 5550 50  0001 C CNN
+F 3 "~" H 2450 5450 50  0001 C CNN
+	1    2450 5450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2550 5200 2550 5250
 $EndSCHEMATC
