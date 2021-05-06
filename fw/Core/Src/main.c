@@ -33,6 +33,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define DO_HBEAT
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -161,13 +162,16 @@ int main(void)
         break;
     }
 
+    #ifdef DO_HBEAT
     // Heartbeat
     if (uwTick - lastTick_HBEAT > ticks_HBEAT) {
       HAL_GPIO_TogglePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin);
       lastTick_HBEAT = uwTick;
     }
+    #endif  // DO_HBEAT
 
-	  // Accelerometer
+    #ifdef DO_ACC
+    // Accelerometer
     if ( (uwTick - lastTick_ACC > ticks_ACC) ) {
       out = HAL_OK;
       __disable_irq();
@@ -180,10 +184,11 @@ int main(void)
       zacc = accVal(accRaw+4);
       lastTick_ACC = uwTick;
     }
+    #endif  // DO_ACC
   }
-    /* USER CODE END WHILE */
+  /* USER CODE END WHILE */
 
-    /* USER CODE BEGIN 3 */
+  /* USER CODE BEGIN 3 */
   /* USER CODE END 3 */
 }
 
@@ -327,16 +332,13 @@ static void MX_I2C1_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN I2C1_Init 2 */
-  // Set accelerometer to active
-  // TODO
-  /*
+	#ifdef DO_ACC
+  // Set accelerometer to active, MMA8452 datasheet p11
   static uint8_t d[2] = {ACC_CTRL_REG1, 1};
   __disable_irq();
-  if (HAL_I2C_Master_Transmit(&ACC_I2C, ACC_ADDR<<1, d, 2, HAL_MAX_DELAY) != HAL_OK) {
-    Error_Handler();
-  }
+  if (HAL_I2C_Master_Transmit(&ACC_I2C, ACC_ADDR<<1, d, 2, HAL_MAX_DELAY) != HAL_OK) Error_Handler();
   __enable_irq();
-  */
+  #endif  // DO_ACC
   /* USER CODE END I2C1_Init 2 */
 
 }
@@ -461,34 +463,28 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOC, SIG_LED_Pin|SIG_SOL_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, INA_Pin|LED_HBEAT_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, INA_Pin|INB_Pin|LED_HBEAT_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : SIG_LED_Pin */
-  GPIO_InitStruct.Pin = SIG_LED_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  /*Configure GPIO pins : SIG_LED_Pin SIG_SOL_Pin */
+  GPIO_InitStruct.Pin = SIG_LED_Pin|SIG_SOL_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(SIG_LED_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : SIG_SOL_Pin */
-  GPIO_InitStruct.Pin = SIG_SOL_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(SIG_SOL_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : INA_Pin LED_HBEAT_Pin */
-  GPIO_InitStruct.Pin = INA_Pin|LED_HBEAT_Pin;
+  /*Configure GPIO pins : INA_Pin INB_Pin */
+  GPIO_InitStruct.Pin = INA_Pin|INB_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : INB_Pin */
-  GPIO_InitStruct.Pin = INB_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(INB_GPIO_Port, &GPIO_InitStruct);
+  /*Configure GPIO pin : LED_HBEAT_Pin */
+  GPIO_InitStruct.Pin = LED_HBEAT_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LED_HBEAT_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : BTN_Pin */
   GPIO_InitStruct.Pin = BTN_Pin;
@@ -503,7 +499,10 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-// ***************************************************************************
+
+/*****************************************************************************
+ * STATE BEHAVIOR
+ ****************************************************************************/
 /**
   * @brief  EXTI line detection callbacks.
   * @param  GPIO_Pin Specifies the pins connected to the EXTI line.
@@ -579,10 +578,9 @@ static inline void execSaberRetract(void)
   HAL_GPIO_WritePin(SIG_LED_GPIO_Port, SIG_LED_Pin, GPIO_PIN_RESET);
 }
 
-/**
-  * @}
-  */
-
+/*****************************************************************************
+ *
+ ****************************************************************************/
 /**
  * @brief Convert Period to Number of System Ticks
  * @param T execution period in seconds
@@ -604,8 +602,19 @@ static inline uint16_t accVal(uint8_t*d)
 {
   return ((*d)<<ACC_BIT0_SHIFT) + (*(d+1)<<ACC_BIT1_SHIFT);
 }
+/*****************************************************************************
+ * MOTOR CONTROL
+ ****************************************************************************/
+#ifdef DO_MTR
+static inline void mtrCtl(void)
+{
+  asm("NOOP");  // TODO: remove
+  // TODO: update PWM
+  // TODO: compute motor dir
+  // TODO: compute motor torque
+}
+#endif  // DO_MTR
 
-// ***************************************************************************
 /* USER CODE END 4 */
 
 /**
