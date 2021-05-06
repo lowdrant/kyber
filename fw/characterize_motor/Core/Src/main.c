@@ -24,6 +24,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "hardware.h"
+#include "interface.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -33,7 +34,6 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define DO_HBEAT
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -51,16 +51,6 @@ TIM_HandleTypeDef htim22;
 
 /* USER CODE BEGIN PV */
 
-SABER_ExecState SaberState = SABER_OFF;
-
-// Communication
-HAL_StatusTypeDef out = HAL_OK;
-
-// Global Timing
-uint32_t ticksPerSec;  // for timing: stm32l0xx_hal.h, period2ticks
-uint32_t lastTick_DEBOUNCE = 0;
-uint32_t ticksDEBOUNCE;
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -71,11 +61,6 @@ static void MX_ADC_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_TIM22_Init(void);
 /* USER CODE BEGIN PFP */
-static inline void nextState_USER(void);
-static inline void execSaberExtend(void);
-static inline void execSaberRetract(void);
-static inline uint32_t Period2Ticks(float);
-static inline uint16_t accVal(uint8_t*);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -90,9 +75,7 @@ static inline uint16_t accVal(uint8_t*);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-  __disable_irq();  // wait for setup
-  static const uint8_t accRaw[10] = {0,0,0,0,0,0,0,0,0,0};
-  static const uint8_t accTxPacket[1] = {ACC_X_MSB_ADDR};
+  __disable_irq();
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -101,29 +84,15 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
+  // Configure Clock and Wait for Setup
+  HAL_SetTickFreq(HAL_TICK_FREQ_1KHZ);
+  uint32_t ticksPerSec = 1000;
   /* USER CODE END Init */
 
   /* Configure the system clock */
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-  // Timing Configuration
-  switch (uwTickFreq) {
-    case HAL_TICK_FREQ_10HZ :
-      ticksPerSec = 10;
-      break;
-    case HAL_TICK_FREQ_100HZ :
-      ticksPerSec = 100;
-      break;
-    case HAL_TICK_FREQ_1KHZ :
-      ticksPerSec = 1000;
-      break;
-    default :
-      Error_Handler();
-  }
-  uint32_t ticks_HBEAT = Period2Ticks(T_HBEAT);
-  uint32_t ticks_ACC = Period2Ticks(T_ACC);
-  ticksDEBOUNCE = Period2Ticks(T_DEBOUNCE);
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -133,62 +102,31 @@ int main(void)
   MX_TIM2_Init();
   MX_TIM22_Init();
   /* USER CODE BEGIN 2 */
-  uint16_t xacc,yacc,zacc;
-  uint32_t lastTick_HBEAT = 0;  // reset ticks
-  uint32_t lastTick_ACC = 0;
+  uint32_t ticks_HBEAT = (uint32_t) ((float)T_HBEAT)*ticksPerSec;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  HAL_ADC_Start(&hadc);
-  __enable_irq();  // start program
-  while (1) {
-    // State Behavior
-    switch (SaberState) {
-      case SABER_OFF:
-        break;
-      case SABER_EXTEND:
-        execSaberExtend();
-        SaberState = SABER_ON;
-        break;
-      case SABER_RETRACT:
-        execSaberRetract();
-        SaberState = SABER_OFF;
-        break;
-      case SABER_ON:
-        break;  // TODO: accelerometer noises
-      default:
-        Error_Handler();
-        break;
-    }
-
-    #ifdef DO_HBEAT
+  uint32_t nextTick_HBEAT = 0;
+//  HAL_TIM_PWM_Start(&htim2);
+  __enable_irq();
+  while (1)
+  {
     // Heartbeat
-    if (uwTick - lastTick_HBEAT > ticks_HBEAT) {
+    if (HAL_GetTick() > nextTick_HBEAT) {
       HAL_GPIO_TogglePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin);
-      lastTick_HBEAT = uwTick;
+      nextTick_HBEAT = HAL_GetTick() + ticks_HBEAT;
     }
-    #endif  // DO_HBEAT
-
-    #ifdef DO_ACC
-    // Accelerometer
-    if ( (uwTick - lastTick_ACC > ticks_ACC) ) {
-      out = HAL_OK;
-      __disable_irq();
-      out |= HAL_I2C_Master_Transmit(&ACC_I2C, ACC_ADDR<<1, accTxPacket, 1, HAL_MAX_DELAY);
-      out |= HAL_I2C_Master_Receive(&ACC_I2C, ACC_ADDR<<1, accRaw, 10, HAL_MAX_DELAY);
-      if (out != HAL_OK) {Error_Handler();}
-      __enable_irq();
-      xacc = accVal(accRaw);
-      yacc = accVal(accRaw+2);
-      zacc = accVal(accRaw+4);
-      lastTick_ACC = uwTick;
+    for (int i=0;i<2;i++) {
+      for (int j=0;j<2;j++) {
+        HAL_GPIO_WritePin(INA_GPIO_Port, INA_Pin, i);
+        HAL_GPIO_WritePin(INB_GPIO_Port, INB_Pin, j);
+        HAL_Delay(1000);
+      }
     }
-    #endif  // DO_ACC
-  }
     /* USER CODE END WHILE */
-
     /* USER CODE BEGIN 3 */
+  }
   /* USER CODE END 3 */
 }
 
@@ -332,13 +270,7 @@ static void MX_I2C1_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN I2C1_Init 2 */
-	#ifdef DO_ACC
-  // Set accelerometer to active, MMA8452 datasheet p11
-  static uint8_t d[2] = {ACC_CTRL_REG1, 1};
-  __disable_irq();
-  if (HAL_I2C_Master_Transmit(&ACC_I2C, ACC_ADDR<<1, d, 2, HAL_MAX_DELAY) != HAL_OK) Error_Handler();
-  __enable_irq();
-  #endif  // DO_ACC
+
   /* USER CODE END I2C1_Init 2 */
 
 }
@@ -499,122 +431,6 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
-/*****************************************************************************
- * STATE BEHAVIOR
- ****************************************************************************/
-/**
-  * @brief  EXTI line detection callbacks.
-  * @param  GPIO_Pin Specifies the pins connected to the EXTI line.
-  * @retval None
-  */
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-//  btnPresses++;
-  __disable_irq();
-  switch (GPIO_Pin) {
-    case BTN_Pin:
-      if (uwTick-lastTick_DEBOUNCE > ticksDEBOUNCE) {
-        nextState_USER();
-        lastTick_DEBOUNCE = uwTick;
-      }
-      break;
-  }
-  __enable_irq();
-}
-
-/** @defgroup Exec_Saber_State  Saber state subroutines.
-  * @{
-  */
-
-/**
-  * @brief  Advance saber state from user input.
-  * @retval None
-  */
-static inline void nextState_USER(void)
-{
-  switch (SaberState) {
-    case SABER_LOW_BATT:
-      break;
-    case SABER_OFF:
-      SaberState = SABER_EXTEND;
-      break;
-    case SABER_EXTEND:
-      SaberState = SABER_RETRACT;
-      break;
-    case SABER_ON:
-      SaberState = SABER_RETRACT;
-      break;
-    case SABER_RETRACT:  // TODO: it won't just jump like this, will it?
-      SaberState = SABER_EXTEND;
-      break;
-    default:
-      Error_Handler();
-      break;
-  }
-}
-
-/**
-  * @brief  Execute Saber Extension Sequence
-  * @retval None
-  *
-  * TODO: blink lights
-  * TODO: play extension noise
-  */
-static inline void execSaberExtend(void)
-{
-  HAL_GPIO_WritePin(SIG_LED_GPIO_Port, SIG_LED_Pin, GPIO_PIN_SET);
-}
-
-/**
-  * @brief  Execute Saber Retraction Sequence
-  * @retval None
-  *
-  * TODO: blink lights
-  * TODO: play retraction noise
-  */
-static inline void execSaberRetract(void)
-{
-  HAL_GPIO_WritePin(SIG_LED_GPIO_Port, SIG_LED_Pin, GPIO_PIN_RESET);
-}
-
-/*****************************************************************************
- *
- ****************************************************************************/
-/**
- * @brief Convert Period to Number of System Ticks
- * @param T execution period in seconds
- * @retval Execution period in system ticks
- */
-static inline uint32_t Period2Ticks(float T)
-{
-	return (uint32_t)(T * ticksPerSec);
-}
-
-
-/**
- * @brief Convert I2C Data to Accelerometer Reading
- * @note See hardware.h accelerometer section for details.
- * @param d length-2 uint8 accelerometer data
- * @retval Acceleration in counts
- */
-static inline uint16_t accVal(uint8_t*d)
-{
-  return ((*d)<<ACC_BIT0_SHIFT) + (*(d+1)<<ACC_BIT1_SHIFT);
-}
-/*****************************************************************************
- * MOTOR CONTROL
- ****************************************************************************/
-#ifdef DO_MTR
-static inline void mtrCtl(void)
-{
-  asm("NOOP");  // TODO: remove
-  // TODO: update PWM
-  // TODO: compute motor dir
-  // TODO: compute motor torque
-}
-#endif  // DO_MTR
-
 /* USER CODE END 4 */
 
 /**
@@ -625,20 +441,7 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-    // Turn off motor
-    HAL_GPIO_WritePin(PWM_MTR_GPIO_Port,PWM_MTR_Pin,GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(INA_GPIO_Port,INA_Pin,GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(INB_GPIO_Port,INB_Pin,GPIO_PIN_RESET);
-    // Disable speaker
-    HAL_GPIO_WritePin(PWM_SPKR_GPIO_Port,PWM_SPKR_Pin,GPIO_PIN_RESET);
-    // Disable power led
-    HAL_GPIO_WritePin(SIG_LED_GPIO_Port,SIG_LED_Pin,GPIO_PIN_RESET);
-    // Turn on hbeat led
-    HAL_GPIO_WritePin(LED_HBEAT_GPIO_Port,LED_HBEAT_Pin,GPIO_PIN_SET);
-  }
+
   /* USER CODE END Error_Handler_Debug */
 }
 
@@ -654,7 +457,7 @@ void assert_failed(uint8_t *file, uint32_t line)
 { 
   /* USER CODE BEGIN 6 */
   /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+     tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */

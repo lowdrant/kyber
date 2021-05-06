@@ -8,11 +8,11 @@
 
 #ifndef INC_HARDWARE_H
 #define INC_HARDWARE_H
-#include "stm32l0xx_hal.h"
 
 /*****************************************************************************
  * Accelerometer IO - MMA8452 Addresses & Helper Functions
  ****************************************************************************/
+#include "stm32l0xx_hal_i2c.h"
 extern I2C_HandleTypeDef hi2c1;
 #define ACC_I2C hi2c1
 #define ACC_ADDR 0x1D
@@ -56,9 +56,8 @@ float counts2volt(uint32_t);
 // goal params (metric!!)
 #define TDES 5  // desired torque (Nm)
 static const float ides = ((float)TDES) / MK;
-
-
-uint8_t mtrdir();
+// functions
+void mtrDir(void);
 uint16_t pwmperiod();
 
 #endif /* INC_HARDWARE_H_ */

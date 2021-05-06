@@ -10,8 +10,13 @@ Building the toy lightsaber I always wanted as a kid
 ## [fw](fw/)
 I am writing code for the [STM32L031F4P6](https://www.st.com/content/ccc/resource/technical/document/datasheet/c6/fd/d9/98/8e/95/41/a1/DM00152023.pdf/files/DM00152023.pdf/jcr:content/translations/en.DM00152023.pdf) microcontroller, but it should be translatable to anything else in the STM32 ecosystem. Broadly speaking, all the fancy bits are done in firmware, and I will upload a state diagram sometime in June.
 
+### Configuring STM32CubeIde
+Edit project settings to include the multi-project libraries and make the compiler optimize for size.
+![In C/C++ General Settings, add '../saber-libs' to the compiler search path](images-for-docs/include-hardware-h.png)
+![Configure the compiler to optimize for size](images-for-docs/compiler-settings.png)
+
 ## [hw](hw/)
-Simulation, schematics, and layout. 
+Simulation, schematics, and layout.
 
 ### Component Selection Rules
 Try to use parts I can take off the breakout boards I have lying around, but also try to have the thing work on the first rev.
@@ -40,7 +45,7 @@ Current resolution: standardize on D2PAK for its ubiquity
 #### Reverse Polarity Protection
 Use the built-in protection of the hbridge. Need to characterise I<sup>2</sup>R losses. This will help prevent the Big Dumb<sup>TM</sup> since I plan to use terminal blocks for my main connector.
 #### Low-Voltage Shutoff
-Simple Zener-NMOS-PMOS circuit I designed for a student club a while back. Zener triggers NMOS, which in turn drives the PMOS. It has decent switching characteristics. PMOS here should match the RPP PMOS. 
+Simple Zener-NMOS-PMOS circuit I designed for a student club a while back. Zener triggers NMOS, which in turn drives the PMOS. It has decent switching characteristics. PMOS here should match the RPP PMOS.
 
 TODO:add schematic + sim plots
 #### 3V3 Bus
