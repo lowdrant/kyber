@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    hardware.c
+  * @file    hardware.h
   * @author  Marion Anderson
   * @brief   Hardware Configuration Header File
   ******************************************************************************
@@ -57,7 +57,10 @@ float counts2volt(uint32_t);
 #define TDES 5  // desired torque (Nm)
 static const float ides = ((float)TDES) / MK;
 // functions
-void mtrDir(void);
-uint16_t pwmperiod();
+void Mtr_CW(void);
+void Mtr_CCW(void);
+void Mtr_Brake(void);
+void Mtr_SetDir(float);
+void Mtr_SetPWM(float);  // TODO: set channel compare preload?
 
 #endif /* INC_HARDWARE_H_ */

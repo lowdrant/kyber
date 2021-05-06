@@ -24,7 +24,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "hardware.h"
-#include "interface.h"
+#include "hardware.c"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -103,12 +103,16 @@ int main(void)
   MX_TIM22_Init();
   /* USER CODE BEGIN 2 */
   uint32_t ticks_HBEAT = (uint32_t) ((float)T_HBEAT)*ticksPerSec;
+  uint32_t ticks_MTR = (uint32_t) ((float)T_MTR)*ticksPerSec;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   uint32_t nextTick_HBEAT = 0;
-//  HAL_TIM_PWM_Start(&htim2);
+  uint32_t nextTick_MTR = 0;
+  HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
+  int u[3] = {-1,0,1};
+  uint8_t i = 0;
   __enable_irq();
   while (1)
   {
@@ -117,14 +121,12 @@ int main(void)
       HAL_GPIO_TogglePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin);
       nextTick_HBEAT = HAL_GetTick() + ticks_HBEAT;
     }
-    for (int i=0;i<2;i++) {
-      for (int j=0;j<2;j++) {
-        HAL_GPIO_WritePin(INA_GPIO_Port, INA_Pin, i);
-        HAL_GPIO_WritePin(INB_GPIO_Port, INB_Pin, j);
-        HAL_Delay(1000);
-      }
+    if (HAL_GetTick() > nextTick_MTR) {
+      Mtr_SetDir(u[i]); i+=1; i%=3;
+      nextTick_MTR = HAL_GetTick() + ticks_MTR;
     }
     /* USER CODE END WHILE */
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -287,6 +289,7 @@ static void MX_TIM2_Init(void)
 
   /* USER CODE END TIM2_Init 0 */
 
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
   TIM_OC_InitTypeDef sConfigOC = {0};
 
@@ -295,10 +298,19 @@ static void MX_TIM2_Init(void)
   /* USER CODE END TIM2_Init 1 */
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 0;
-  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 0;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_DOWN;
+  htim2.Init.Period = 200;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
   if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
   {
     Error_Handler();
@@ -317,10 +329,13 @@ static void MX_TIM2_Init(void)
   {
     Error_Handler();
   }
+  sConfigOC.Pulse = 100;
+  sConfigOC.OCFastMode = TIM_OCFAST_ENABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
   {
     Error_Handler();
   }
+  __HAL_TIM_DISABLE_OCxPRELOAD(&htim2, TIM_CHANNEL_2);
   /* USER CODE BEGIN TIM2_Init 2 */
 
   /* USER CODE END TIM2_Init 2 */
