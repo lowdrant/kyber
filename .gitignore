@@ -55,10 +55,10 @@ fp-info-cache
 *.mxproject
 *.cproject
 *.project
-fw/Drivers/
-fw/Debug
-fw/Core/Startup/
-fw/.settings/
+fw/*/Drivers/
+fw/*/Debug
+fw/*/Core/Startup/
+fw/*/.settings/
 fw/*.pdf
 fw/*.txt
 fw/*.metadata
