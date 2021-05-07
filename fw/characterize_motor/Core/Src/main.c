@@ -103,7 +103,7 @@ int main(void)
   MX_TIM22_Init();
   /* USER CODE BEGIN 2 */
   uint32_t ticks_HBEAT = (uint32_t) ((float)T_HBEAT)*ticksPerSec;
-  uint32_t ticks_MTR = (uint32_t) ((float)T_MTR)*ticksPerSec;
+  uint32_t ticks_MTR = (uint32_t) ((float)T_MTR*ticksPerSec);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -112,7 +112,8 @@ int main(void)
   uint32_t nextTick_MTR = 0;
   HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
   uint8_t numu = 6;
-  float u[6] = {-9,-6,-3,3,6,9};
+  float u = 0;
+  float du = -1;
   uint8_t i = 0;
   __enable_irq();
   while (1)
@@ -123,7 +124,7 @@ int main(void)
       nextTick_HBEAT = HAL_GetTick() + ticks_HBEAT;
     }
     if (HAL_GetTick() > nextTick_MTR) {
-      MtrCtl(u[i]); i += 1; i%=numu;
+      MtrCtl(u); u+=du; if (u<-11){du=1;} if(u>11){du=-1;}
       nextTick_MTR = HAL_GetTick() + ticks_MTR;
     }
     /* USER CODE END WHILE */

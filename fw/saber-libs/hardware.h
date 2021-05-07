@@ -41,6 +41,10 @@ float counts2volt(uint32_t);
 /*****************************************************************************
  * MOTOR
  ****************************************************************************/
+// sensing
+#define MRSENSE 1500  // Ohms
+#define MIGAIN 11000  // VNHD7008AY datasheet p15
+static const uint32_t MTR_I_MULT = MRSENSE*MIGAIN;
 // control gains
 #define K0 1
 #define KP 1

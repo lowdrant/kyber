@@ -49,7 +49,6 @@ void MtrCtl(float u)
     u *= -1;
   } else if (u>0) {
     MtrCCW();
-    u *= -1;
   }
   uint32_t d = htim2.Init.Period * u / MV;
   TIM2->CCR2 = d;

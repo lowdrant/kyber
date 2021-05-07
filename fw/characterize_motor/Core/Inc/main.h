@@ -43,7 +43,7 @@ extern "C" {
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
 #define T_HBEAT (float) 2  // LED Heartbeat Period
-#define T_MTR (float) 3 // mot stuff
+#define T_MTR (float) 0.1    // mot stuff
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/
