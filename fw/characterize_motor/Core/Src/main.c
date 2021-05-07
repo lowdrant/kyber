@@ -111,7 +111,8 @@ int main(void)
   uint32_t nextTick_HBEAT = 0;
   uint32_t nextTick_MTR = 0;
   HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
-  int u[3] = {-1,0,1};
+  uint8_t numu = 6;
+  float u[6] = {-9,-6,-3,3,6,9};
   uint8_t i = 0;
   __enable_irq();
   while (1)
@@ -122,7 +123,7 @@ int main(void)
       nextTick_HBEAT = HAL_GetTick() + ticks_HBEAT;
     }
     if (HAL_GetTick() > nextTick_MTR) {
-      Mtr_SetDir(u[i]); i+=1; i%=3;
+      MtrCtl(u[i]); i += 1; i%=numu;
       nextTick_MTR = HAL_GetTick() + ticks_MTR;
     }
     /* USER CODE END WHILE */
@@ -298,8 +299,8 @@ static void MX_TIM2_Init(void)
   /* USER CODE END TIM2_Init 1 */
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 0;
-  htim2.Init.CounterMode = TIM_COUNTERMODE_DOWN;
-  htim2.Init.Period = 200;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 125;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim2) != HAL_OK)

@@ -57,10 +57,9 @@ float counts2volt(uint32_t);
 #define TDES 5  // desired torque (Nm)
 static const float ides = ((float)TDES) / MK;
 // functions
-void Mtr_CW(void);
-void Mtr_CCW(void);
-void Mtr_Brake(void);
-void Mtr_SetDir(float);
-void Mtr_SetPWM(float);  // TODO: set channel compare preload?
+void MtrCW(void);
+void MtrCCW(void);
+void MtrBrake(void);
+void MtrCtl(float);  // TODO: set channel compare preload?
 
 #endif /* INC_HARDWARE_H_ */
