@@ -112,10 +112,11 @@ int main(void)
   uint32_t nextTick_MTR = 0;
   HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
   TIM2->CCR2 = 50;  // period
-  HAL_TIM_Encoder_Start(&htim22,TIM_CHANNEL_1);
+  HAL_TIM_Encoder_Start(&htim22,TIM_CHANNEL_ALL);
   float u = 0;
   float du = -1;
-  int32_t * const asdf = &(TIM22->CNT);
+  volatile int16_t asdf;
+//  *asdf = &(TIM22->CNT);
   __enable_irq();
   while (1)
   {
@@ -126,13 +127,14 @@ int main(void)
     }
     if (HAL_GetTick() > nextTick_MTR) {
 //      MtrCtl(u); u+=du; if (u<-11){du=1;} if(u>11){du=-1;}
-      if ((TIM22->CNT)>>1 > 0) {
+      if (asdf > 0) {
         MtrCW();
       } else {
         MtrCCW();
       }
       nextTick_MTR = HAL_GetTick() + ticks_MTR;
     }
+    asdf=((int16_t)TIM22->CNT)>>1;  // TODO: potential bug source
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
