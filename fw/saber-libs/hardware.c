@@ -54,3 +54,19 @@ void MtrCtl(float u)
   TIM2->CCR2 = d;
 }
 
+/**
+ * @brief Motor control law
+ * @param err Output error
+ * @retval Output voltage
+ * TODO: integrator windup prevention
+ */
+float CtlLaw(float err)
+{
+  static float erri = 0;
+  static float errd = 0;
+  static float errlast = 0;
+  erri += err / T_CTL;  // see main.h
+  errd += (err-errlast) / DQUOTIENT;
+  float u = K0 * (KP*err + KI*erri + KD*errd);
+  return u;
+}

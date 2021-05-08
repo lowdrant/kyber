@@ -111,10 +111,10 @@ int main(void)
   uint32_t nextTick_HBEAT = 0;
   uint32_t nextTick_MTR = 0;
   HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
-  uint8_t numu = 6;
+  TIM2->CCR2 = 100;  // period
+  HAL_TIM_Encoder_Start(&htim22,TIM_CHANNEL_ALL);
   float u = 0;
   float du = -1;
-  uint8_t i = 0;
   __enable_irq();
   while (1)
   {
@@ -124,7 +124,12 @@ int main(void)
       nextTick_HBEAT = HAL_GetTick() + ticks_HBEAT;
     }
     if (HAL_GetTick() > nextTick_MTR) {
-      MtrCtl(u); u+=du; if (u<-11){du=1;} if(u>11){du=-1;}
+//      MtrCtl(u); u+=du; if (u<-11){du=1;} if(u>11){du=-1;}
+      if ((int32_t)TIM22->CNT > 0) {
+        MtrCW();
+      } else {
+        MtrCCW();
+      }
       nextTick_MTR = HAL_GetTick() + ticks_MTR;
     }
     /* USER CODE END WHILE */
@@ -366,18 +371,18 @@ static void MX_TIM22_Init(void)
   htim22.Instance = TIM22;
   htim22.Init.Prescaler = 0;
   htim22.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim22.Init.Period = 0;
+  htim22.Init.Period = 65535;
   htim22.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim22.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
-  sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
+  htim22.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
+  sConfig.IC1Polarity = TIM_ICPOLARITY_FALLING;
   sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
-  sConfig.IC1Filter = 0;
-  sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
+  sConfig.IC1Filter = 10;
+  sConfig.IC2Polarity = TIM_ICPOLARITY_FALLING;
   sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
-  sConfig.IC2Filter = 0;
+  sConfig.IC2Filter = 10;
   if (HAL_TIM_Encoder_Init(&htim22, &sConfig) != HAL_OK)
   {
     Error_Handler();

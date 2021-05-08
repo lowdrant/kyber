@@ -50,6 +50,9 @@ static const uint32_t MTR_I_MULT = MRSENSE*MIGAIN;
 #define KP 1
 #define KI 0
 #define KD 0
+#define ND 3  // derivative averager length
+#define T_CTL (float) 0.001  // control period
+static const float DQUOTIENT = ND * T_CTL;
 // motor params (metric!!)
 #define ML 100 // uH
 #define MR 2   // Ohms
@@ -65,5 +68,5 @@ void MtrCW(void);
 void MtrCCW(void);
 void MtrBrake(void);
 void MtrCtl(float);  // TODO: set channel compare preload?
-
+float CtlLaw(float);
 #endif /* INC_HARDWARE_H_ */
