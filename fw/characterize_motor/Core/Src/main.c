@@ -34,11 +34,11 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define NUMTICKS 2000
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -47,10 +47,12 @@ ADC_HandleTypeDef hadc;
 I2C_HandleTypeDef hi2c1;
 
 TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim21;
 TIM_HandleTypeDef htim22;
 
 /* USER CODE BEGIN PV */
-
+uint16_t tickLogNdx = 0;
+uint16_t tickLog[NUMTICKS];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -60,12 +62,12 @@ static void MX_I2C1_Init(void);
 static void MX_ADC_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_TIM22_Init(void);
+static void MX_TIM21_Init(void);
 /* USER CODE BEGIN PFP */
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
 /* USER CODE END 0 */
 
 /**
@@ -84,9 +86,10 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-  // Configure Clock and Wait for Setup
+  // Configure Ticks Counter
   HAL_SetTickFreq(HAL_TICK_FREQ_1KHZ);
   uint32_t ticksPerSec = 1000;
+  uint32_t ticks_HBEAT = (uint32_t) (T_HBEAT*ticksPerSec);
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -101,42 +104,22 @@ int main(void)
   MX_ADC_Init();
   MX_TIM2_Init();
   MX_TIM22_Init();
+  MX_TIM21_Init();
   /* USER CODE BEGIN 2 */
-  uint32_t ticks_HBEAT = (uint32_t) ((float)T_HBEAT)*ticksPerSec;
-  uint32_t ticks_MTR = (uint32_t) ((float)T_MTR*ticksPerSec);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  uint32_t nextTick_HBEAT = 0;
-  uint32_t nextTick_MTR = 0;
-  HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
-  TIM2->CCR2 = 50;  // period
   HAL_TIM_Encoder_Start(&htim22,TIM_CHANNEL_ALL);
-  float u = 0;
-  float du = -1;
-  volatile int16_t asdf;
-//  *asdf = &(TIM22->CNT);
+  HAL_TIM_Base_Start_IT(&htim21);
+  HAL_GPIO_WritePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin, GPIO_PIN_SET);  // startup blink
+  HAL_GPIO_WritePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin, GPIO_PIN_RESET);
+  TIM2->CCR2 = TIM2->ARR;                          // PWM 100% Duty Cycle
   __enable_irq();
-  while (1)
-  {
-    // Heartbeat
-    if (HAL_GetTick() > nextTick_HBEAT) {
-      HAL_GPIO_TogglePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin);
-      nextTick_HBEAT = HAL_GetTick() + ticks_HBEAT;
-    }
-    if (HAL_GetTick() > nextTick_MTR) {
-//      MtrCtl(u); u+=du; if (u<-11){du=1;} if(u>11){du=-1;}
-      if (asdf > 0) {
-        MtrCW();
-      } else {
-        MtrCCW();
-      }
-      nextTick_MTR = HAL_GetTick() + ticks_MTR;
-    }
-    asdf=((int16_t)TIM22->CNT)>>1;  // TODO: potential bug source
+  HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);  // after logging IRQ to catch startup
+  MtrCW();
+  while (1) {
     /* USER CODE END WHILE */
-
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -157,11 +140,13 @@ void SystemClock_Config(void)
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
   /** Initializes the CPU, AHB and APB busses clocks 
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_MSI;
-  RCC_OscInitStruct.MSIState = RCC_MSI_ON;
-  RCC_OscInitStruct.MSICalibrationValue = 0;
-  RCC_OscInitStruct.MSIClockRange = RCC_MSIRANGE_5;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
+  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLLMUL_4;
+  RCC_OscInitStruct.PLL.PLLDIV = RCC_PLLDIV_2;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -170,10 +155,10 @@ void SystemClock_Config(void)
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_MSI;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV16;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
   {
@@ -208,7 +193,7 @@ static void MX_ADC_Init(void)
   */
   hadc.Instance = ADC1;
   hadc.Init.OversamplingMode = DISABLE;
-  hadc.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV1;
+  hadc.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
   hadc.Init.Resolution = ADC_RESOLUTION_12B;
   hadc.Init.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
   hadc.Init.ScanConvMode = ADC_SCAN_DIRECTION_FORWARD;
@@ -257,7 +242,7 @@ static void MX_I2C1_Init(void)
 
   /* USER CODE END I2C1_Init 1 */
   hi2c1.Instance = I2C1;
-  hi2c1.Init.Timing = 0x00000708;
+  hi2c1.Init.Timing = 0x00000103;
   hi2c1.Init.OwnAddress1 = 0;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
@@ -310,7 +295,7 @@ static void MX_TIM2_Init(void)
   htim2.Init.Prescaler = 0;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim2.Init.Period = 125;
-  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV4;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
   {
@@ -354,6 +339,51 @@ static void MX_TIM2_Init(void)
 }
 
 /**
+  * @brief TIM21 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM21_Init(void)
+{
+
+  /* USER CODE BEGIN TIM21_Init 0 */
+
+  /* USER CODE END TIM21_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM21_Init 1 */
+
+  /* USER CODE END TIM21_Init 1 */
+  htim21.Instance = TIM21;
+  htim21.Init.Prescaler = 0;
+  htim21.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim21.Init.Period = 1000;
+  htim21.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim21.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  if (HAL_TIM_Base_Init(&htim21) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim21, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim21, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM21_Init 2 */
+
+  /* USER CODE END TIM21_Init 2 */
+
+}
+
+/**
   * @brief TIM22 Initialization Function
   * @param None
   * @retval None
@@ -375,7 +405,7 @@ static void MX_TIM22_Init(void)
   htim22.Init.Prescaler = 0;
   htim22.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim22.Init.Period = 65535;
-  htim22.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim22.Init.ClockDivision = TIM_CLOCKDIVISION_DIV2;
   htim22.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
   sConfig.IC1Polarity = TIM_ICPOLARITY_FALLING;
@@ -456,6 +486,25 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+/**
+ * @brief Logging timer htim21. Turn off PWM & timer isr when logging done
+ */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  __disable_irq();
+  if (htim==&htim21) {
+    if (tickLogNdx < NUMTICKS) {
+      tickLog[tickLogNdx] = TIM22->CNT;
+      tickLogNdx++;
+    } else {
+      HAL_GPIO_WritePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin, GPIO_PIN_SET);
+      HAL_TIM_PWM_Stop(&htim2,TIM_CHANNEL_2);
+      HAL_TIM_Base_Stop_IT(&htim21);
+    }
+  }
+  __enable_irq();
+}
+
 /* USER CODE END 4 */
 
 /**
@@ -466,7 +515,17 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
-
+  __disable_irq();
+  HAL_GPIO_WritePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin, GPIO_PIN_RESET);
+  HAL_TIM_PWM_Stop(&htim2,TIM_CHANNEL_ALL);
+  while (1) {
+    HAL_GPIO_WritePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(SIG_LED_GPIO_Port, SIG_SOL_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(PWM_SPKR_GPIO_Port, PWM_SPKR_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(PWM_MTR_GPIO_Port, PWM_MTR_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(INA_GPIO_Port, INA_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(INB_GPIO_Port, INB_Pin, GPIO_PIN_RESET);
+  }
   /* USER CODE END Error_Handler_Debug */
 }
 
