@@ -6,8 +6,7 @@
   ******************************************************************************
   */
 #include "hardware.h"
-#include "stm32l0xx_hal_gpio.h"
-#include "stm32l0xx_hal_tim.h"
+#include "math.h"
 
 extern TIM_HandleTypeDef htim2;
 
@@ -46,27 +45,31 @@ void MtrCtl(float u)
 {
   if (u<0) {
     MtrCW();
-    u *= -1;
   } else if (u>0) {
     MtrCCW();
   }
-  uint32_t d = htim2.Init.Period * u / MV;
+  u = abs(u);
+  uint16_t d = htim2.Init.Period * u / MV;
   TIM2->CCR2 = d;
 }
 
 /**
  * @brief Motor control law
- * @param err Output error
+ * @param err System error
  * @retval Output voltage
  * TODO: integrator windup prevention
  */
-float CtlLaw(float err)
+float CtlLaw(int16_t err)
 {
-  static float erri = 0;
-  static float errd = 0;
-  static float errlast = 0;
-  erri += err / T_CTL;  // see main.h
-  errd += (err-errlast) / DQUOTIENT;
-  float u = K0 * (KP*err + KI*erri + KD*errd);
-  return u;
+  static int32_t erri = 0;
+  erri += err;
+  return (KP*err + KI*erri*T_CTL);
+}
+
+void Ctl(void)
+{
+  static int32_t erri = 0;
+  int16_t err = tgt - ((int16_t)TIM22->CNT);
+  erri += err;
+  MtrCtl(KP*err + KI*erri*T_CTL);
 }

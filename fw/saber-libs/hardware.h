@@ -9,10 +9,14 @@
 #ifndef INC_HARDWARE_H
 #define INC_HARDWARE_H
 
+#include "stm32l0xx_hal_i2c.h"
+#include "stm32l0xx_hal_gpio.h"
+#include "stm32l0xx_hal_tim.h"
+#include "math.h"
+
 /*****************************************************************************
  * Accelerometer IO - MMA8452 Addresses & Helper Functions
  ****************************************************************************/
-#include "stm32l0xx_hal_i2c.h"
 extern I2C_HandleTypeDef hi2c1;
 #define ACC_I2C hi2c1
 #define ACC_ADDR 0x1D
@@ -46,13 +50,13 @@ float counts2volt(uint32_t);
 #define MIGAIN 11000  // VNHD7008AY datasheet p15
 static const uint32_t MTR_I_MULT = MRSENSE*MIGAIN;
 // control gains
-#define K0 1
-#define KP 1
-#define KI 0
-#define KD 0
+#define K0 ((float) 1)
+#define KP ((float) 1)
+#define KI ((float) 0)
+#define KD ((float) 0)
 #define ND 3  // derivative averager length
-#define T_CTL (float) 0.001  // control period
-static const float DQUOTIENT = ND * T_CTL;
+#define T_CTL ((float) 0.001)  // control period
+static const float DERVQUOTIENT = ND * T_CTL;
 // motor params (metric!!)
 #define ML 100 // uH
 #define MR 2   // Ohms
@@ -62,11 +66,12 @@ static const float DQUOTIENT = ND * T_CTL;
 #define MD 1   // Friction Constant
 // goal params (metric!!)
 #define TDES 5  // desired torque (Nm)
-static const float ides = ((float)TDES) / MK;
+const int16_t tgt = 10;
 // functions
 void MtrCW(void);
 void MtrCCW(void);
 void MtrBrake(void);
 void MtrCtl(float);  // TODO: set channel compare preload?
-float CtlLaw(float);
+float CtlLaw(int16_t);
+void Ctl(void);
 #endif /* INC_HARDWARE_H_ */

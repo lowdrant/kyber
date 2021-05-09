@@ -51,8 +51,6 @@ TIM_HandleTypeDef htim21;
 TIM_HandleTypeDef htim22;
 
 /* USER CODE BEGIN PV */
-uint16_t tickLogNdx = 0;
-uint16_t tickLog[NUMTICKS];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -88,7 +86,7 @@ int main(void)
   /* USER CODE BEGIN Init */
   // Configure Ticks Counter
   HAL_SetTickFreq(HAL_TICK_FREQ_1KHZ);
-  uint32_t ticksPerSec = 1000;  // TODO: something in HAL_Delay handles this programatically?
+  const uint16_t ticksPerSec = 1000;
   uint32_t ticks_HBEAT = (uint32_t) (T_HBEAT*ticksPerSec);
   uint32_t nextTick_HBEAT = 0;
   /* USER CODE END Init */
@@ -112,20 +110,13 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   HAL_TIM_Encoder_Start(&htim22,TIM_CHANNEL_ALL);
-  HAL_TIM_Base_Start_IT(&htim21);
-  HAL_GPIO_WritePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin, GPIO_PIN_SET);  // startup blink
-  HAL_GPIO_WritePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin, GPIO_PIN_RESET);
+  __HAL_TIM_ENABLE_IT(&htim21, TIM_IT_UPDATE);
   TIM2->CCR2 = 0;
   __enable_irq();
   HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);  // after logging IRQ to catch startup
-  MtrCW();
   while (1) {
     /* USER CODE END WHILE */
-    // Heartbeat
-    if (HAL_GetTick() > nextTick_HBEAT) {
-      HAL_GPIO_TogglePin(LED_HBEAT_GPIO_Port,LED_HBEAT_Pin);
-      nextTick_HBEAT += HAL_GetTick() + ticks_HBEAT;
-    }
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -366,7 +357,7 @@ static void MX_TIM21_Init(void)
   htim21.Init.Prescaler = 0;
   htim21.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim21.Init.Period = 1000;
-  htim21.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim21.Init.ClockDivision = TIM_CLOCKDIVISION_DIV2;
   htim21.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim21) != HAL_OK)
   {
@@ -411,7 +402,7 @@ static void MX_TIM22_Init(void)
   htim22.Init.Prescaler = 0;
   htim22.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim22.Init.Period = 65535;
-  htim22.Init.ClockDivision = TIM_CLOCKDIVISION_DIV2;
+  htim22.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim22.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
   sConfig.IC1Polarity = TIM_ICPOLARITY_FALLING;
@@ -493,20 +484,14 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 /**
- * @brief Logging timer htim21. Turn off PWM & timer isr when logging done
+ * @brief Motor control timer htim21
  */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   __disable_irq();
   if (htim==&htim21) {
-    if (tickLogNdx < NUMTICKS) {
-      tickLog[tickLogNdx] = TIM22->CNT;
-      tickLogNdx++;
-    } else {
-      HAL_GPIO_WritePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin, GPIO_PIN_SET);
-      HAL_TIM_PWM_Stop(&htim2,TIM_CHANNEL_2);
-      HAL_TIM_Base_Stop_IT(&htim21);
-    }
+//    MtrCtl(CtlLaw(TIM22->CNT));
+    Ctl();
   }
   __enable_irq();
 }
