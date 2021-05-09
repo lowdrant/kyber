@@ -36,8 +36,8 @@ U 1 1 60A05B09
 P 4050 3900
 AR Path="/60835C0E/60A05B09" Ref="R?"  Part="1" 
 AR Path="/60A05B09" Ref="R?"  Part="1" 
-AR Path="/60A0541C/60A05B09" Ref="R17"  Part="1" 
-F 0 "R17" H 4120 3946 50  0000 L CNN
+AR Path="/60A0541C/60A05B09" Ref="R15"  Part="1" 
+F 0 "R15" H 4120 3946 50  0000 L CNN
 F 1 "10k" H 4120 3855 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 3980 3900 50  0001 C CNN
 F 3 "~" H 4050 3900 50  0001 C CNN
@@ -111,8 +111,8 @@ U 1 1 60A12CA7
 P 7500 4450
 AR Path="/60835C0E/60A12CA7" Ref="R?"  Part="1" 
 AR Path="/60A12CA7" Ref="R?"  Part="1" 
-AR Path="/60A0541C/60A12CA7" Ref="R18"  Part="1" 
-F 0 "R18" H 7570 4496 50  0000 L CNN
+AR Path="/60A0541C/60A12CA7" Ref="R16"  Part="1" 
+F 0 "R16" H 7570 4496 50  0000 L CNN
 F 1 "1k" H 7570 4405 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 7430 4450 50  0001 C CNN
 F 3 "~" H 7500 4450 50  0001 C CNN
@@ -172,18 +172,18 @@ Wire Wire Line
 $Comp
 L pspice:INDUCTOR L?
 U 1 1 60A16B37
-P 5150 2400
+P 4950 2400
 AR Path="/60835C0E/60A16B37" Ref="L?"  Part="1" 
 AR Path="/60A16B37" Ref="L?"  Part="1" 
 AR Path="/60A0541C/60A16B37" Ref="L1"  Part="1" 
-F 0 "L1" H 5150 2615 50  0000 C CNN
-F 1 "PCS125MT180" H 5150 2524 50  0000 C CNN
-F 2 "" H 5150 2400 50  0001 C CNN
-F 3 "https://www.digikey.com/en/products/detail/viking-tech/PCS125MT180/12141892" H 5150 2400 50  0001 C CNN
-	1    5150 2400
+F 0 "L1" H 4950 2615 50  0000 C CNN
+F 1 "CIGT201210UHR47MNE" H 4950 2524 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 4950 2400 50  0001 C CNN
+F 3 "https://www.digikey.com/en/products/detail/samsung-electro-mechanics/CIGT201210UHR47MNE/7041214" H 4950 2400 50  0001 C CNN
+	1    4950 2400
 	-1   0    0    -1  
 $EndComp
-Text Notes 4850 2100 0    50   ~ 0
+Text Notes 4650 2100 0    50   ~ 0
 surge suppression
 Text HLabel 3600 2400 0    118  Input ~ 0
 Vs
@@ -220,10 +220,10 @@ Wire Wire Line
 Wire Wire Line
 	7500 3500 7500 3600
 $Comp
-L Connector:TestPoint TP11
+L Connector:TestPoint TP12
 U 1 1 60A8568B
 P 7500 3500
-F 0 "TP11" H 7558 3620 50  0000 L CNN
+F 0 "TP12" H 7558 3620 50  0000 L CNN
 F 1 "TestPoint" H 7558 3529 50  0000 L CNN
 F 2 "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical" H 7700 3500 50  0001 C CNN
 F 3 "~" H 7700 3500 50  0001 C CNN
@@ -231,10 +231,10 @@ F 3 "~" H 7700 3500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:TestPoint TP10
+L Connector:TestPoint TP11
 U 1 1 60B7B28C
 P 7500 2300
-F 0 "TP10" H 7558 2420 50  0000 L CNN
+F 0 "TP11" H 7558 2420 50  0000 L CNN
 F 1 "TestPoint" H 7558 2329 50  0000 L CNN
 F 2 "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical" H 7700 2300 50  0001 C CNN
 F 3 "~" H 7700 2300 50  0001 C CNN
@@ -256,25 +256,27 @@ Connection ~ 6450 5400
 Wire Wire Line
 	3600 5400 4050 5400
 Connection ~ 4050 5400
-Wire Wire Line
-	5400 2400 6000 2400
 Connection ~ 6000 2400
-Connection ~ 4050 2400
-Wire Wire Line
-	4050 2400 4900 2400
 Wire Wire Line
 	4050 2400 4050 3500
-Wire Wire Line
-	3600 2400 4050 2400
 $Comp
 L power:PWR_FLAG #FLG04
 U 1 1 60CB89E2
-P 6000 2400
-F 0 "#FLG04" H 6000 2475 50  0001 C CNN
-F 1 "PWR_FLAG" H 6000 2574 50  0000 C CNN
-F 2 "" H 6000 2400 50  0001 C CNN
-F 3 "~" H 6000 2400 50  0001 C CNN
-	1    6000 2400
+P 6000 2300
+F 0 "#FLG04" H 6000 2375 50  0001 C CNN
+F 1 "PWR_FLAG" H 6000 2474 50  0000 C CNN
+F 2 "" H 6000 2300 50  0001 C CNN
+F 3 "~" H 6000 2300 50  0001 C CNN
+	1    6000 2300
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	3600 2400 4050 2400
+Wire Wire Line
+	4050 2400 4700 2400
+Connection ~ 4050 2400
+Wire Wire Line
+	5200 2400 6000 2400
+Wire Wire Line
+	6000 2300 6000 2400
 $EndSCHEMATC

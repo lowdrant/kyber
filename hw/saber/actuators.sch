@@ -131,10 +131,10 @@ LED Driver
 Text Notes 8800 4200 0    50   ~ 0
 Speaker
 $Comp
-L Device:Q_NMOS_GSD Q7
+L Device:Q_NMOS_GSD Q6
 U 1 1 60ECB138
 P 5750 5450
-F 0 "Q7" H 5956 5496 50  0000 L CNN
+F 0 "Q6" H 5956 5496 50  0000 L CNN
 F 1 "SSM3K337R" H 5956 5405 50  0000 L CNN
 F 2 "Package_TO_SOT_SMD:SOT-23" H 5950 5550 50  0001 C CNN
 F 3 "https://toshiba.semicon-storage.com/info/docget.jsp?did=14758&prodName=SSM3K337R" H 5750 5450 50  0001 C CNN
@@ -1003,10 +1003,10 @@ Wire Wire Line
 Wire Wire Line
 	9425 4550 9200 4550
 $Comp
-L Device:Q_NMOS_GSD Q6
+L Device:Q_NMOS_GSD Q5
 U 1 1 608FADAE
 P 2450 5450
-F 0 "Q6" H 2656 5496 50  0000 L CNN
+F 0 "Q5" H 2656 5496 50  0000 L CNN
 F 1 "SSM3K337R" H 2656 5405 50  0000 L CNN
 F 2 "Package_TO_SOT_SMD:SOT-23" H 2650 5550 50  0001 C CNN
 F 3 "https://toshiba.semicon-storage.com/info/docget.jsp?did=14758&prodName=SSM3K337R" H 2450 5450 50  0001 C CNN
@@ -1014,10 +1014,10 @@ F 3 "https://toshiba.semicon-storage.com/info/docget.jsp?did=14758&prodName=SSM3
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:Q_NMOS_GSD Q8
+L Device:Q_NMOS_GSD Q7
 U 1 1 608FB298
 P 8850 5450
-F 0 "Q8" H 9056 5496 50  0000 L CNN
+F 0 "Q7" H 9056 5496 50  0000 L CNN
 F 1 "SSM3K337R" H 9056 5405 50  0000 L CNN
 F 2 "Package_TO_SOT_SMD:SOT-23" H 9050 5550 50  0001 C CNN
 F 3 "https://toshiba.semicon-storage.com/info/docget.jsp?did=14758&prodName=SSM3K337R" H 8850 5450 50  0001 C CNN

@@ -26,10 +26,10 @@ F5 "SIG_LED" O L 6950 5150 50
 F6 "INA" O L 6950 2700 50 
 F7 "INB" O L 6950 2900 50 
 F8 "PWM_MTR" B L 6950 2500 50 
-F9 "PWM_SPKR" O L 6950 5250 50 
+F9 "PWM_SPKR" O L 6950 4950 50 
 F10 "SIG_SOL" O L 6950 5050 50 
-F11 "BTN" I L 6950 3900 50 
-F12 "ENC_A" I L 6950 4150 50 
+F11 "BTN" I L 6950 4100 50 
+F12 "ENC_A" I L 6950 4300 50 
 F13 "ENC_B" I L 6950 4400 50 
 $EndSheet
 Text Label 2400 3200 0    50   ~ 0
@@ -76,8 +76,6 @@ Text Label 4050 4650 2    50   ~ 0
 SOL+
 Text Label 4050 4750 2    50   ~ 0
 SOL-
-Text Notes 7025 1700 0    118  ~ 0
-TODOs\n- Size hbridge caps\n- re-pick power FETs for density
 $Comp
 L Device:R R1
 U 1 1 6084D9B8
@@ -146,7 +144,7 @@ F1 "actuators.sch" 50
 F2 "LED+" O L 4200 4950 50 
 F3 "SPKR+" O L 4200 5250 50 
 F4 "SIG_LED" I R 5450 5150 50 
-F5 "PWM_SPKR" I R 5450 5250 50 
+F5 "PWM_SPKR" I R 5450 4950 50 
 F6 "SIG_SOL" I R 5450 5050 50 
 F7 "SOL+" O L 4200 4650 50 
 F8 "SOL-" O L 4200 4750 50 
@@ -430,10 +428,10 @@ Wire Wire Line
 Text Notes 5500 2300 0    50   ~ 0
 terminations from VNHD7008AY\ndatasheet p28
 $Comp
-L Connector:TestPoint TP8
+L Connector:TestPoint TP5
 U 1 1 60B15E77
 P 8350 2550
-F 0 "TP8" V 8304 2738 50  0000 L CNN
+F 0 "TP5" V 8304 2738 50  0000 L CNN
 F 1 "TestPoint" V 8395 2738 50  0000 L CNN
 F 2 "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical" H 8550 2550 50  0001 C CNN
 F 3 "~" H 8550 2550 50  0001 C CNN
@@ -509,10 +507,10 @@ Wire Wire Line
 Wire Wire Line
 	8350 2550 8300 2550
 $Comp
-L Connector:TestPoint TP9
+L Connector:TestPoint TP6
 U 1 1 60B480A1
 P 8350 2800
-F 0 "TP9" V 8304 2988 50  0000 L CNN
+F 0 "TP6" V 8304 2988 50  0000 L CNN
 F 1 "TestPoint" V 8395 2988 50  0000 L CNN
 F 2 "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical" H 8550 2800 50  0001 C CNN
 F 3 "~" H 8550 2800 50  0001 C CNN
@@ -635,51 +633,6 @@ Wire Wire Line
 	2300 5200 2400 5200
 Wire Wire Line
 	2400 5200 2400 5250
-$Comp
-L Connector:TestPoint TP6
-U 1 1 60BE82A3
-P 6350 4300
-F 0 "TP6" V 6304 4488 50  0000 L CNN
-F 1 "TestPoint" V 6395 4488 50  0000 L CNN
-F 2 "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical" H 6550 4300 50  0001 C CNN
-F 3 "~" H 6550 4300 50  0001 C CNN
-	1    6350 4300
-	0    1    1    0   
-$EndComp
-$Comp
-L Connector:TestPoint TP5
-U 1 1 60BEDD92
-P 6350 4050
-F 0 "TP5" V 6304 4238 50  0000 L CNN
-F 1 "TestPoint" V 6395 4238 50  0000 L CNN
-F 2 "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical" H 6550 4050 50  0001 C CNN
-F 3 "~" H 6550 4050 50  0001 C CNN
-	1    6350 4050
-	0    1    1    0   
-$EndComp
-$Comp
-L Connector:TestPoint TP4
-U 1 1 60BF5E07
-P 6350 3800
-F 0 "TP4" V 6304 3988 50  0000 L CNN
-F 1 "TestPoint" V 6395 3988 50  0000 L CNN
-F 2 "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical" H 6550 3800 50  0001 C CNN
-F 3 "~" H 6550 3800 50  0001 C CNN
-	1    6350 3800
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	6350 3800 6300 3800
-Wire Wire Line
-	6300 3800 6300 3900
-Wire Wire Line
-	6350 4050 6300 4050
-Wire Wire Line
-	6300 4050 6300 4150
-Wire Wire Line
-	6350 4300 6300 4300
-Wire Wire Line
-	6300 4300 6300 4400
 Wire Wire Line
 	4050 7050 4200 7050
 Wire Wire Line
@@ -688,8 +641,6 @@ Wire Wire Line
 	5450 7300 5900 7300
 Wire Wire Line
 	5450 7050 5600 7050
-Wire Wire Line
-	5450 5050 6950 5050
 Wire Wire Line
 	5450 5150 6950 5150
 Wire Wire Line
@@ -707,46 +658,33 @@ Wire Wire Line
 	8300 2900 9050 2900
 Connection ~ 8300 2900
 Wire Wire Line
-	5950 4300 5950 4150
+	2350 4400 6950 4400
+Text Notes 5050 4050 0    50   ~ 0
+don't need testpoints on physical connectors
 Wire Wire Line
-	2350 4100 5950 4100
+	2350 4300 6950 4300
 Wire Wire Line
-	2350 4300 5950 4300
+	2350 4100 6950 4100
 Wire Wire Line
-	5950 3900 5950 4100
+	5450 5050 6950 5050
 $Comp
-L Connector:TestPoint TP7
-U 1 1 60D0D211
-P 6350 5350
-F 0 "TP7" V 6304 5538 50  0000 L CNN
-F 1 "TestPoint" V 6395 5538 50  0000 L CNN
-F 2 "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical" H 6550 5350 50  0001 C CNN
-F 3 "~" H 6550 5350 50  0001 C CNN
-	1    6350 5350
+L Connector:TestPoint TP4
+U 1 1 60A598DA
+P 6100 4850
+F 0 "TP4" V 6054 5038 50  0000 L CNN
+F 1 "TestPoint" V 6145 5038 50  0000 L CNN
+F 2 "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical" H 6300 4850 50  0001 C CNN
+F 3 "~" H 6300 4850 50  0001 C CNN
+	1    6100 4850
 	0    1    1    0   
 $EndComp
 Wire Wire Line
-	6350 5350 6300 5350
+	6100 4850 6050 4850
 Wire Wire Line
-	6300 5350 6300 5250
+	6050 4850 6050 4950
+Connection ~ 6050 4950
 Wire Wire Line
-	5950 3900 6300 3900
+	6050 4950 6950 4950
 Wire Wire Line
-	6300 3900 6950 3900
-Connection ~ 6300 3900
-Wire Wire Line
-	5950 4150 6300 4150
-Connection ~ 6300 4150
-Wire Wire Line
-	6300 4150 6950 4150
-Wire Wire Line
-	6300 4400 6950 4400
-Connection ~ 6300 4400
-Connection ~ 6300 5250
-Wire Wire Line
-	6300 5250 6950 5250
-Wire Wire Line
-	5450 5250 6300 5250
-Wire Wire Line
-	2350 4400 6300 4400
+	5450 4950 6050 4950
 $EndSCHEMATC

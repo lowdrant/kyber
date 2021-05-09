@@ -1,5 +1,23 @@
 EESchema-DOCLIB  Version 2.0
 #
+$CMP MMA8452Q
+D  3-Axis, 12-bit/8-bit Digital Accelerometer
+K accelerometer, 3-axis accelerometer
+F symbol-datasheets/MMA8452Q-rev8.1.pdf
+$ENDCMP
+#
+$CMP STL120N4F6AG
+D Automotive-grade N-channel 40 V, 2.9 mΩ typ., 55 A STripFET™ F6 PowerMOSFETinaPowerFLAT™5x6package
+K transistor NMOS N-MOS N-MOSFET
+F ${KIPRJMOD}/symbol-datasheets/stl120n4f6ag.pdf
+$ENDCMP
+#
+$CMP STL76DN4LF7AG
+D Automotive-grade dual N-channel 40 V, 5 mΩ typ., 40 A STripFET™ F7 Power MOSFET in a PowerFLAT™ 5x6 DI
+K transistor NMOS N-MOS N-MOSFET
+F ${KIPRJMOD}/symbol-datasheets/stl76dn4lf7ag-1.pdf
+$ENDCMP
+#
 $CMP VNHD7008AY
 D H-bridge motor driver for automotive DC motor driving
 K hbridge,h-bridge,h bridge,motor driver,dc motor
