@@ -36,30 +36,14 @@ U 1 1 60A05B09
 P 4050 3900
 AR Path="/60835C0E/60A05B09" Ref="R?"  Part="1" 
 AR Path="/60A05B09" Ref="R?"  Part="1" 
-AR Path="/60A0541C/60A05B09" Ref="R15"  Part="1" 
-F 0 "R15" H 4120 3946 50  0000 L CNN
+AR Path="/60A0541C/60A05B09" Ref="R14"  Part="1" 
+F 0 "R14" H 4120 3946 50  0000 L CNN
 F 1 "10k" H 4120 3855 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 3980 3900 50  0001 C CNN
 F 3 "~" H 4050 3900 50  0001 C CNN
 	1    4050 3900
 	1    0    0    -1  
 $EndComp
-$Comp
-L Device:Jumper_NC_Small JP?
-U 1 1 60A05B37
-P 4050 3600
-AR Path="/609455AB/60A05B37" Ref="JP?"  Part="1" 
-AR Path="/60A05B37" Ref="JP?"  Part="1" 
-AR Path="/60A0541C/60A05B37" Ref="JP6"  Part="1" 
-F 0 "JP6" V 4004 3674 50  0000 L CNN
-F 1 "Jumper_NC_Small" V 4095 3674 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 4050 3600 50  0001 C CNN
-F 3 "~" H 4050 3600 50  0001 C CNN
-	1    4050 3600
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	4050 3700 4050 3750
 $Comp
 L Regulator_Linear:AZ1117-3.3 U?
 U 1 1 60A12C8F
@@ -111,8 +95,8 @@ U 1 1 60A12CA7
 P 7500 4450
 AR Path="/60835C0E/60A12CA7" Ref="R?"  Part="1" 
 AR Path="/60A12CA7" Ref="R?"  Part="1" 
-AR Path="/60A0541C/60A12CA7" Ref="R16"  Part="1" 
-F 0 "R16" H 7570 4496 50  0000 L CNN
+AR Path="/60A0541C/60A12CA7" Ref="R15"  Part="1" 
+F 0 "R15" H 7570 4496 50  0000 L CNN
 F 1 "1k" H 7570 4405 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 7430 4450 50  0001 C CNN
 F 3 "~" H 7500 4450 50  0001 C CNN
@@ -151,22 +135,6 @@ F 3 "https://www.we-online.com/catalog/datasheet/150060AS75000.pdf" H 7500 4800 
 	1    7500 4800
 	0    -1   -1   0   
 $EndComp
-$Comp
-L Device:Jumper_NC_Small JP?
-U 1 1 60A12CE2
-P 7500 4150
-AR Path="/609455AB/60A12CE2" Ref="JP?"  Part="1" 
-AR Path="/60A12CE2" Ref="JP?"  Part="1" 
-AR Path="/60A0541C/60A12CE2" Ref="JP7"  Part="1" 
-F 0 "JP7" V 7454 4224 50  0000 L CNN
-F 1 "Jumper_NC_Small" V 7545 4224 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 7500 4150 50  0001 C CNN
-F 3 "~" H 7500 4150 50  0001 C CNN
-	1    7500 4150
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	7500 4250 7500 4300
 Wire Wire Line
 	6900 3600 6900 3900
 $Comp
@@ -212,8 +180,6 @@ Wire Wire Line
 Connection ~ 7500 5400
 Wire Wire Line
 	7500 5400 8000 5400
-Wire Wire Line
-	7500 4050 7500 3600
 Connection ~ 7500 3600
 Wire Wire Line
 	7500 3600 8000 3600
@@ -257,8 +223,6 @@ Wire Wire Line
 	3600 5400 4050 5400
 Connection ~ 4050 5400
 Connection ~ 6000 2400
-Wire Wire Line
-	4050 2400 4050 3500
 $Comp
 L power:PWR_FLAG #FLG04
 U 1 1 60CB89E2
@@ -279,4 +243,8 @@ Wire Wire Line
 	5200 2400 6000 2400
 Wire Wire Line
 	6000 2300 6000 2400
+Wire Wire Line
+	7500 3600 7500 4300
+Wire Wire Line
+	4050 2400 4050 3750
 $EndSCHEMATC

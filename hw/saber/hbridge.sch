@@ -35,8 +35,8 @@ L Device:R R?
 U 1 1 60946834
 P 3250 4550
 AR Path="/60835C30/60946834" Ref="R?"  Part="1" 
-AR Path="/609455AB/60946834" Ref="R9"  Part="1" 
-F 0 "R9" H 3320 4596 50  0000 L CNN
+AR Path="/609455AB/60946834" Ref="R8"  Part="1" 
+F 0 "R8" H 3320 4596 50  0000 L CNN
 F 1 "10k" H 3320 4505 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 3180 4550 50  0001 C CNN
 F 3 "~" H 3250 4550 50  0001 C CNN
@@ -50,8 +50,8 @@ L Device:R R?
 U 1 1 6094683C
 P 4800 4550
 AR Path="/60835C30/6094683C" Ref="R?"  Part="1" 
-AR Path="/609455AB/6094683C" Ref="R10"  Part="1" 
-F 0 "R10" H 4870 4596 50  0000 L CNN
+AR Path="/609455AB/6094683C" Ref="R9"  Part="1" 
+F 0 "R9" H 4870 4596 50  0000 L CNN
 F 1 "10k" H 4870 4505 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 4730 4550 50  0001 C CNN
 F 3 "~" H 4800 4550 50  0001 C CNN
@@ -117,8 +117,8 @@ U 1 1 60A0C7C9
 P 8900 2450
 AR Path="/60835C0E/60A0C7C9" Ref="R?"  Part="1" 
 AR Path="/60A0C7C9" Ref="R?"  Part="1" 
-AR Path="/609455AB/60A0C7C9" Ref="R13"  Part="1" 
-F 0 "R13" H 8970 2496 50  0000 L CNN
+AR Path="/609455AB/60A0C7C9" Ref="R12"  Part="1" 
+F 0 "R12" H 8970 2496 50  0000 L CNN
 F 1 "1k" H 8970 2405 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 8830 2450 50  0001 C CNN
 F 3 "~" H 8900 2450 50  0001 C CNN
@@ -131,8 +131,8 @@ U 1 1 60A0C7D0
 P 8550 2800
 AR Path="/60835C0E/60A0C7D0" Ref="R?"  Part="1" 
 AR Path="/60A0C7D0" Ref="R?"  Part="1" 
-AR Path="/609455AB/60A0C7D0" Ref="R11"  Part="1" 
-F 0 "R11" H 8481 2754 50  0000 R CNN
+AR Path="/609455AB/60A0C7D0" Ref="R10"  Part="1" 
+F 0 "R10" H 8481 2754 50  0000 R CNN
 F 1 "0" H 8481 2845 50  0000 R CNN
 F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 8480 2800 50  0001 C CNN
 F 3 "~" H 8550 2800 50  0001 C CNN
@@ -145,8 +145,8 @@ U 1 1 60A0C7D7
 P 8550 3200
 AR Path="/60835C0E/60A0C7D7" Ref="R?"  Part="1" 
 AR Path="/60A0C7D7" Ref="R?"  Part="1" 
-AR Path="/609455AB/60A0C7D7" Ref="R12"  Part="1" 
-F 0 "R12" H 8481 3154 50  0000 R CNN
+AR Path="/609455AB/60A0C7D7" Ref="R11"  Part="1" 
+F 0 "R11" H 8481 3154 50  0000 R CNN
 F 1 "1k" H 8481 3245 50  0000 R CNN
 F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 8480 3200 50  0001 C CNN
 F 3 "~" H 8550 3200 50  0001 C CNN
@@ -204,9 +204,9 @@ L Device:D_Schottky D2
 U 1 1 60B3B341
 P 3550 6450
 F 0 "D2" V 3504 6529 50  0000 L CNN
-F 1 "SBR10E45P5-7" V 3595 6529 50  0000 L CNN
-F 2 "powerdi5:D_PowerDI5-AAK" H 3550 6450 50  0001 C CNN
-F 3 "https://www.diodes.com/assets/Datasheets/SBR10E45P5.pdf" H 3550 6450 50  0001 C CNN
+F 1 "CDSW4448-G" V 3595 6529 50  0000 L CNN
+F 2 "Diode_SMD:D_SOD-123" H 3550 6450 50  0001 C CNN
+F 3 "https://www.digikey.com/en/products/detail/comchip-technology/CDSW4448-G/3308609" H 3550 6450 50  0001 C CNN
 	1    3550 6450
 	0    -1   1    0   
 $EndComp
@@ -239,10 +239,10 @@ F 3 "https://www.we-online.de/katalog/datasheet/150060RS75000.pdf" H 9900 4050 5
 	0    1    -1   0   
 $EndComp
 $Comp
-L Device:R R14
+L Device:R R13
 U 1 1 60BFF003
 P 9900 3700
-F 0 "R14" H 9970 3746 50  0000 L CNN
+F 0 "R13" H 9970 3746 50  0000 L CNN
 F 1 "1K" H 9970 3655 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 9830 3700 50  0001 C CNN
 F 3 "~" H 9900 3700 50  0001 C CNN
@@ -303,52 +303,6 @@ Wire Wire Line
 	9900 3850 9900 3900
 Text Notes 9950 3000 0    50   ~ 0
 Undervoltage-On Indicator
-$Comp
-L Device:D_Schottky D3
-U 1 1 60EDFB2E
-P 3550 6950
-F 0 "D3" V 3504 7029 50  0000 L CNN
-F 1 "SBR10E45P5-7" V 3595 7029 50  0000 L CNN
-F 2 "powerdi5:D_PowerDI5-AAK" H 3550 6950 50  0001 C CNN
-F 3 "https://www.diodes.com/assets/Datasheets/SBR10E45P5.pdf" H 3550 6950 50  0001 C CNN
-	1    3550 6950
-	0    -1   1    0   
-$EndComp
-$Comp
-L Device:D_Schottky D5
-U 1 1 60EE22CC
-P 4450 6950
-F 0 "D5" V 4404 7029 50  0000 L CNN
-F 1 "SBR10E45P5-7" V 4495 7029 50  0000 L CNN
-F 2 "powerdi5:D_PowerDI5-AAK" H 4450 6950 50  0001 C CNN
-F 3 "https://www.diodes.com/assets/Datasheets/SBR10E45P5.pdf" H 4450 6950 50  0001 C CNN
-	1    4450 6950
-	0    1    1    0   
-$EndComp
-$Comp
-L Device:D_Schottky D4
-U 1 1 60EE71EA
-P 4450 6450
-F 0 "D4" V 4404 6529 50  0000 L CNN
-F 1 "SBR10E45P5-7" V 4495 6529 50  0000 L CNN
-F 2 "powerdi5:D_PowerDI5-AAK" H 4450 6450 50  0001 C CNN
-F 3 "https://www.diodes.com/assets/Datasheets/SBR10E45P5.pdf" H 4450 6450 50  0001 C CNN
-	1    4450 6450
-	0    1    1    0   
-$EndComp
-$Comp
-L Device:Jumper_NC_Small JP2
-U 1 1 60F24C08
-P 9900 3400
-F 0 "JP2" V 9854 3474 50  0000 L CNN
-F 1 "Jumper_NC_Small" V 9945 3474 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 9900 3400 50  0001 C CNN
-F 3 "~" H 9900 3400 50  0001 C CNN
-	1    9900 3400
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	9900 3500 9900 3550
 $Comp
 L Device:CP1 C10
 U 1 1 609A9AD8
@@ -490,8 +444,6 @@ Connection ~ 8550 2200
 Text Notes 5750 2150 0    50   ~ 0
 UV protections can be after hbridge\nb/c PWM/INA/INB are after UV protections,\nso they will go low and turn off hbridge
 Wire Wire Line
-	9900 2700 9900 3300
-Wire Wire Line
 	9900 5050 9900 4200
 Wire Wire Line
 	6700 2200 8550 2200
@@ -536,25 +488,25 @@ Wire Wire Line
 	4450 6600 4450 6700
 $Comp
 L saber:STL76DN4LF7AG Q1
-U 1 1 609AF43E
-P 3500 3800
-F 0 "Q1" H 3700 3950 50  0000 L CNN
-F 1 "STL76DN4LF7AG" H 3700 3850 50  0000 L CNN
-F 2 "STL76DN4LF7AG:STL76DN4LF7AG" H 3700 3800 50  0001 C CNN
-F 3 "${KIPRJMOD}/symbol-datasheets/stl76dn4lf7ag-1.pdf" H 3700 3800 50  0001 C CNN
-	1    3500 3800
-	1    0    0    -1  
-$EndComp
-$Comp
-L saber:STL76DN4LF7AG Q1
-U 2 1 609AF58B
+U 2 1 609AF43E
 P 4550 3800
-F 0 "Q1" H 4700 3700 50  0000 L CNN
-F 1 "STL76DN4LF7AG" H 4700 3600 50  0000 L CNN
+F 0 "Q1" H 4750 3950 50  0000 L CNN
+F 1 "STL76DN4LF7AG" H 4750 3850 50  0000 L CNN
 F 2 "STL76DN4LF7AG:STL76DN4LF7AG" H 4750 3800 50  0001 C CNN
 F 3 "${KIPRJMOD}/symbol-datasheets/stl76dn4lf7ag-1.pdf" H 4750 3800 50  0001 C CNN
 	2    4550 3800
 	-1   0    0    -1  
+$EndComp
+$Comp
+L saber:STL76DN4LF7AG Q1
+U 1 1 609AF58B
+P 3500 3800
+F 0 "Q1" H 3650 3700 50  0000 L CNN
+F 1 "STL76DN4LF7AG" H 3650 3600 50  0000 L CNN
+F 2 "STL76DN4LF7AG:STL76DN4LF7AG" H 3700 3800 50  0001 C CNN
+F 3 "${KIPRJMOD}/symbol-datasheets/stl76dn4lf7ag-1.pdf" H 3700 3800 50  0001 C CNN
+	1    3500 3800
+	1    0    0    -1  
 $EndComp
 $Comp
 L saber:VNHD7008AY U?
@@ -683,4 +635,39 @@ Wire Wire Line
 Connection ~ 4800 3800
 Wire Wire Line
 	4800 3800 4850 3800
+$Comp
+L Device:D_Schottky D3
+U 1 1 60EDFB2E
+P 3550 6950
+F 0 "D3" V 3504 7029 50  0000 L CNN
+F 1 "CDSW4448-G" V 3595 7029 50  0000 L CNN
+F 2 "Diode_SMD:D_SOD-123" H 3550 6950 50  0001 C CNN
+F 3 "https://www.digikey.com/en/products/detail/comchip-technology/CDSW4448-G/3308609" H 3550 6950 50  0001 C CNN
+	1    3550 6950
+	0    -1   1    0   
+$EndComp
+$Comp
+L Device:D_Schottky D5
+U 1 1 60EE22CC
+P 4450 6950
+F 0 "D5" V 4404 7029 50  0000 L CNN
+F 1 "CDSW4448-G" V 4495 7029 50  0000 L CNN
+F 2 "Diode_SMD:D_SOD-123" H 4450 6950 50  0001 C CNN
+F 3 "https://www.digikey.com/en/products/detail/comchip-technology/CDSW4448-G/3308609" H 4450 6950 50  0001 C CNN
+	1    4450 6950
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:D_Schottky D4
+U 1 1 60EE71EA
+P 4450 6450
+F 0 "D4" V 4404 6529 50  0000 L CNN
+F 1 "CDSW4448-G" V 4495 6529 50  0000 L CNN
+F 2 "Diode_SMD:D_SOD-123" H 4450 6450 50  0001 C CNN
+F 3 "https://www.digikey.com/en/products/detail/comchip-technology/CDSW4448-G/3308609" H 4450 6450 50  0001 C CNN
+	1    4450 6450
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	9900 2700 9900 3550
 $EndSCHEMATC

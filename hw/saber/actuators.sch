@@ -869,9 +869,9 @@ P 2550 5000
 AR Path="/609455AB/60EED09E" Ref="D?"  Part="1" 
 AR Path="/60835C30/60EED09E" Ref="D8"  Part="1" 
 F 0 "D8" V 2504 5079 50  0000 L CNN
-F 1 "SBR10E45P5-7" V 2595 5079 50  0000 L CNN
-F 2 "powerdi5:D_PowerDI5-AAK" H 2550 5000 50  0001 C CNN
-F 3 "https://www.diodes.com/assets/Datasheets/SBR10E45P5.pdf" H 2550 5000 50  0001 C CNN
+F 1 "CDSW4448-G" V 2595 5079 50  0000 L CNN
+F 2 "Diode_SMD:D_SOD-123" H 2550 5000 50  0001 C CNN
+F 3 "https://www.digikey.com/en/products/detail/comchip-technology/CDSW4448-G/3308609" H 2550 5000 50  0001 C CNN
 	1    2550 5000
 	0    -1   1    0   
 $EndComp
@@ -882,19 +882,19 @@ P 8950 5000
 AR Path="/609455AB/60EED2A1" Ref="D?"  Part="1" 
 AR Path="/60835C30/60EED2A1" Ref="D9"  Part="1" 
 F 0 "D9" V 8904 5079 50  0000 L CNN
-F 1 "SBR10E45P5-7" V 8995 5079 50  0000 L CNN
-F 2 "powerdi5:D_PowerDI5-AAK" H 8950 5000 50  0001 C CNN
-F 3 "https://www.diodes.com/assets/Datasheets/SBR10E45P5.pdf" H 8950 5000 50  0001 C CNN
+F 1 "CDSW4448-G" V 8995 5079 50  0000 L CNN
+F 2 "Diode_SMD:D_SOD-123" H 8950 5000 50  0001 C CNN
+F 3 "https://www.digikey.com/en/products/detail/comchip-technology/CDSW4448-G/3308609" H 8950 5000 50  0001 C CNN
 	1    8950 5000
 	0    -1   1    0   
 $EndComp
 Wire Wire Line
 	2550 5200 2550 5250
 $Comp
-L Jumper:Jumper_3_Bridged12 JP3
+L Jumper:Jumper_3_Bridged12 JP1
 U 1 1 6093D827
 P 2550 4550
-F 0 "JP3" H 2550 4754 50  0000 C CNN
+F 0 "JP1" H 2550 4754 50  0000 C CNN
 F 1 "Jumper_3_Bridged12" H 2550 4663 50  0000 C CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 2550 4550 50  0001 C CNN
 F 3 "~" H 2550 4550 50  0001 C CNN
@@ -932,10 +932,10 @@ F 3 "" H 5375 4475 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Jumper:Jumper_3_Bridged12 JP4
+L Jumper:Jumper_3_Bridged12 JP2
 U 1 1 6093E300
 P 5850 4550
-F 0 "JP4" H 5850 4754 50  0000 C CNN
+F 0 "JP2" H 5850 4754 50  0000 C CNN
 F 1 "Jumper_3_Bridged12" H 5850 4663 50  0000 C CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 5850 4550 50  0001 C CNN
 F 3 "~" H 5850 4550 50  0001 C CNN
@@ -973,10 +973,10 @@ F 3 "" H 8475 4475 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Jumper:Jumper_3_Bridged12 JP5
+L Jumper:Jumper_3_Bridged12 JP3
 U 1 1 6093EAC4
 P 8950 4550
-F 0 "JP5" H 8950 4754 50  0000 C CNN
+F 0 "JP3" H 8950 4754 50  0000 C CNN
 F 1 "Jumper_3_Bridged12" H 8950 4663 50  0000 C CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 8950 4550 50  0001 C CNN
 F 3 "~" H 8950 4550 50  0001 C CNN
