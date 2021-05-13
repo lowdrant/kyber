@@ -19,12 +19,12 @@ SIG_SOL
 $Comp
 L power:+12V #PWR023
 U 1 1 608818EB
-P 2075 4475
-F 0 "#PWR023" H 2075 4325 50  0001 C CNN
-F 1 "+12V" H 2090 4648 50  0000 C CNN
-F 2 "" H 2075 4475 50  0001 C CNN
-F 3 "" H 2075 4475 50  0001 C CNN
-	1    2075 4475
+P 2550 4475
+F 0 "#PWR023" H 2550 4325 50  0001 C CNN
+F 1 "+12V" H 2565 4648 50  0000 C CNN
+F 2 "" H 2550 4475 50  0001 C CNN
+F 3 "" H 2550 4475 50  0001 C CNN
+	1    2550 4475
 	1    0    0    -1  
 $EndComp
 Text HLabel 2850 4800 2    50   Output ~ 0
@@ -32,10 +32,10 @@ SOL+
 Text HLabel 2850 5200 2    50   Output ~ 0
 SOL-
 $Comp
-L power:GNDPWR #PWR024
+L power:GNDPWR #PWR028
 U 1 1 60891D43
 P 2550 5700
-F 0 "#PWR024" H 2550 5500 50  0001 C CNN
+F 0 "#PWR028" H 2550 5500 50  0001 C CNN
 F 1 "GNDPWR" H 2554 5546 50  0000 C CNN
 F 2 "" H 2550 5650 50  0001 C CNN
 F 3 "" H 2550 5650 50  0001 C CNN
@@ -61,8 +61,6 @@ Wire Wire Line
 	2850 5200 2550 5200
 Wire Wire Line
 	2550 5650 2550 5700
-Wire Wire Line
-	2550 4700 2550 4800
 Text Notes 900  2350 0    118  ~ 0
 Seems safe to drive NMOS with GPIO directly\nSims also show 20kHz waveform well-preserved\n\nDMTH4005SK3Q-13 Cin: 120pF\n              GPIO Zout: 50 Ohms\n                   Imax: 16 mA\n\nSafety factor of 6.4 with these FETs;\nno need for 0-ohm jumpers
 Connection ~ 2550 5200
@@ -75,10 +73,10 @@ LED+
 Text HLabel 6150 5200 2    50   Output ~ 0
 LED-
 $Comp
-L power:GNDPWR #PWR027
+L power:GNDPWR #PWR029
 U 1 1 60E796CE
 P 5850 5700
-F 0 "#PWR027" H 5850 5500 50  0001 C CNN
+F 0 "#PWR029" H 5850 5500 50  0001 C CNN
 F 1 "GNDPWR" H 5854 5546 50  0000 C CNN
 F 2 "" H 5850 5650 50  0001 C CNN
 F 3 "" H 5850 5650 50  0001 C CNN
@@ -91,8 +89,6 @@ Wire Wire Line
 	6150 5200 5850 5200
 Wire Wire Line
 	5850 5650 5850 5700
-Wire Wire Line
-	5850 4700 5850 4800
 Wire Wire Line
 	5850 5200 5850 5250
 Wire Wire Line
@@ -119,8 +115,6 @@ Wire Wire Line
 	9250 5200 8950 5200
 Wire Wire Line
 	8950 5650 8950 5700
-Wire Wire Line
-	8950 4700 8950 4800
 Wire Wire Line
 	8950 5200 8950 5250
 Connection ~ 8950 5200
@@ -869,9 +863,9 @@ P 2550 5000
 AR Path="/609455AB/60EED09E" Ref="D?"  Part="1" 
 AR Path="/60835C30/60EED09E" Ref="D8"  Part="1" 
 F 0 "D8" V 2504 5079 50  0000 L CNN
-F 1 "CDSW4448-G" V 2595 5079 50  0000 L CNN
+F 1 "SDM2U30CSP-7" V 2595 5079 50  0000 L CNN
 F 2 "Diode_SMD:D_SOD-123" H 2550 5000 50  0001 C CNN
-F 3 "https://www.digikey.com/en/products/detail/comchip-technology/CDSW4448-G/3308609" H 2550 5000 50  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/SDM2U30CSP.pdf" H 2550 5000 50  0001 C CNN
 	1    2550 5000
 	0    -1   1    0   
 $EndComp
@@ -882,64 +876,23 @@ P 8950 5000
 AR Path="/609455AB/60EED2A1" Ref="D?"  Part="1" 
 AR Path="/60835C30/60EED2A1" Ref="D9"  Part="1" 
 F 0 "D9" V 8904 5079 50  0000 L CNN
-F 1 "CDSW4448-G" V 8995 5079 50  0000 L CNN
+F 1 "SDM2U30CSP-7" V 8995 5079 50  0000 L CNN
 F 2 "Diode_SMD:D_SOD-123" H 8950 5000 50  0001 C CNN
-F 3 "https://www.digikey.com/en/products/detail/comchip-technology/CDSW4448-G/3308609" H 8950 5000 50  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/SDM2U30CSP.pdf" H 8950 5000 50  0001 C CNN
 	1    8950 5000
 	0    -1   1    0   
 $EndComp
 Wire Wire Line
 	2550 5200 2550 5250
 $Comp
-L Jumper:Jumper_3_Bridged12 JP1
-U 1 1 6093D827
-P 2550 4550
-F 0 "JP1" H 2550 4754 50  0000 C CNN
-F 1 "Jumper_3_Bridged12" H 2550 4663 50  0000 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 2550 4550 50  0001 C CNN
-F 3 "~" H 2550 4550 50  0001 C CNN
-	1    2550 4550
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	2075 4475 2075 4550
-Wire Wire Line
-	2075 4550 2300 4550
-$Comp
-L power:+3V3 #PWR025
-U 1 1 6093DFEC
-P 3025 4475
-F 0 "#PWR025" H 3025 4325 50  0001 C CNN
-F 1 "+3V3" H 3040 4648 50  0000 C CNN
-F 2 "" H 3025 4475 50  0001 C CNN
-F 3 "" H 3025 4475 50  0001 C CNN
-	1    3025 4475
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	3025 4475 3025 4550
-Wire Wire Line
-	3025 4550 2800 4550
-$Comp
-L power:+12V #PWR026
+L power:+12V #PWR024
 U 1 1 6093E2FA
 P 5375 4475
-F 0 "#PWR026" H 5375 4325 50  0001 C CNN
+F 0 "#PWR024" H 5375 4325 50  0001 C CNN
 F 1 "+12V" H 5390 4648 50  0000 C CNN
 F 2 "" H 5375 4475 50  0001 C CNN
 F 3 "" H 5375 4475 50  0001 C CNN
 	1    5375 4475
-	1    0    0    -1  
-$EndComp
-$Comp
-L Jumper:Jumper_3_Bridged12 JP2
-U 1 1 6093E300
-P 5850 4550
-F 0 "JP2" H 5850 4754 50  0000 C CNN
-F 1 "Jumper_3_Bridged12" H 5850 4663 50  0000 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 5850 4550 50  0001 C CNN
-F 3 "~" H 5850 4550 50  0001 C CNN
-	1    5850 4550
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -947,10 +900,10 @@ Wire Wire Line
 Wire Wire Line
 	5375 4550 5600 4550
 $Comp
-L power:+3V3 #PWR028
+L power:+3V3 #PWR025
 U 1 1 6093E309
 P 6325 4475
-F 0 "#PWR028" H 6325 4325 50  0001 C CNN
+F 0 "#PWR025" H 6325 4325 50  0001 C CNN
 F 1 "+3V3" H 6340 4648 50  0000 C CNN
 F 2 "" H 6325 4475 50  0001 C CNN
 F 3 "" H 6325 4475 50  0001 C CNN
@@ -962,25 +915,14 @@ Wire Wire Line
 Wire Wire Line
 	6325 4550 6100 4550
 $Comp
-L power:+12V #PWR029
+L power:+12V #PWR026
 U 1 1 6093EABE
 P 8475 4475
-F 0 "#PWR029" H 8475 4325 50  0001 C CNN
+F 0 "#PWR026" H 8475 4325 50  0001 C CNN
 F 1 "+12V" H 8490 4648 50  0000 C CNN
 F 2 "" H 8475 4475 50  0001 C CNN
 F 3 "" H 8475 4475 50  0001 C CNN
 	1    8475 4475
-	1    0    0    -1  
-$EndComp
-$Comp
-L Jumper:Jumper_3_Bridged12 JP3
-U 1 1 6093EAC4
-P 8950 4550
-F 0 "JP3" H 8950 4754 50  0000 C CNN
-F 1 "Jumper_3_Bridged12" H 8950 4663 50  0000 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 8950 4550 50  0001 C CNN
-F 3 "~" H 8950 4550 50  0001 C CNN
-	1    8950 4550
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -988,10 +930,10 @@ Wire Wire Line
 Wire Wire Line
 	8475 4550 8700 4550
 $Comp
-L power:+3V3 #PWR031
+L power:+3V3 #PWR027
 U 1 1 6093EACD
 P 9425 4475
-F 0 "#PWR031" H 9425 4325 50  0001 C CNN
+F 0 "#PWR027" H 9425 4325 50  0001 C CNN
 F 1 "+3V3" H 9440 4648 50  0000 C CNN
 F 2 "" H 9425 4475 50  0001 C CNN
 F 3 "" H 9425 4475 50  0001 C CNN
@@ -1024,4 +966,64 @@ F 3 "https://toshiba.semicon-storage.com/info/docget.jsp?did=14758&prodName=SSM3
 	1    8850 5450
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	2550 4475 2550 4800
+$Comp
+L Device:R_Small R14
+U 1 1 609E19DA
+P 5700 4550
+F 0 "R14" V 5504 4550 50  0000 C CNN
+F 1 "0" V 5595 4550 50  0000 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" H 5700 4550 50  0001 C CNN
+F 3 "~" H 5700 4550 50  0001 C CNN
+	1    5700 4550
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R_Small R15
+U 1 1 609E1A27
+P 6000 4550
+F 0 "R15" V 5804 4550 50  0000 C CNN
+F 1 "0" V 5895 4550 50  0000 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" H 6000 4550 50  0001 C CNN
+F 3 "~" H 6000 4550 50  0001 C CNN
+	1    6000 4550
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	5800 4550 5850 4550
+Wire Wire Line
+	5850 4550 5850 4800
+Connection ~ 5850 4550
+Wire Wire Line
+	5850 4550 5900 4550
+$Comp
+L Device:R_Small R16
+U 1 1 609E271F
+P 8800 4550
+F 0 "R16" V 8604 4550 50  0000 C CNN
+F 1 "0" V 8695 4550 50  0000 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" H 8800 4550 50  0001 C CNN
+F 3 "~" H 8800 4550 50  0001 C CNN
+	1    8800 4550
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R_Small R17
+U 1 1 609E2794
+P 9100 4550
+F 0 "R17" V 8904 4550 50  0000 C CNN
+F 1 "0" V 8995 4550 50  0000 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" H 9100 4550 50  0001 C CNN
+F 3 "~" H 9100 4550 50  0001 C CNN
+	1    9100 4550
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	8900 4550 8950 4550
+Wire Wire Line
+	8950 4550 8950 4800
+Connection ~ 8950 4550
+Wire Wire Line
+	8950 4550 9000 4550
 $EndSCHEMATC

@@ -111,10 +111,9 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   HAL_TIM_Encoder_Start(&htim22,TIM_CHANNEL_ALL);
-  HAL_TIM_Base_Start_IT(&htim21);
   HAL_GPIO_WritePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin, GPIO_PIN_SET);  // startup blink
   HAL_GPIO_WritePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin, GPIO_PIN_RESET);
-  TIM2->CCR2 = TIM2->ARR;                          // PWM 100% Duty Cycle
+  TIM2->CCR2 = TIM2->ARR;  // PWM 100% Duty Cycle
   __enable_irq();
   HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);  // after logging IRQ to catch startup
   MtrCW();
