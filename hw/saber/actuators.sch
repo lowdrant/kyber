@@ -864,7 +864,7 @@ AR Path="/609455AB/60EED09E" Ref="D?"  Part="1"
 AR Path="/60835C30/60EED09E" Ref="D8"  Part="1" 
 F 0 "D8" V 2504 5079 50  0000 L CNN
 F 1 "SDM2U30CSP-7" V 2595 5079 50  0000 L CNN
-F 2 "Diode_SMD:D_SOD-123" H 2550 5000 50  0001 C CNN
+F 2 "Diode_SMD:D_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 2550 5000 50  0001 C CNN
 F 3 "https://www.diodes.com/assets/Datasheets/SDM2U30CSP.pdf" H 2550 5000 50  0001 C CNN
 	1    2550 5000
 	0    -1   1    0   
@@ -877,7 +877,7 @@ AR Path="/609455AB/60EED2A1" Ref="D?"  Part="1"
 AR Path="/60835C30/60EED2A1" Ref="D9"  Part="1" 
 F 0 "D9" V 8904 5079 50  0000 L CNN
 F 1 "SDM2U30CSP-7" V 8995 5079 50  0000 L CNN
-F 2 "Diode_SMD:D_SOD-123" H 8950 5000 50  0001 C CNN
+F 2 "Diode_SMD:D_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 8950 5000 50  0001 C CNN
 F 3 "https://www.diodes.com/assets/Datasheets/SDM2U30CSP.pdf" H 8950 5000 50  0001 C CNN
 	1    8950 5000
 	0    -1   1    0   

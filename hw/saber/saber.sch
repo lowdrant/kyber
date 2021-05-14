@@ -433,7 +433,7 @@ U 1 1 60B15E77
 P 8350 2550
 F 0 "TP2" V 8304 2738 50  0000 L CNN
 F 1 "TestPoint" V 8395 2738 50  0000 L CNN
-F 2 "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical" H 8550 2550 50  0001 C CNN
+F 2 "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical" H 8550 2550 50  0001 C CNN
 F 3 "~" H 8550 2550 50  0001 C CNN
 	1    8350 2550
 	0    1    1    0   
@@ -446,7 +446,7 @@ U 1 1 60B1B777
 P 6100 2800
 F 0 "TP4" V 6054 2988 50  0000 L CNN
 F 1 "TestPoint" V 6145 2988 50  0000 L CNN
-F 2 "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical" H 6300 2800 50  0001 C CNN
+F 2 "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical" H 6300 2800 50  0001 C CNN
 F 3 "~" H 6300 2800 50  0001 C CNN
 	1    6100 2800
 	0    1    1    0   
@@ -457,7 +457,7 @@ U 1 1 60B1EB2F
 P 6100 2600
 F 0 "TP3" V 6054 2788 50  0000 L CNN
 F 1 "TestPoint" V 6145 2788 50  0000 L CNN
-F 2 "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical" H 6300 2600 50  0001 C CNN
+F 2 "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical" H 6300 2600 50  0001 C CNN
 F 3 "~" H 6300 2600 50  0001 C CNN
 	1    6100 2600
 	0    1    1    0   
@@ -468,7 +468,7 @@ U 1 1 60B20388
 P 6100 2400
 F 0 "TP1" V 6054 2588 50  0000 L CNN
 F 1 "TestPoint" V 6145 2588 50  0000 L CNN
-F 2 "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical" H 6300 2400 50  0001 C CNN
+F 2 "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical" H 6300 2400 50  0001 C CNN
 F 3 "~" H 6300 2400 50  0001 C CNN
 	1    6100 2400
 	0    1    1    0   
@@ -512,7 +512,7 @@ U 1 1 60B480A1
 P 8350 2800
 F 0 "TP5" V 8304 2988 50  0000 L CNN
 F 1 "TestPoint" V 8395 2988 50  0000 L CNN
-F 2 "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical" H 8550 2800 50  0001 C CNN
+F 2 "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical" H 8550 2800 50  0001 C CNN
 F 3 "~" H 8550 2800 50  0001 C CNN
 	1    8350 2800
 	0    1    1    0   
@@ -662,7 +662,7 @@ U 1 1 60A598DA
 P 6100 4850
 F 0 "TP6" V 6054 5038 50  0000 L CNN
 F 1 "TestPoint" V 6145 5038 50  0000 L CNN
-F 2 "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical" H 6300 4850 50  0001 C CNN
+F 2 "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical" H 6300 4850 50  0001 C CNN
 F 3 "~" H 6300 4850 50  0001 C CNN
 	1    6100 4850
 	0    1    1    0   
@@ -682,7 +682,7 @@ U 1 1 609B67F0
 P 2150 2600
 F 0 "J1" H 2250 2500 50  0000 C CNN
 F 1 "Screw_Terminal_01x02" H 2650 2600 50  0000 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 2150 2600 50  0001 C CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-2-2.54_1x02_P2.54mm_Horizontal" H 2150 2600 50  0001 C CNN
 F 3 "~" H 2150 2600 50  0001 C CNN
 	1    2150 2600
 	-1   0    0    1   
@@ -693,7 +693,7 @@ U 1 1 609B688A
 P 2150 3050
 F 0 "J2" H 2250 2950 50  0000 C CNN
 F 1 "Screw_Terminal_01x02" H 2650 3050 50  0000 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 2150 3050 50  0001 C CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-2-2.54_1x02_P2.54mm_Horizontal" H 2150 3050 50  0001 C CNN
 F 3 "~" H 2150 3050 50  0001 C CNN
 	1    2150 3050
 	-1   0    0    1   
@@ -704,7 +704,7 @@ U 1 1 609C7A7B
 P 2150 3900
 F 0 "J3" H 2300 4000 50  0000 C CNN
 F 1 "Screw_Terminal_01x12" H 2650 3900 50  0000 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x12_P2.54mm_Vertical" H 2150 3900 50  0001 C CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-12-2.54_1x12_P2.54mm_Horizontal" H 2150 3900 50  0001 C CNN
 F 3 "~" H 2150 3900 50  0001 C CNN
 	1    2150 3900
 	-1   0    0    -1  

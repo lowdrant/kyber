@@ -3,7 +3,7 @@ EESchema-DOCLIB  Version 2.0
 $CMP MMA8452Q
 D  3-Axis, 12-bit/8-bit Digital Accelerometer
 K accelerometer, 3-axis accelerometer
-F symbol-datasheets/MMA8452Q-rev8.1.pdf
+F ${KIPRJMOD}/symbol-datasheets/MMA8452Q-rev8.1.pdf
 $ENDCMP
 #
 $CMP STL120N4F6AG

@@ -167,8 +167,6 @@ Wire Wire Line
 	6750 3900 6900 3900
 Wire Wire Line
 	6450 4300 6900 4300
-Wire Wire Line
-	6900 3600 7500 3600
 Text HLabel 8000 5400 2    118  Output ~ 0
 GND
 Wire Wire Line
@@ -180,40 +178,6 @@ Wire Wire Line
 Connection ~ 7500 5400
 Wire Wire Line
 	7500 5400 8000 5400
-Connection ~ 7500 3600
-Wire Wire Line
-	7500 3600 8000 3600
-Wire Wire Line
-	7500 3500 7500 3600
-$Comp
-L Connector:TestPoint TP12
-U 1 1 60A8568B
-P 7500 3500
-F 0 "TP12" H 7558 3620 50  0000 L CNN
-F 1 "TestPoint" H 7558 3529 50  0000 L CNN
-F 2 "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical" H 7700 3500 50  0001 C CNN
-F 3 "~" H 7700 3500 50  0001 C CNN
-	1    7500 3500
-	1    0    0    -1  
-$EndComp
-$Comp
-L Connector:TestPoint TP11
-U 1 1 60B7B28C
-P 7500 2300
-F 0 "TP11" H 7558 2420 50  0000 L CNN
-F 1 "TestPoint" H 7558 2329 50  0000 L CNN
-F 2 "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical" H 7700 2300 50  0001 C CNN
-F 3 "~" H 7700 2300 50  0001 C CNN
-	1    7500 2300
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	7500 2300 7500 2400
-Wire Wire Line
-	8000 2400 7500 2400
-Connection ~ 7500 2400
-Wire Wire Line
-	7500 2400 6000 2400
 Wire Wire Line
 	4050 5400 6450 5400
 Wire Wire Line
@@ -247,4 +211,11 @@ Wire Wire Line
 	7500 3600 7500 4300
 Wire Wire Line
 	4050 2400 4050 3750
+Wire Wire Line
+	7500 3600 8000 3600
+Wire Wire Line
+	6000 2400 8000 2400
+Wire Wire Line
+	6900 3600 7500 3600
+Connection ~ 7500 3600
 $EndSCHEMATC

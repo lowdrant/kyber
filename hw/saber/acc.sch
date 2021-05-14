@@ -14,52 +14,10 @@ Comment2 ""
 Comment3 ""
 Comment4 "Marion Anderson"
 $EndDescr
-$Comp
-L saber-rescue:MMA8452Q-saber U?
-U 1 1 60AC96A8
-P 5150 3550
-AR Path="/60835C4F/60AC96A8" Ref="U?"  Part="1" 
-AR Path="/60AC96A8" Ref="U?"  Part="1" 
-AR Path="/60AC9516/60AC96A8" Ref="U4"  Part="1" 
-F 0 "U4" H 5050 3600 50  0000 C CNN
-F 1 "MMA8452Q" H 4900 3500 50  0000 C CNN
-F 2 "Package_DFN_QFN:QFN-16-1EP_3x3mm_P0.5mm_EP1.8x1.8mm" H 5150 3550 50  0001 C CNN
-F 3 "https://www.nxp.com/docs/en/data-sheet/MMA8452Q.pdf" H 5150 3550 50  0001 C CNN
-	1    5150 3550
-	-1   0    0    -1  
-$EndComp
-Wire Wire Line
-	5100 4500 5100 4550
-$Comp
-L power:GND #PWR?
-U 1 1 60AC96B0
-P 5100 4550
-AR Path="/60835C4F/60AC96B0" Ref="#PWR?"  Part="1" 
-AR Path="/60AC96B0" Ref="#PWR?"  Part="1" 
-AR Path="/60AC9516/60AC96B0" Ref="#PWR034"  Part="1" 
-F 0 "#PWR034" H 5100 4300 50  0001 C CNN
-F 1 "GND" H 5105 4377 50  0000 C CNN
-F 2 "" H 5100 4550 50  0001 C CNN
-F 3 "" H 5100 4550 50  0001 C CNN
-	1    5100 4550
-	-1   0    0    -1  
-$EndComp
 Wire Wire Line
 	4600 4100 4600 4150
 Wire Wire Line
 	4600 4500 4600 4450
-Wire Wire Line
-	5200 4500 5200 4450
-Wire Wire Line
-	5000 4500 5000 4450
-Wire Wire Line
-	5200 4500 5100 4500
-Wire Wire Line
-	5100 4450 5100 4500
-Connection ~ 5100 4500
-Wire Wire Line
-	5100 4500 5000 4500
-Connection ~ 5200 4500
 $Comp
 L Device:C C?
 U 1 1 60AC96BF
@@ -189,43 +147,38 @@ $EndComp
 Wire Wire Line
 	5650 4450 5650 4500
 Wire Wire Line
-	5650 4500 5200 4500
-Wire Wire Line
 	5600 4100 5650 4100
 Wire Wire Line
 	5650 4100 5650 4150
 Wire Wire Line
 	4650 4100 4600 4100
-Wire Wire Line
-	5000 4500 4600 4500
-Connection ~ 5000 4500
 NoConn ~ 5600 3900
 NoConn ~ 5600 4000
 $Comp
 L power:+3V3 #PWR?
 U 1 1 60AC9706
-P 5100 3450
+P 5150 3450
 AR Path="/60835C4F/60AC9706" Ref="#PWR?"  Part="1" 
 AR Path="/60AC9706" Ref="#PWR?"  Part="1" 
 AR Path="/60AC9516/60AC9706" Ref="#PWR031"  Part="1" 
-F 0 "#PWR031" H 5100 3300 50  0001 C CNN
-F 1 "+3V3" H 5115 3623 50  0000 C CNN
-F 2 "" H 5100 3450 50  0001 C CNN
-F 3 "" H 5100 3450 50  0001 C CNN
-	1    5100 3450
+F 0 "#PWR031" H 5150 3300 50  0001 C CNN
+F 1 "+3V3" H 5165 3623 50  0000 C CNN
+F 2 "" H 5150 3450 50  0001 C CNN
+F 3 "" H 5150 3450 50  0001 C CNN
+	1    5150 3450
 	-1   0    0    -1  
 $EndComp
 Wire Wire Line
-	5100 3450 5100 3500
+	5150 3450 5150 3500
 Wire Wire Line
-	5100 3500 5150 3500
+	5150 3500 5200 3500
 Wire Wire Line
-	5150 3500 5150 3550
+	5200 3500 5200 3550
 Wire Wire Line
-	5100 3500 5050 3500
+	5150 3500 5100 3500
 Wire Wire Line
-	5050 3500 5050 3550
-Connection ~ 5100 3500
+	5100 3500 5100 3550
+Connection ~ 5150 3500
 Text HLabel 4600 3900 0    50   BiDi ~ 0
 SDA
 Text HLabel 4600 4000 0    50   Input ~ 0
@@ -234,4 +187,45 @@ Wire Wire Line
 	4600 3900 4650 3900
 Wire Wire Line
 	4600 4000 4650 4000
+$Comp
+L saber:MMA8452Q U4
+U 1 1 609F046F
+P 5100 3550
+F 0 "U4" H 5300 3600 50  0000 C CNN
+F 1 "MMA8452Q" H 5450 3500 50  0000 C CNN
+F 2 "Package_DFN_QFN:QFN-16-1EP_3x3mm_P0.5mm_EP1.8x1.8mm" H 5100 3550 50  0001 C CNN
+F 3 "${KIPRJMOD}/symbol-datasheets/MMA8452Q-rev8.1.pdf" H 5100 3550 50  0001 C CNN
+	1    5100 3550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5050 4450 5050 4500
+Wire Wire Line
+	5050 4500 5150 4500
+Wire Wire Line
+	5250 4450 5250 4500
+Connection ~ 5250 4500
+Wire Wire Line
+	5250 4500 5650 4500
+Wire Wire Line
+	5150 4450 5150 4500
+Connection ~ 5150 4500
+Wire Wire Line
+	5150 4500 5250 4500
+Wire Wire Line
+	5050 4500 4600 4500
+Connection ~ 5050 4500
+$Comp
+L power:GND #PWR0101
+U 1 1 609F26EC
+P 5150 4550
+F 0 "#PWR0101" H 5150 4300 50  0001 C CNN
+F 1 "GND" H 5155 4377 50  0000 C CNN
+F 2 "" H 5150 4550 50  0001 C CNN
+F 3 "" H 5150 4550 50  0001 C CNN
+	1    5150 4550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5150 4500 5150 4550
 $EndSCHEMATC
