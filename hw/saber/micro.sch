@@ -134,64 +134,45 @@ Wire Wire Line
 Text Notes 4800 5550 0    50   ~ 0
 All pinnames should match in .ioc \nBTN internal pulldown\nPWM_SPKR,SIG_LED,SIG_SOL Push-Pull\nMCU uses internal pu for i2c
 $Comp
-L Connector:Conn_01x05_Male J?
-U 1 1 60AB40EF
-P 1600 4200
-AR Path="/60AB40EF" Ref="J?"  Part="1" 
-AR Path="/608DACE2/60AB40EF" Ref="J4"  Part="1" 
-F 0 "J4" H 1700 4650 50  0000 C CNN
-F 1 "NUCLEO144ZE-STLINK" H 1700 4550 50  0000 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical" H 1600 4200 50  0001 C CNN
-F 3 "https://www.st.com/resource/en/user_manual/dm00244518-stm32-nucleo144-boards-mb1137-stmicroelectronics.pdf" H 1600 4200 50  0001 C CNN
-	1    1600 4200
-	1    0    0    -1  
-$EndComp
-$Comp
 L power:+3V3 #PWR?
 U 1 1 60AB40F6
-P 2350 3950
+P 1550 3950
 AR Path="/60AB40F6" Ref="#PWR?"  Part="1" 
 AR Path="/608DACE2/60AB40F6" Ref="#PWR013"  Part="1" 
-F 0 "#PWR013" H 2350 3800 50  0001 C CNN
-F 1 "+3V3" H 2365 4123 50  0000 C CNN
-F 2 "" H 2350 3950 50  0001 C CNN
-F 3 "" H 2350 3950 50  0001 C CNN
-	1    2350 3950
+F 0 "#PWR013" H 1550 3800 50  0001 C CNN
+F 1 "+3V3" H 1565 4123 50  0000 C CNN
+F 2 "" H 1550 3950 50  0001 C CNN
+F 3 "" H 1550 3950 50  0001 C CNN
+	1    1550 3950
 	1    0    0    -1  
 $EndComp
-Text Label 1950 4100 0    50   ~ 0
+Text Label 1550 4100 2    50   ~ 0
 SWCLK
-Text Label 1950 4300 0    50   ~ 0
+Text Label 2450 4200 0    50   ~ 0
 SWDIO
 Wire Wire Line
-	1950 4100 1800 4100
-Wire Wire Line
-	1950 4300 1800 4300
-Text Label 1950 4400 0    50   ~ 0
+	2450 4200 2300 4200
+Text Label 2450 4100 0    50   ~ 0
 NRST
 Wire Wire Line
-	1950 4400 1800 4400
+	2450 4100 2300 4100
 $Comp
 L power:GND #PWR?
 U 1 1 60AB4102
-P 2350 4250
+P 1550 4250
 AR Path="/60AB4102" Ref="#PWR?"  Part="1" 
 AR Path="/608DACE2/60AB4102" Ref="#PWR015"  Part="1" 
-F 0 "#PWR015" H 2350 4000 50  0001 C CNN
-F 1 "GND" H 2355 4077 50  0000 C CNN
-F 2 "" H 2350 4250 50  0001 C CNN
-F 3 "" H 2350 4250 50  0001 C CNN
-	1    2350 4250
+F 0 "#PWR015" H 1550 4000 50  0001 C CNN
+F 1 "GND" H 1555 4077 50  0000 C CNN
+F 2 "" H 1550 4250 50  0001 C CNN
+F 3 "" H 1550 4250 50  0001 C CNN
+	1    1550 4250
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1800 4200 2350 4200
+	1550 4200 1550 4250
 Wire Wire Line
-	2350 4200 2350 4250
-Wire Wire Line
-	1800 4000 2350 4000
-Wire Wire Line
-	2350 4000 2350 3950
+	1550 4000 1550 3950
 Text Notes 1250 5450 0    50   ~ 0
 pinout for 144pin nucleo user manual, p19\nsymbol docs link to said user manual
 Text Notes 1700 2800 0    50   ~ 0
@@ -365,7 +346,7 @@ U 1 1 60933504
 P 7950 4200
 F 0 "SW1" V 7904 4348 50  0000 L CNN
 F 1 "SW" V 7995 4348 50  0000 L CNN
-F 2 "Button_Switch_THT:SW_PUSH_6mm_H5mm" H 7950 4400 50  0001 C CNN
+F 2 "Button_Switch_SMD:SW_SPST_TL3342" H 7950 4400 50  0001 C CNN
 F 3 "" H 7950 4400 50  0001 C CNN
 	1    7950 4200
 	0    1    1    0   
@@ -440,4 +421,22 @@ Wire Wire Line
 Connection ~ 7750 3950
 Wire Wire Line
 	7750 3950 7950 3950
+$Comp
+L Connector_Generic:Conn_02x03_Counter_Clockwise J4
+U 1 1 609FEADF
+P 2000 4100
+F 0 "J4" H 2050 4417 50  0000 C CNN
+F 1 "NUCLEO144ZE-STLINK" H 2050 4326 50  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical_SMD" H 2000 4100 50  0001 C CNN
+F 3 "~" H 2000 4100 50  0001 C CNN
+	1    2000 4100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1550 4000 1800 4000
+Wire Wire Line
+	1550 4100 1800 4100
+Wire Wire Line
+	1550 4200 1800 4200
+NoConn ~ 2300 4000
 $EndSCHEMATC

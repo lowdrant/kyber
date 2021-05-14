@@ -250,17 +250,6 @@ F 3 "~" H 850 650 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L Mechanical:MountingHole_Pad H2
-U 1 1 60B5998E
-P 850 850
-F 0 "H2" V 804 1000 50  0000 L CNN
-F 1 "MountingHole_Pad" V 895 1000 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.2mm_M3_Pad_Via" H 850 850 50  0001 C CNN
-F 3 "~" H 850 850 50  0001 C CNN
-	1    850  850 
-	0    1    1    0   
-$EndComp
-$Comp
 L Mechanical:MountingHole_Pad H3
 U 1 1 60B5D6C8
 P 850 1050
@@ -289,15 +278,8 @@ Wire Wire Line
 Wire Wire Line
 	700  650  750  650 
 Wire Wire Line
-	750  850  700  850 
-Connection ~ 700  850 
-Wire Wire Line
-	700  850  700  650 
-Wire Wire Line
 	750  1050 700  1050
 Connection ~ 700  1050
-Wire Wire Line
-	700  1050 700  850 
 Wire Wire Line
 	700  1250 700  1300
 Connection ~ 700  1250
@@ -680,10 +662,10 @@ $Comp
 L Connector:Screw_Terminal_01x02 J1
 U 1 1 609B67F0
 P 2150 2600
-F 0 "J1" H 2250 2500 50  0000 C CNN
-F 1 "Screw_Terminal_01x02" H 2650 2600 50  0000 C CNN
-F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-2-2.54_1x02_P2.54mm_Horizontal" H 2150 2600 50  0001 C CNN
-F 3 "~" H 2150 2600 50  0001 C CNN
+F 0 "J1" H 2275 2500 50  0000 C CNN
+F 1 "282834-2" H 2425 2600 50  0000 C CNN
+F 2 "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282834-2_1x02_P2.54mm_Horizontal" H 2150 2600 50  0001 C CNN
+F 3 "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=srchrtrv&DocNm=282834&DocType=Customer+Drawing&DocLang=English" H 2150 2600 50  0001 C CNN
 	1    2150 2600
 	-1   0    0    1   
 $EndComp
@@ -691,10 +673,10 @@ $Comp
 L Connector:Screw_Terminal_01x02 J2
 U 1 1 609B688A
 P 2150 3050
-F 0 "J2" H 2250 2950 50  0000 C CNN
-F 1 "Screw_Terminal_01x02" H 2650 3050 50  0000 C CNN
-F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-2-2.54_1x02_P2.54mm_Horizontal" H 2150 3050 50  0001 C CNN
-F 3 "~" H 2150 3050 50  0001 C CNN
+F 0 "J2" H 2275 2950 50  0000 C CNN
+F 1 "282834-2" H 2425 3050 50  0000 C CNN
+F 2 "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282834-2_1x02_P2.54mm_Horizontal" H 2150 3050 50  0001 C CNN
+F 3 "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=srchrtrv&DocNm=282834&DocType=Customer+Drawing&DocLang=English" H 2150 3050 50  0001 C CNN
 	1    2150 3050
 	-1   0    0    1   
 $EndComp
@@ -702,13 +684,15 @@ $Comp
 L Connector:Screw_Terminal_01x12 J3
 U 1 1 609C7A7B
 P 2150 3900
-F 0 "J3" H 2300 4000 50  0000 C CNN
-F 1 "Screw_Terminal_01x12" H 2650 3900 50  0000 C CNN
+F 0 "J3" H 2275 4000 50  0000 C CNN
+F 1 "OSTVN12A150" H 2475 3900 50  0000 C CNN
 F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-12-2.54_1x12_P2.54mm_Horizontal" H 2150 3900 50  0001 C CNN
-F 3 "~" H 2150 3900 50  0001 C CNN
+F 3 "https://www.digikey.com/en/products/detail/on-shore-technology-inc/OSTVN12A150/1588872" H 2150 3900 50  0001 C CNN
 	1    2150 3900
 	-1   0    0    -1  
 $EndComp
-Text Notes 6800 1450 0    118  ~ 0
-TODO: stm transistor footprints
+Text Notes 6300 1650 0    118  ~ 0
+TODO: \n- stm transistor footprints\n- double check 200uF hbridge cap\n- update mcu footprint\n- 3V3 zeners on BTN/ENCA/ENCB?
+Wire Wire Line
+	700  650  700  1050
 $EndSCHEMATC
