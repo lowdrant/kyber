@@ -157,20 +157,6 @@ Wire Wire Line
 	8550 2600 8550 2650
 Text Notes 8600 1750 0    50   ~ 0
 Undervoltage Protection
-$Comp
-L Device:Q_PMOS_GDS Q?
-U 1 1 60A0C7E1
-P 9200 2300
-AR Path="/60835C0E/60A0C7E1" Ref="Q?"  Part="1" 
-AR Path="/60A0C7E1" Ref="Q?"  Part="1" 
-AR Path="/609455AB/60A0C7E1" Ref="Q2"  Part="1" 
-F 0 "Q2" V 9543 2300 50  0000 C CNN
-F 1 "SIS413DN-T1-GE3" V 9452 2300 50  0000 C CNN
-F 2 "Package_SO:Vishay_PowerPAK_1212-8_Single" H 9400 2400 50  0001 C CNN
-F 3 "https://www.vishay.com/docs/63262/sis413dn.pdf" H 9200 2300 50  0001 C CNN
-	1    9200 2300
-	0    1    -1   0   
-$EndComp
 Wire Wire Line
 	8550 2950 8550 3000
 Connection ~ 8550 3000
@@ -230,24 +216,24 @@ Wire Wire Line
 $Comp
 L Device:LED D3
 U 1 1 60BFEEFB
-P 9900 4050
-F 0 "D3" V 9938 4128 50  0000 L CNN
-F 1 "150060RS75020" V 9847 4128 50  0000 L CNN
-F 2 "LED_SMD:LED_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 9900 4050 50  0001 C CNN
-F 3 "https://www.we-online.de/katalog/datasheet/150060RS75000.pdf" H 9900 4050 50  0001 C CNN
-	1    9900 4050
-	0    1    -1   0   
+P 9900 2700
+F 0 "D3" V 9938 2778 50  0000 L CNN
+F 1 "150060RS75020" V 9847 2778 50  0000 L CNN
+F 2 "LED_SMD:LED_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 9900 2700 50  0001 C CNN
+F 3 "https://www.we-online.de/katalog/datasheet/150060RS75000.pdf" H 9900 2700 50  0001 C CNN
+	1    9900 2700
+	1    0    0    1   
 $EndComp
 $Comp
 L Device:R R11
 U 1 1 60BFF003
-P 9900 3700
-F 0 "R11" H 9970 3746 50  0000 L CNN
-F 1 "1K" H 9970 3655 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 9830 3700 50  0001 C CNN
-F 3 "~" H 9900 3700 50  0001 C CNN
-	1    9900 3700
-	1    0    0    -1  
+P 10250 2700
+F 0 "R11" H 10320 2746 50  0000 L CNN
+F 1 "1K" H 10320 2655 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 10180 2700 50  0001 C CNN
+F 3 "~" H 10250 2700 50  0001 C CNN
+	1    10250 2700
+	0    1    1    0   
 $EndComp
 Wire Wire Line
 	4800 5050 5850 5050
@@ -300,8 +286,8 @@ Wire Wire Line
 Wire Wire Line
 	8550 3350 8550 5050
 Wire Wire Line
-	9900 3850 9900 3900
-Text Notes 9950 3000 0    50   ~ 0
+	10100 2700 10050 2700
+Text Notes 10000 3100 0    50   ~ 0
 Undervoltage-On Indicator
 $Comp
 L Device:CP1 C6
@@ -413,9 +399,6 @@ Motor Protections
 Wire Wire Line
 	6700 2200 6700 3400
 Wire Wire Line
-	9200 2700 9900 2700
-Connection ~ 9200 2700
-Wire Wire Line
 	6250 5050 5850 5050
 Connection ~ 6250 5050
 Connection ~ 5850 5050
@@ -432,9 +415,6 @@ Connection ~ 3250 5050
 Connection ~ 8550 5050
 Wire Wire Line
 	8550 5050 8900 5050
-Connection ~ 8900 5050
-Wire Wire Line
-	8900 5050 9900 5050
 Wire Wire Line
 	9000 2200 8900 2200
 Connection ~ 8900 2200
@@ -443,8 +423,6 @@ Wire Wire Line
 Connection ~ 8550 2200
 Text Notes 5750 2150 0    50   ~ 0
 UV protections can be after hbridge\nb/c PWM/INA/INB are after UV protections,\nso they will go low and turn off hbridge
-Wire Wire Line
-	9900 5050 9900 4200
 Wire Wire Line
 	6700 2200 8550 2200
 Connection ~ 6700 2200
@@ -643,8 +621,24 @@ F 3 "https://www.diodes.com/assets/Datasheets/SDM2U30CSP.pdf" H 4450 6450 50  00
 	1    4450 6450
 	0    1    1    0   
 $EndComp
-Wire Wire Line
-	9900 2700 9900 3550
 Text Label 4900 2200 0    50   ~ 0
 VCC
+$Comp
+L saber:SIS413DN-T1-GE3 Q2
+U 1 1 60B5EB73
+P 9200 2300
+F 0 "Q2" V 9543 2300 50  0000 C CNN
+F 1 "SIS413DN-T1-GE3" V 9452 2300 50  0000 C CNN
+F 2 "Package_SO:Vishay_PowerPAK_1212-8_Single" H 9400 2400 50  0001 C CNN
+F 3 "https://www.vishay.com/docs/63262/sis413dn.pdf" H 9200 2300 50  0001 C CNN
+	1    9200 2300
+	0    1    -1   0   
+$EndComp
+Connection ~ 9200 2700
+Wire Wire Line
+	10450 2700 10400 2700
+Text Label 10450 2700 0    50   ~ 0
+VCC
+Wire Wire Line
+	9200 2700 9750 2700
 $EndSCHEMATC

@@ -1026,4 +1026,23 @@ Wire Wire Line
 Connection ~ 8950 4550
 Wire Wire Line
 	8950 4550 9000 4550
+$Comp
+L Device:D_Schottky D?
+U 1 1 60A6DAFE
+P 5850 5000
+AR Path="/609455AB/60A6DAFE" Ref="D?"  Part="1" 
+AR Path="/60835C30/60A6DAFE" Ref="D12"  Part="1" 
+F 0 "D12" V 5804 5079 50  0000 L CNN
+F 1 "SDM2U30CSP-7" V 5895 5079 50  0000 L CNN
+F 2 "Diode_SMD:D_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 5850 5000 50  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/SDM2U30CSP.pdf" H 5850 5000 50  0001 C CNN
+	1    5850 5000
+	0    -1   1    0   
+$EndComp
+Wire Wire Line
+	5850 4850 5850 4800
+Connection ~ 5850 4800
+Wire Wire Line
+	5850 5150 5850 5200
+Connection ~ 5850 5200
 $EndSCHEMATC

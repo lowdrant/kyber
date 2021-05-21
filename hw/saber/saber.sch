@@ -563,47 +563,47 @@ F 3 "" H 5600 7550 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	5600 7500 5600 7550
-Text Label 2300 5000 2    50   ~ 0
+Text Label 1500 5800 2    50   ~ 0
 BTN+
-Text Label 2300 5100 2    50   ~ 0
+Text Label 1500 5900 2    50   ~ 0
 ENC+
-Text Label 2300 5200 2    50   ~ 0
+Text Label 1500 6000 2    50   ~ 0
 ENC-
 Wire Wire Line
-	2300 5000 2400 5000
+	1500 5800 1600 5800
 Wire Wire Line
-	2400 5000 2400 5100
+	1600 5800 1600 5900
 Wire Wire Line
-	2400 5100 2300 5100
+	1600 5900 1500 5900
 Wire Wire Line
-	2400 5000 2400 4950
-Connection ~ 2400 5000
+	1600 5800 1600 5750
+Connection ~ 1600 5800
 $Comp
 L power:+3V3 #PWR05
 U 1 1 60BBEEDD
-P 2400 4950
-F 0 "#PWR05" H 2400 4800 50  0001 C CNN
-F 1 "+3V3" H 2415 5123 50  0000 C CNN
-F 2 "" H 2400 4950 50  0001 C CNN
-F 3 "" H 2400 4950 50  0001 C CNN
-	1    2400 4950
+P 1600 5750
+F 0 "#PWR05" H 1600 5600 50  0001 C CNN
+F 1 "+3V3" H 1615 5923 50  0000 C CNN
+F 2 "" H 1600 5750 50  0001 C CNN
+F 3 "" H 1600 5750 50  0001 C CNN
+	1    1600 5750
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:GND #PWR06
 U 1 1 60BBEF7A
-P 2400 5250
-F 0 "#PWR06" H 2400 5000 50  0001 C CNN
-F 1 "GND" H 2405 5077 50  0000 C CNN
-F 2 "" H 2400 5250 50  0001 C CNN
-F 3 "" H 2400 5250 50  0001 C CNN
-	1    2400 5250
+P 1600 6050
+F 0 "#PWR06" H 1600 5800 50  0001 C CNN
+F 1 "GND" H 1605 5877 50  0000 C CNN
+F 2 "" H 1600 6050 50  0001 C CNN
+F 3 "" H 1600 6050 50  0001 C CNN
+	1    1600 6050
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2300 5200 2400 5200
+	1500 6000 1600 6000
 Wire Wire Line
-	2400 5200 2400 5250
+	1600 6000 1600 6050
 Wire Wire Line
 	4050 7050 4200 7050
 Wire Wire Line
@@ -691,8 +691,84 @@ F 3 "https://www.digikey.com/en/products/detail/on-shore-technology-inc/OSTVN12A
 	1    2150 3900
 	-1   0    0    -1  
 $EndComp
-Text Notes 6300 1650 0    118  ~ 0
-TODO: \n- stm transistor footprints\n- double check 200uF hbridge cap\n- update mcu footprint\n- 3V3 zeners on BTN/ENCA/ENCB?
+Text Notes 6050 1900 0    118  ~ 0
+TODO: \n- mcu current io current budget\n- JLC design rules\n- fix weitd pour clearances\n- size trace widths\n- update mcu pinout\n- clean up terminal block footprints\n- clean up stm transistor footprints\n- clean up testpoint footprints\n- double check 200uF hbridge cap\n- (LAST THING) swap passives labels to comp values
 Wire Wire Line
 	700  650  700  1050
+$Comp
+L Device:D_Zener D13
+U 1 1 60A90646
+P 2750 5550
+F 0 "D13" H 2750 5650 50  0000 C CNN
+F 1 "BZT585B4V3T-7" H 2750 5450 50  0000 C CNN
+F 2 "Diode_SMD:D_SOD-523" H 2750 5550 50  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/BZT585BxVxT.pdf" H 2750 5550 50  0001 C CNN
+	1    2750 5550
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0103
+U 1 1 60AB3A5C
+P 3100 6250
+F 0 "#PWR0103" H 3100 6000 50  0001 C CNN
+F 1 "GND" H 3105 6077 50  0000 C CNN
+F 2 "" H 3100 6250 50  0001 C CNN
+F 3 "" H 3100 6250 50  0001 C CNN
+	1    3100 6250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2900 6150 3100 6150
+Wire Wire Line
+	3100 6150 3100 6250
+Wire Wire Line
+	2900 5850 3100 5850
+Wire Wire Line
+	3100 5850 3100 6150
+Connection ~ 3100 6150
+Wire Wire Line
+	2900 5550 3100 5550
+Wire Wire Line
+	3100 5550 3100 5850
+Connection ~ 3100 5850
+Text Label 2400 5550 2    50   ~ 0
+BTN
+Text Label 2400 5850 2    50   ~ 0
+ENC_A
+Text Label 2400 6150 2    50   ~ 0
+ENC_B
+Wire Wire Line
+	2400 6150 2600 6150
+Wire Wire Line
+	2400 5850 2600 5850
+Wire Wire Line
+	2400 5550 2600 5550
+Text Notes 2200 5300 0    50   ~ 0
+Input overvoltage protection
+Text Notes 1200 5300 0    50   ~ 0
+GPIO Power Supply
+Text Notes 1150 6650 0    50   ~ 0
+BTN+ENC are tied directly to micro - protect/run at 3V3
+$Comp
+L Device:D_Zener D14
+U 1 1 60B0F03F
+P 2750 5850
+F 0 "D14" H 2750 5950 50  0000 C CNN
+F 1 "BZT585B4V3T-7" H 2750 5750 50  0000 C CNN
+F 2 "Diode_SMD:D_SOD-523" H 2750 5850 50  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/BZT585BxVxT.pdf" H 2750 5850 50  0001 C CNN
+	1    2750 5850
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:D_Zener D15
+U 1 1 60B124A2
+P 2750 6150
+F 0 "D15" H 2750 6250 50  0000 C CNN
+F 1 "BZT585B4V3T-7" H 2750 6050 50  0000 C CNN
+F 2 "Diode_SMD:D_SOD-523" H 2750 6150 50  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/BZT585BxVxT.pdf" H 2750 6150 50  0001 C CNN
+	1    2750 6150
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC

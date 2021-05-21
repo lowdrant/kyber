@@ -6,6 +6,12 @@ K accelerometer, 3-axis accelerometer
 F ${KIPRJMOD}/symbol-datasheets/MMA8452Q-rev8.1.pdf
 $ENDCMP
 #
+$CMP SIS413DN-T1-GE3
+D P-Channel 30 V (D-S) MOSFET
+K transistor PMOS P-MOS P-MOSFET
+F https://www.vishay.com/docs/63262/sis413dn.pdf
+$ENDCMP
+#
 $CMP STL120N4F6AG
 D Automotive-grade N-channel 40 V, 2.9 mΩ typ., 55 A STripFET™ F6 PowerMOSFETinaPowerFLAT™5x6package
 K transistor NMOS N-MOS N-MOSFET
