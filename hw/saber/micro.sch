@@ -99,7 +99,7 @@ Wire Wire Line
 Wire Wire Line
 	7400 3100 7350 3100
 Text Notes 7650 5750 0    50   ~ 0
-VDDA (Pin 5) - 1u + 100n cap (C19+C18)\nVSS (Pin 1)  - 10u + 100n cap (C3+C4)\nVSS (Pin 17) - 100n (C5)\nNRST (pin 4) - Cap for AN4467 p30
+VDDA (Pin 5) - 1u + 100n cap (C19+C18)\nVSS (Pin 1)  - 10u + 100n cap (C3+C4)\nVSS (Pin 17) - 100n (C5)\nNRST (pin 4) - Cap for AN4467 p30 (C2)
 Wire Wire Line
 	6050 4300 6000 4300
 Text Notes 5400 2800 0    50   ~ 0
