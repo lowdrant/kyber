@@ -27,7 +27,7 @@ $ENDCMP
 $CMP VNHD7008AY
 D H-bridge motor driver for automotive DC motor driving
 K hbridge,h-bridge,h bridge,motor driver,dc motor
-F https://www.st.com/resource/en/datasheet/vnhd7008ay.pdf
+F ${KIPRJMOD}/symbol-datasheets/vnhd7008ay.pdf
 $ENDCMP
 #
 #End Doc Library

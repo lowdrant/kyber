@@ -692,7 +692,7 @@ F 3 "https://www.digikey.com/en/products/detail/on-shore-technology-inc/OSTVN12A
 	-1   0    0    -1  
 $EndComp
 Text Notes 6050 1900 0    118  ~ 0
-TODO: \n- mcu current io current budget\n- JLC design rules\n- fix weitd pour clearances\n- size trace widths\n- update mcu pinout\n- clean up terminal block footprints\n- clean up stm transistor footprints\n- clean up testpoint footprints\n- double check 200uF hbridge cap\n- (LAST THING) swap passives labels to comp values
+TODO: \n- mcu current io current budget\n- size trace widths\n- update mcu pinout\n- clean up terminal block footprints\n- clean up testpoint footprints\n- double check 200uF hbridge cap\n- (LAST THING) swap passives labels to comp values
 Wire Wire Line
 	700  650  700  1050
 $Comp
