@@ -22,7 +22,7 @@ Text HLabel 6050 3900 2    50   Output ~ 0
 PWM_MTR_MCU
 Text HLabel 6050 3800 2    50   Input ~ 0
 ADC_imtr
-Text HLabel 6050 4300 2    50   Output ~ 0
+Text HLabel 4850 4400 0    50   Output ~ 0
 SIG_LED_MCU
 $Comp
 L power:+3V3 #PWR?
@@ -97,11 +97,11 @@ INB_MCU
 Wire Wire Line
 	4850 3600 4900 3600
 Wire Wire Line
-	7400 3100 7350 3100
+	6050 4300 6000 4300
 Text Notes 7650 5750 0    50   ~ 0
 VDDA (Pin 5) - 1u + 100n cap (C19+C18)\nVSS (Pin 1)  - 10u + 100n cap (C3+C4)\nVSS (Pin 17) - 100n (C5)\nNRST (pin 4) - Cap for AN4467 p30 (C2)
 Wire Wire Line
-	6050 4300 6000 4300
+	4850 4400 4900 4400
 Text Notes 5400 2800 0    50   ~ 0
 Micro
 Text Notes 8500 2800 0    50   ~ 0
@@ -167,10 +167,10 @@ SWCLK
 Wire Wire Line
 	6050 4800 6000 4800
 Wire Wire Line
-	6000 4200 6050 4200
-Text HLabel 6050 4200 2    50   Output ~ 0
+	4900 4300 4850 4300
+Text HLabel 4850 4300 0    50   Output ~ 0
 SIG_SOL_MCU
-Text HLabel 7400 3100 2    50   Input ~ 0
+Text HLabel 6050 4300 2    50   Input ~ 0
 BTN
 $Comp
 L Device:C C4
@@ -198,11 +198,11 @@ Text HLabel 4850 4600 0    50   Input ~ 0
 ENC_A
 Text HLabel 4850 4700 0    50   Input ~ 0
 ENC_B
-Text Label 4550 3300 2    50   ~ 0
+Text Label 6050 4100 0    50   ~ 0
 LED_HBEAT
 Wire Wire Line
-	4550 3300 4600 3300
-Text HLabel 4050 3750 0    50   Output ~ 0
+	6050 4100 6000 4100
+Text HLabel 6050 3600 2    50   Output ~ 0
 PWM_SPKR_MCU
 $Comp
 L Device:C C5
@@ -240,7 +240,7 @@ F 3 "" H 9150 3950 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	8350 4050 8350 4000
-Text Label 7400 3950 2    50   ~ 0
+Text Label 7400 4150 2    50   ~ 0
 NRST
 $Comp
 L Device:C C2
@@ -256,46 +256,41 @@ $EndComp
 $Comp
 L Switch:SW_Push SW1
 U 1 1 60933504
-P 7850 4200
-F 0 "SW1" V 7804 4348 50  0000 L CNN
-F 1 "SW" V 7895 4348 50  0000 L CNN
-F 2 "Button_Switch_SMD:SW_SPST_TL3342" H 7850 4400 50  0001 C CNN
-F 3 "" H 7850 4400 50  0001 C CNN
-	1    7850 4200
+P 7850 4400
+F 0 "SW1" V 7804 4548 50  0000 L CNN
+F 1 "SW" V 7895 4548 50  0000 L CNN
+F 2 "Button_Switch_SMD:SW_SPST_TL3342" H 7850 4600 50  0001 C CNN
+F 3 "" H 7850 4600 50  0001 C CNN
+	1    7850 4400
 	0    1    1    0   
 $EndComp
 $Comp
 L power:+3V3 #PWR012
 U 1 1 60934F7D
-P 7650 3900
-F 0 "#PWR012" H 7650 3750 50  0001 C CNN
-F 1 "+3V3" H 7665 4073 50  0000 C CNN
-F 2 "" H 7650 3900 50  0001 C CNN
-F 3 "" H 7650 3900 50  0001 C CNN
-	1    7650 3900
+P 7650 3750
+F 0 "#PWR012" H 7650 3600 50  0001 C CNN
+F 1 "+3V3" H 7665 3923 50  0000 C CNN
+F 2 "" H 7650 3750 50  0001 C CNN
+F 3 "" H 7650 3750 50  0001 C CNN
+	1    7650 3750
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	7850 3950 7850 4000
+	7450 4650 7650 4650
 Wire Wire Line
-	7450 4800 7650 4800
+	7650 4650 7650 4700
+Connection ~ 7650 4650
 Wire Wire Line
-	7400 3950 7450 3950
-Connection ~ 7450 3950
-Wire Wire Line
-	7650 4800 7650 4850
-Connection ~ 7650 4800
-Wire Wire Line
-	7650 4800 7850 4800
+	7650 4650 7850 4650
 $Comp
 L power:GND #PWR018
 U 1 1 60944438
-P 7650 4850
-F 0 "#PWR018" H 7650 4600 50  0001 C CNN
-F 1 "GND" H 7655 4677 50  0000 C CNN
-F 2 "" H 7650 4850 50  0001 C CNN
-F 3 "" H 7650 4850 50  0001 C CNN
-	1    7650 4850
+P 7650 4700
+F 0 "#PWR018" H 7650 4450 50  0001 C CNN
+F 1 "GND" H 7655 4527 50  0000 C CNN
+F 2 "" H 7650 4700 50  0001 C CNN
+F 3 "" H 7650 4700 50  0001 C CNN
+	1    7650 4700
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -316,12 +311,7 @@ LED_HBEAT
 Wire Wire Line
 	10500 3800 10500 3850
 Wire Wire Line
-	7450 3950 7650 3950
-Wire Wire Line
-	7650 3900 7650 3950
-Connection ~ 7650 3950
-Wire Wire Line
-	7650 3950 7850 3950
+	7650 3750 7650 3800
 $Comp
 L Connector_Generic:Conn_02x03_Counter_Clockwise J4
 U 1 1 609FEADF
@@ -454,20 +444,32 @@ Wire Wire Line
 $Comp
 L Device:R R7
 U 1 1 60B2786D
-P 7850 4600
-F 0 "R7" H 7920 4646 50  0000 L CNN
-F 1 "1k" H 7920 4555 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 7780 4600 50  0001 C CNN
-F 3 "~" H 7850 4600 50  0001 C CNN
-	1    7850 4600
+P 7650 3950
+F 0 "R7" H 7720 3996 50  0000 L CNN
+F 1 "1k" H 7720 3905 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 7580 3950 50  0001 C CNN
+F 3 "~" H 7650 3950 50  0001 C CNN
+	1    7650 3950
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	7850 4750 7850 4800
+	7400 4150 7450 4150
 Wire Wire Line
-	7850 4400 7850 4450
+	7850 4150 7850 4200
 Wire Wire Line
-	7450 4550 7450 4800
+	7850 4600 7850 4650
 Wire Wire Line
-	7450 3950 7450 4250
+	7450 4550 7450 4650
+Wire Wire Line
+	7450 4150 7450 4250
+Connection ~ 7450 4150
+Wire Wire Line
+	7450 4150 7650 4150
+Wire Wire Line
+	7650 4100 7650 4150
+Connection ~ 7650 4150
+Wire Wire Line
+	7650 4150 7850 4150
+Wire Wire Line
+	6050 3600 6000 3600
 $EndSCHEMATC

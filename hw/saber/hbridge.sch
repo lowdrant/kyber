@@ -512,24 +512,6 @@ F 3 "${KIPRJMOD}/symbol-datasheets/stl120n4f6ag.pdf" H 4000 2300 50  0001 C CNN
 	1    4000 2300
 	0    1    -1   0   
 $EndComp
-$Comp
-L Connector:TestPoint TP10
-U 1 1 609B37CF
-P 3250 3850
-F 0 "TP10" H 3192 3877 50  0000 R CNN
-F 1 "TestPoint" H 3192 3968 50  0000 R CNN
-F 2 "Connector_Pin:Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork" H 3450 3850 50  0001 C CNN
-F 3 "~" H 3450 3850 50  0001 C CNN
-	1    3250 3850
-	-1   0    0    1   
-$EndComp
-Wire Wire Line
-	3200 3800 3250 3800
-Wire Wire Line
-	3250 3850 3250 3800
-Connection ~ 3250 3800
-Wire Wire Line
-	3250 3800 3300 3800
 Wire Wire Line
 	3200 3550 3600 3550
 Wire Wire Line
@@ -566,24 +548,6 @@ Wire Wire Line
 Connection ~ 4450 3550
 Wire Wire Line
 	4450 3550 4850 3550
-$Comp
-L Connector:TestPoint TP9
-U 1 1 609CF496
-P 4800 3750
-F 0 "TP9" H 4742 3870 50  0000 R CNN
-F 1 "TestPoint" H 4742 3779 50  0000 R CNN
-F 2 "Connector_Pin:Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork" H 5000 3750 50  0001 C CNN
-F 3 "~" H 5000 3750 50  0001 C CNN
-	1    4800 3750
-	-1   0    0    -1  
-$EndComp
-Wire Wire Line
-	4750 3800 4800 3800
-Wire Wire Line
-	4800 3750 4800 3800
-Connection ~ 4800 3800
-Wire Wire Line
-	4800 3800 4850 3800
 $Comp
 L Device:D_Schottky D6
 U 1 1 60EDFB2E
@@ -641,4 +605,8 @@ Wire Wire Line
 Connection ~ 9200 2700
 Text Label 4000 6200 1    50   ~ 0
 VCC
+Wire Wire Line
+	3200 3800 3300 3800
+Wire Wire Line
+	4750 3800 4850 3800
 $EndSCHEMATC
