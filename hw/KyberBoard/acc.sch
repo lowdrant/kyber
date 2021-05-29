@@ -1,5 +1,5 @@
 EESchema Schematic File Version 4
-LIBS:saber-cache
+LIBS:KyberBoard-cache
 EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
@@ -164,9 +164,11 @@ Wire Wire Line
 Wire Wire Line
 	5650 4000 5600 4000
 $Comp
-L saber:MMA8452Q U4
+L KyberBoard:MMA8452Q U4
 U 1 1 609F046F
 P 5100 3550
+AR Path="/609F046F" Ref="U4"  Part="1" 
+AR Path="/60AC9516/609F046F" Ref="U4"  Part="1" 
 F 0 "U4" H 5300 3600 50  0000 C CNN
 F 1 "MMA8452Q" H 5450 3500 50  0000 C CNN
 F 2 "Package_DFN_QFN:QFN-16-1EP_3x3mm_P0.5mm_EP1.8x1.8mm" H 5100 3550 50  0001 C CNN

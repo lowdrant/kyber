@@ -1,5 +1,5 @@
 EESchema Schematic File Version 4
-LIBS:saber-cache
+LIBS:KyberBoard-cache
 EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
@@ -572,7 +572,7 @@ F 3 "https://www.digikey.com/en/products/detail/on-shore-technology-inc/OSTVN12A
 	-1   0    0    -1  
 $EndComp
 Text Notes 5700 1750 0    118  ~ 0
-TODO: \n- check motor flybacks\n- add solder mask to acc traces for assembly\n- mcu current io current budget\n- update mcu pinout\n- double check 200uF hbridge cap\n- (LAST THING) swap passives labels to comp values
+TODO: \n- add solder mask to acc traces for assembly\n- mcu current io current budget\n- double check 200uF hbridge cap\n- (LAST THING) swap passives labels to comp values
 Wire Wire Line
 	700  650  700  1050
 $Comp

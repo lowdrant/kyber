@@ -1,5 +1,5 @@
 EESchema Schematic File Version 4
-LIBS:saber-cache
+LIBS:KyberBoard-cache
 EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
@@ -472,4 +472,14 @@ Wire Wire Line
 	7650 4150 7850 4150
 Wire Wire Line
 	6050 3600 6000 3600
+NoConn ~ 6000 3400
+NoConn ~ 6000 3500
+NoConn ~ 6000 4200
+NoConn ~ 6000 4400
+NoConn ~ 6000 4500
+NoConn ~ 6000 4600
+NoConn ~ 6000 4900
+NoConn ~ 4900 4500
+NoConn ~ 4900 4100
+NoConn ~ 4900 4000
 $EndSCHEMATC
