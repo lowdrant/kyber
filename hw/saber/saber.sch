@@ -409,100 +409,12 @@ Wire Wire Line
 	6050 3500 6350 3500
 Text Notes 5500 2300 0    50   ~ 0
 terminations from VNHD7008AY\ndatasheet p28
-$Comp
-L Connector:TestPoint TP2
-U 1 1 60B15E77
-P 8350 2550
-F 0 "TP2" V 8304 2738 50  0000 L CNN
-F 1 "TestPoint" V 8395 2738 50  0000 L CNN
-F 2 "Connector_Pin:Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork" H 8550 2550 50  0001 C CNN
-F 3 "~" H 8550 2550 50  0001 C CNN
-	1    8350 2550
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	8300 2650 8300 2550
-$Comp
-L Connector:TestPoint TP4
-U 1 1 60B1B777
-P 6100 2800
-F 0 "TP4" V 6054 2988 50  0000 L CNN
-F 1 "TestPoint" V 6145 2988 50  0000 L CNN
-F 2 "Connector_Pin:Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork" H 6300 2800 50  0001 C CNN
-F 3 "~" H 6300 2800 50  0001 C CNN
-	1    6100 2800
-	0    1    1    0   
-$EndComp
-$Comp
-L Connector:TestPoint TP3
-U 1 1 60B1EB2F
-P 6100 2600
-F 0 "TP3" V 6054 2788 50  0000 L CNN
-F 1 "TestPoint" V 6145 2788 50  0000 L CNN
-F 2 "Connector_Pin:Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork" H 6300 2600 50  0001 C CNN
-F 3 "~" H 6300 2600 50  0001 C CNN
-	1    6100 2600
-	0    1    1    0   
-$EndComp
-$Comp
-L Connector:TestPoint TP1
-U 1 1 60B20388
-P 6100 2400
-F 0 "TP1" V 6054 2588 50  0000 L CNN
-F 1 "TestPoint" V 6145 2588 50  0000 L CNN
-F 2 "Connector_Pin:Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork" H 6300 2400 50  0001 C CNN
-F 3 "~" H 6300 2400 50  0001 C CNN
-	1    6100 2400
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	6100 2800 6050 2800
-Wire Wire Line
-	6050 2800 6050 2900
-Connection ~ 6050 2900
-Wire Wire Line
-	6100 2600 6050 2600
-Wire Wire Line
-	6050 2600 6050 2700
-Connection ~ 6050 2700
-Wire Wire Line
-	6100 2400 6050 2400
-Wire Wire Line
-	6050 2400 6050 2500
-Connection ~ 6050 2500
 Wire Wire Line
 	5550 2500 5450 2500
 Wire Wire Line
 	5450 2700 5550 2700
 Wire Wire Line
 	5450 2900 5550 2900
-Wire Wire Line
-	5850 2900 6050 2900
-Wire Wire Line
-	5850 2700 6050 2700
-Wire Wire Line
-	5850 2500 6050 2500
-Wire Wire Line
-	8150 2900 8300 2900
-Wire Wire Line
-	8150 2650 8300 2650
-Wire Wire Line
-	8350 2550 8300 2550
-$Comp
-L Connector:TestPoint TP5
-U 1 1 60B480A1
-P 8350 2800
-F 0 "TP5" V 8304 2988 50  0000 L CNN
-F 1 "TestPoint" V 8395 2988 50  0000 L CNN
-F 2 "Connector_Pin:Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork" H 8550 2800 50  0001 C CNN
-F 3 "~" H 8550 2800 50  0001 C CNN
-	1    8350 2800
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	8350 2800 8300 2800
-Wire Wire Line
-	8300 2800 8300 2900
 $Comp
 L power:+12C #PWR08
 U 1 1 60B8A739
@@ -615,19 +527,7 @@ Wire Wire Line
 Wire Wire Line
 	5450 5150 6950 5150
 Wire Wire Line
-	6050 2900 6950 2900
-Wire Wire Line
-	6050 2700 6950 2700
-Wire Wire Line
-	6050 2500 6950 2500
-Wire Wire Line
 	6350 3100 6950 3100
-Wire Wire Line
-	8300 2650 9050 2650
-Connection ~ 8300 2650
-Wire Wire Line
-	8300 2900 9050 2900
-Connection ~ 8300 2900
 Wire Wire Line
 	2350 4400 6950 4400
 Text Notes 5050 4050 0    50   ~ 0
@@ -638,26 +538,6 @@ Wire Wire Line
 	2350 4100 6950 4100
 Wire Wire Line
 	5450 5050 6950 5050
-$Comp
-L Connector:TestPoint TP6
-U 1 1 60A598DA
-P 6100 4850
-F 0 "TP6" V 6054 5038 50  0000 L CNN
-F 1 "TestPoint" V 6145 5038 50  0000 L CNN
-F 2 "Connector_Pin:Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork" H 6300 4850 50  0001 C CNN
-F 3 "~" H 6300 4850 50  0001 C CNN
-	1    6100 4850
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	6100 4850 6050 4850
-Wire Wire Line
-	6050 4850 6050 4950
-Connection ~ 6050 4950
-Wire Wire Line
-	6050 4950 6950 4950
-Wire Wire Line
-	5450 4950 6050 4950
 $Comp
 L Connector:Screw_Terminal_01x02 J1
 U 1 1 609B67F0
@@ -771,4 +651,16 @@ F 3 "https://www.diodes.com/assets/Datasheets/BZT585BxVxT.pdf" H 2750 6150 50  0
 	1    2750 6150
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	5850 2500 6950 2500
+Wire Wire Line
+	5850 2700 6950 2700
+Wire Wire Line
+	5850 2900 6950 2900
+Wire Wire Line
+	5450 4950 6950 4950
+Wire Wire Line
+	8150 2650 9050 2650
+Wire Wire Line
+	8150 2900 9050 2900
 $EndSCHEMATC
