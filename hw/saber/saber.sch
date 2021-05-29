@@ -415,7 +415,7 @@ U 1 1 60B15E77
 P 8350 2550
 F 0 "TP2" V 8304 2738 50  0000 L CNN
 F 1 "TestPoint" V 8395 2738 50  0000 L CNN
-F 2 "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical" H 8550 2550 50  0001 C CNN
+F 2 "Connector_Pin:Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork" H 8550 2550 50  0001 C CNN
 F 3 "~" H 8550 2550 50  0001 C CNN
 	1    8350 2550
 	0    1    1    0   
@@ -428,7 +428,7 @@ U 1 1 60B1B777
 P 6100 2800
 F 0 "TP4" V 6054 2988 50  0000 L CNN
 F 1 "TestPoint" V 6145 2988 50  0000 L CNN
-F 2 "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical" H 6300 2800 50  0001 C CNN
+F 2 "Connector_Pin:Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork" H 6300 2800 50  0001 C CNN
 F 3 "~" H 6300 2800 50  0001 C CNN
 	1    6100 2800
 	0    1    1    0   
@@ -439,7 +439,7 @@ U 1 1 60B1EB2F
 P 6100 2600
 F 0 "TP3" V 6054 2788 50  0000 L CNN
 F 1 "TestPoint" V 6145 2788 50  0000 L CNN
-F 2 "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical" H 6300 2600 50  0001 C CNN
+F 2 "Connector_Pin:Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork" H 6300 2600 50  0001 C CNN
 F 3 "~" H 6300 2600 50  0001 C CNN
 	1    6100 2600
 	0    1    1    0   
@@ -450,7 +450,7 @@ U 1 1 60B20388
 P 6100 2400
 F 0 "TP1" V 6054 2588 50  0000 L CNN
 F 1 "TestPoint" V 6145 2588 50  0000 L CNN
-F 2 "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical" H 6300 2400 50  0001 C CNN
+F 2 "Connector_Pin:Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork" H 6300 2400 50  0001 C CNN
 F 3 "~" H 6300 2400 50  0001 C CNN
 	1    6100 2400
 	0    1    1    0   
@@ -494,7 +494,7 @@ U 1 1 60B480A1
 P 8350 2800
 F 0 "TP5" V 8304 2988 50  0000 L CNN
 F 1 "TestPoint" V 8395 2988 50  0000 L CNN
-F 2 "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical" H 8550 2800 50  0001 C CNN
+F 2 "Connector_Pin:Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork" H 8550 2800 50  0001 C CNN
 F 3 "~" H 8550 2800 50  0001 C CNN
 	1    8350 2800
 	0    1    1    0   
@@ -644,7 +644,7 @@ U 1 1 60A598DA
 P 6100 4850
 F 0 "TP6" V 6054 5038 50  0000 L CNN
 F 1 "TestPoint" V 6145 5038 50  0000 L CNN
-F 2 "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical" H 6300 4850 50  0001 C CNN
+F 2 "Connector_Pin:Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork" H 6300 4850 50  0001 C CNN
 F 3 "~" H 6300 4850 50  0001 C CNN
 	1    6100 4850
 	0    1    1    0   
@@ -691,8 +691,8 @@ F 3 "https://www.digikey.com/en/products/detail/on-shore-technology-inc/OSTVN12A
 	1    2150 3900
 	-1   0    0    -1  
 $EndComp
-Text Notes 6050 1900 0    118  ~ 0
-TODO: \n- mcu current io current budget\n- size trace widths\n- update mcu pinout\n- clean up terminal block footprints\n- clean up testpoint footprints\n- double check 200uF hbridge cap\n- (LAST THING) swap passives labels to comp values
+Text Notes 5700 1750 0    118  ~ 0
+TODO: \n- check motor flybacks\n- add solder mask to acc traces for assembly\n- mcu current io current budget\n- update mcu pinout\n- double check 200uF hbridge cap\n- (LAST THING) swap passives labels to comp values
 Wire Wire Line
 	700  650  700  1050
 $Comp

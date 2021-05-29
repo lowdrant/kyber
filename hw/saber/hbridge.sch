@@ -376,8 +376,6 @@ Wire Wire Line
 	6250 2200 6250 3400
 Wire Wire Line
 	6250 2200 6700 2200
-Text HLabel 4000 6200 1    50   Input ~ 0
-BATT+
 Text HLabel 4000 7200 3    50   Input ~ 0
 BATT-
 Wire Wire Line
@@ -392,7 +390,7 @@ Wire Wire Line
 Connection ~ 4000 7150
 Wire Wire Line
 	4000 7150 4200 7150
-Text Notes 3700 5800 0    50   ~ 0
+Text Notes 3700 5900 0    50   ~ 0
 Motor Protections
 Wire Wire Line
 	6700 2200 6700 3400
@@ -520,7 +518,7 @@ U 1 1 609B37CF
 P 3250 3850
 F 0 "TP10" H 3192 3877 50  0000 R CNN
 F 1 "TestPoint" H 3192 3968 50  0000 R CNN
-F 2 "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical" H 3450 3850 50  0001 C CNN
+F 2 "Connector_Pin:Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork" H 3450 3850 50  0001 C CNN
 F 3 "~" H 3450 3850 50  0001 C CNN
 	1    3250 3850
 	-1   0    0    1   
@@ -574,7 +572,7 @@ U 1 1 609CF496
 P 4800 3750
 F 0 "TP9" H 4742 3870 50  0000 R CNN
 F 1 "TestPoint" H 4742 3779 50  0000 R CNN
-F 2 "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical" H 5000 3750 50  0001 C CNN
+F 2 "Connector_Pin:Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork" H 5000 3750 50  0001 C CNN
 F 3 "~" H 5000 3750 50  0001 C CNN
 	1    4800 3750
 	-1   0    0    -1  
@@ -641,4 +639,6 @@ Wire Wire Line
 Wire Wire Line
 	9600 2700 9200 2700
 Connection ~ 9200 2700
+Text Label 4000 6200 1    50   ~ 0
+VCC
 $EndSCHEMATC

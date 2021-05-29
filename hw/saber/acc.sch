@@ -100,8 +100,8 @@ F 3 "" H 6650 3800 50  0001 C CNN
 	1    6650 3800
 	1    0    0    -1  
 $EndComp
-Text Notes 6750 4900 2    50   ~ 0
-connect 4u7 cap (C16) to VDD (pin14)
+Text Notes 5350 5150 0    50   ~ 0
+Pin 14   - 4u7 vcc (C16)\nPin 5,10 - directly to gnd\nPin 12   - 4u7 gnd (C16)
 Wire Wire Line
 	6450 4250 6650 4250
 Wire Wire Line
