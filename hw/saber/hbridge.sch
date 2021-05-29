@@ -216,12 +216,12 @@ Wire Wire Line
 $Comp
 L Device:LED D3
 U 1 1 60BFEEFB
-P 9900 2700
-F 0 "D3" V 9938 2778 50  0000 L CNN
-F 1 "150060RS75020" V 9847 2778 50  0000 L CNN
-F 2 "LED_SMD:LED_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 9900 2700 50  0001 C CNN
-F 3 "https://www.we-online.de/katalog/datasheet/150060RS75000.pdf" H 9900 2700 50  0001 C CNN
-	1    9900 2700
+P 9750 2700
+F 0 "D3" V 9788 2778 50  0000 L CNN
+F 1 "150060RS75020" V 9697 2778 50  0000 L CNN
+F 2 "LED_SMD:LED_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 9750 2700 50  0001 C CNN
+F 3 "https://www.we-online.de/katalog/datasheet/150060RS75000.pdf" H 9750 2700 50  0001 C CNN
+	1    9750 2700
 	1    0    0    1   
 $EndComp
 $Comp
@@ -285,8 +285,6 @@ Wire Wire Line
 	8900 3200 8900 5050
 Wire Wire Line
 	8550 3350 8550 5050
-Wire Wire Line
-	10100 2700 10050 2700
 Text Notes 10000 3100 0    50   ~ 0
 Undervoltage-On Indicator
 $Comp
@@ -634,11 +632,13 @@ F 3 "https://www.vishay.com/docs/63262/sis413dn.pdf" H 9200 2300 50  0001 C CNN
 	1    9200 2300
 	0    1    -1   0   
 $EndComp
-Connection ~ 9200 2700
 Wire Wire Line
 	10450 2700 10400 2700
 Text Label 10450 2700 0    50   ~ 0
 VCC
 Wire Wire Line
-	9200 2700 9750 2700
+	9900 2700 10100 2700
+Wire Wire Line
+	9600 2700 9200 2700
+Connection ~ 9200 2700
 $EndSCHEMATC
