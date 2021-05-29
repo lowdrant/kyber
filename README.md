@@ -1,4 +1,4 @@
-# saber
+# kyber
 Building the toy lightsaber I always wanted as a kid
 
 ## Goals
