@@ -1,5 +1,4 @@
 EESchema Schematic File Version 4
-LIBS:KyberBoard-cache
 EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
@@ -652,8 +651,6 @@ F 3 "https://www.diodes.com/assets/Datasheets/BZT585BxVxT.pdf" H 2750 6150 50  0
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	5850 2500 6950 2500
-Wire Wire Line
 	5850 2700 6950 2700
 Wire Wire Line
 	5850 2900 6950 2900
@@ -663,4 +660,6 @@ Wire Wire Line
 	8150 2650 9050 2650
 Wire Wire Line
 	8150 2900 9050 2900
+Wire Wire Line
+	6950 2500 5850 2500
 $EndSCHEMATC

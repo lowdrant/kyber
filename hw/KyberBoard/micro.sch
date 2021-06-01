@@ -1,5 +1,4 @@
 EESchema Schematic File Version 4
-LIBS:KyberBoard-cache
 EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
@@ -166,8 +165,6 @@ Text Label 6050 4800 0    50   ~ 0
 SWCLK
 Wire Wire Line
 	6050 4800 6000 4800
-Wire Wire Line
-	4900 4300 4850 4300
 Text HLabel 4850 4300 0    50   Output ~ 0
 SIG_SOL_MCU
 Text HLabel 6050 4300 2    50   Input ~ 0
@@ -482,4 +479,6 @@ NoConn ~ 6000 4900
 NoConn ~ 4900 4500
 NoConn ~ 4900 4100
 NoConn ~ 4900 4000
+Wire Wire Line
+	4900 4300 4850 4300
 $EndSCHEMATC

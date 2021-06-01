@@ -1,5 +1,4 @@
 EESchema Schematic File Version 4
-LIBS:KyberBoard-cache
 EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
@@ -177,8 +176,6 @@ Wire Wire Line
 	8900 2700 8900 2800
 Wire Wire Line
 	4000 2500 4000 2550
-Wire Wire Line
-	4200 2200 4300 2200
 Wire Wire Line
 	4300 2200 4300 2550
 Wire Wire Line
@@ -400,7 +397,6 @@ Connection ~ 6250 5050
 Connection ~ 5850 5050
 Wire Wire Line
 	4300 2200 6250 2200
-Connection ~ 4300 2200
 Connection ~ 6250 2200
 Wire Wire Line
 	1500 2200 3700 2200
@@ -609,4 +605,7 @@ F 3 "${KIPRJMOD}/symbol-datasheets/stl76dn4lf7ag-1.pdf" H 4750 3800 50  0001 C C
 	2    4550 3800
 	-1   0    0    -1  
 $EndComp
+Wire Wire Line
+	4300 2200 4200 2200
+Connection ~ 4300 2200
 $EndSCHEMATC
