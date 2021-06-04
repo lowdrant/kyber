@@ -51,11 +51,12 @@ typedef enum
 /* USER CODE BEGIN EC */
 
 // Program Timing
-#define T_HBEAT (float) 5         // LED Heartbeat Period
-#define T_ACC (float) 0.1           // Accelerometer Update Period
-#define T_BATT (float) 600          // Voltage Update Period
-#define T_EXTEND (float) 0.1        // Saber Extension Time
-#define T_RETRACT (float) 0.3       // Saber Retraction Time
+#define T_HBEAT (float) 0.5         // LED Heartbeat Period
+#define T_ACC (float) 0.1         // Accelerometer Update Period
+#define T_BATT (float) 600        // Voltage Update Period
+#define T_EXTEND (float) 0.1      // Saber Extension Time
+#define T_RETRACT (float) 0.3     // Saber Retraction Time
+#define T_IMTR (float) 0.01      // adc polling time
 
 /* USER CODE END EC */
 

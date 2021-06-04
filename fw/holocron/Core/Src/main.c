@@ -34,6 +34,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #define DO_HBEAT
+#define DO_IMTR
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -51,33 +52,36 @@ TIM_HandleTypeDef htim21;
 TIM_HandleTypeDef htim22;
 
 /* USER CODE BEGIN PV */
-
 SABER_ExecState SaberState = SABER_OFF;
 
 // Communication
-HAL_StatusTypeDef out = HAL_OK;
+HAL_StatusTypeDef rethal = HAL_OK;
 
-// Global Timing
-uint32_t ticksPerSec;  // for timing: stm32l0xx_hal.h, period2ticks
+// Timing Globals
+uint32_t ticksPerSec = 1000;  // for timing: stm32l0xx_hal.h, period2ticks
 uint32_t lastTick_DEBOUNCE = 0;
 uint32_t ticksDEBOUNCE;
+
+// Debugging Globals
+volatile uint16_t imtr;
 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_ADC_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_TIM21_Init(void);
 static void MX_TIM22_Init(void);
+static void MX_ADC_Init(void);
 /* USER CODE BEGIN PFP */
 static inline void nextState_USER(void);
 static inline void execSaberExtend(void);
 static inline void execSaberRetract(void);
 static inline uint32_t Period2Ticks(float);
-static inline uint16_t accVal(uint8_t*);
+static inline uint16_t accVal(uint8_t const * const);
+static inline float ADC_GetMaxVal(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -93,8 +97,19 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
   __disable_irq();  // wait for setup
-  static const uint8_t accRaw[10] = {0,0,0,0,0,0,0,0,0,0};
+
+  // static locals
+  static const uint8_t accRaw[10] = {0,0,0,0,0,0,0,0,0,0};  // TODO: why 10, not 8?
   static const uint8_t accTxPacket[1] = {ACC_X_MSB_ADDR};
+
+  // dynamic locals
+  uint16_t xacc,yacc,zacc;
+  uint16_t imtrs[3] = {0,0,0};  // TODO: programmatically setup lpf buffer
+
+  // timing vars
+  uint32_t lastTick_HBEAT = 0;  // reset ticks
+  uint32_t lastTick_ACC = 0;
+  uint32_t lastTick_IMTR = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -109,61 +124,62 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-  // Timing Configuration
-  switch (uwTickFreq) {
-    case HAL_TICK_FREQ_10HZ :
-      ticksPerSec = 10;
-      break;
-    case HAL_TICK_FREQ_100HZ :
-      ticksPerSec = 100;
-      break;
-    case HAL_TICK_FREQ_1KHZ :
-      ticksPerSec = 1000;
-      break;
-    default :
-      Error_Handler();
-  }
+
+  HAL_SetTickFreq(HAL_TICK_FREQ_1KHZ);
   uint32_t ticks_HBEAT = Period2Ticks(T_HBEAT);
   uint32_t ticks_ACC = Period2Ticks(T_ACC);
+  uint32_t ticks_IMTR = Period2Ticks(T_IMTR);
   ticksDEBOUNCE = Period2Ticks(T_DEBOUNCE);
+
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_ADC_Init();
   MX_I2C1_Init();
   MX_TIM2_Init();
   MX_TIM21_Init();
   MX_TIM22_Init();
+  MX_ADC_Init();
   /* USER CODE BEGIN 2 */
-  uint16_t xacc,yacc,zacc;
-  uint32_t lastTick_HBEAT = 0;  // reset ticks
-  uint32_t lastTick_ACC = 0;
+
+  // adc post-config
+  float adcRes = ADC_GetMaxVal();
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  // motor current startup
+  //  HAL_StatusTypeDef calret = HAL_ADCEx_Calibration_Start(&hadc,1);
+  //  uint32_t calval = HAL_ADC_GetValue(&hadc);
+  //  uint32_t test = calret | calval;
   HAL_ADC_Start(&hadc);
-  __enable_irq();  // start program
+
+  // speaker pwm
+  htim21.Instance->CCR1 = htim21.Instance->ARR >> 1;  // 50% duty cycle
+  HAL_TIM_PWM_Start(&htim21,TIM_CHANNEL_1);
+
+  // start program
+  __enable_irq();
   while (1) {
     // State Behavior
-    switch (SaberState) {
-      case SABER_OFF:
-        break;
-      case SABER_EXTEND:
-        execSaberExtend();
-        SaberState = SABER_ON;
-        break;
-      case SABER_RETRACT:
-        execSaberRetract();
-        SaberState = SABER_OFF;
-        break;
-      case SABER_ON:
-        break;  // TODO: accelerometer noises
-      default:
-        Error_Handler();
-        break;
-    }
+//    switch (SaberState) {
+//      case SABER_OFF:
+//        break;
+//      case SABER_EXTEND:
+//        execSaberExtend();
+//        SaberState = SABER_ON;
+//        break;
+//      case SABER_RETRACT:
+//        execSaberRetract();
+//        SaberState = SABER_OFF;
+//        break;
+//      case SABER_ON:
+//        break;  // TODO: accelerometer noises
+//      default:
+//        Error_Handler();
+//        break;
+//    }
 
     #ifdef DO_HBEAT
     // Heartbeat
@@ -173,19 +189,35 @@ int main(void)
     }
     #endif  // DO_HBEAT
 
+    #ifdef DO_IMTR  // TODO: combine with motor control
+                    // TODO: dma
+    if (uwTick - lastTick_IMTR > ticks_IMTR) {
+      rethal = HAL_ADC_PollForConversion(&hadc,1);
+      if (rethal==HAL_OK) {
+        imtrs[0] = imtrs[1]; imtrs[1] = imtrs[2];  // push through queue
+        imtrs[2] = HAL_ADC_GetValue(&hadc);
+        imtr = (uint16_t) (imtrs[0]+imtrs[1]+imtrs[2]) / 3.0;
+        htim21.Instance->ARR = (uint32_t) (1U<<16)*(imtr/adcRes);
+        htim21.Instance->CCR1 = htim21.Instance->ARR >> 1;
+        lastTick_IMTR = uwTick;
+      }
+    }
+    #endif  // DO_IMTR
+
     #ifdef DO_ACC
     // Accelerometer
     if ( (uwTick - lastTick_ACC > ticks_ACC) ) {
-      out = HAL_OK;
+      rethal = HAL_OK;
       __disable_irq();
-      out |= HAL_I2C_Master_Transmit(&ACC_I2C, ACC_ADDR<<1, accTxPacket, 1, HAL_MAX_DELAY);
-      out |= HAL_I2C_Master_Receive(&ACC_I2C, ACC_ADDR<<1, accRaw, 10, HAL_MAX_DELAY);
-      if (out != HAL_OK) {Error_Handler();}
+      rethal |= HAL_I2C_Master_Transmit(&ACC_I2C, ACC_ADDR<<1, accTxPacket, 1, HAL_MAX_DELAY);  // TODO: reduce delay
+      rethal |= HAL_I2C_Master_Receive(&ACC_I2C, ACC_ADDR<<1, accRaw, 10, HAL_MAX_DELAY);  // TODO: programmatically enforce length match w/buffer
+      if (rethal == HAL_OK) {
+        xacc = accVal(accRaw);
+        yacc = accVal(accRaw+2);
+        zacc = accVal(accRaw+4);
+        lastTick_ACC = uwTick;
+      }
       __enable_irq();
-      xacc = accVal(accRaw);
-      yacc = accVal(accRaw+2);
-      zacc = accVal(accRaw+4);
-      lastTick_ACC = uwTick;
     }
     #endif  // DO_ACC
   }
@@ -262,16 +294,16 @@ static void MX_ADC_Init(void)
   hadc.Instance = ADC1;
   hadc.Init.OversamplingMode = DISABLE;
   hadc.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV1;
-  hadc.Init.Resolution = ADC_RESOLUTION_12B;
-  hadc.Init.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+  hadc.Init.Resolution = ADC_RESOLUTION_10B;
+  hadc.Init.SamplingTime = ADC_SAMPLETIME_7CYCLES_5;
   hadc.Init.ScanConvMode = ADC_SCAN_DIRECTION_FORWARD;
   hadc.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc.Init.ContinuousConvMode = DISABLE;
+  hadc.Init.ContinuousConvMode = ENABLE;
   hadc.Init.DiscontinuousConvMode = DISABLE;
   hadc.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
   hadc.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc.Init.DMAContinuousRequests = DISABLE;
-  hadc.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  hadc.Init.EOCSelection = ADC_EOC_SEQ_CONV;
   hadc.Init.Overrun = ADC_OVR_DATA_PRESERVED;
   hadc.Init.LowPowerAutoWait = DISABLE;
   hadc.Init.LowPowerFrequencyMode = DISABLE;
@@ -407,6 +439,7 @@ static void MX_TIM21_Init(void)
 
   /* USER CODE END TIM21_Init 0 */
 
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
   TIM_OC_InitTypeDef sConfigOC = {0};
 
@@ -416,9 +449,18 @@ static void MX_TIM21_Init(void)
   htim21.Instance = TIM21;
   htim21.Init.Prescaler = 0;
   htim21.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim21.Init.Period = 0;
+  htim21.Init.Period = 0xFF;
   htim21.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim21.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  htim21.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  if (HAL_TIM_Base_Init(&htim21) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim21, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
   if (HAL_TIM_PWM_Init(&htim21) != HAL_OK)
   {
     Error_Handler();
@@ -432,7 +474,7 @@ static void MX_TIM21_Init(void)
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
   sConfigOC.Pulse = 0;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  sConfigOC.OCFastMode = TIM_OCFAST_ENABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim21, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
   {
     Error_Handler();
@@ -503,6 +545,7 @@ static void MX_GPIO_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
@@ -511,6 +554,20 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, SIG_SOL_Pin|SIG_LED_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : PC14 PC15 */
+  GPIO_InitStruct.Pin = GPIO_PIN_14|GPIO_PIN_15;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PA0 PA1 PA8 PA10 
+                           PA11 PA12 PA15 */
+  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_8|GPIO_PIN_10 
+                          |GPIO_PIN_11|GPIO_PIN_12|GPIO_PIN_15;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : INA_Pin INB_Pin LED_HBEAT_Pin */
   GPIO_InitStruct.Pin = INA_Pin|INB_Pin|LED_HBEAT_Pin;
@@ -531,6 +588,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(BTN_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PB3 */
+  GPIO_InitStruct.Pin = GPIO_PIN_3;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 }
 
@@ -615,7 +678,7 @@ static inline void execSaberRetract(void)
 }
 
 /*****************************************************************************
- *
+ * Config Functions
  ****************************************************************************/
 /**
  * @brief Convert Period to Number of System Ticks
@@ -629,12 +692,39 @@ static inline uint32_t Period2Ticks(float T)
 
 
 /**
+ * @brief Get ADC Resolution from Config Struct
+ * @note Run AFTER system configuration
+ * @retval Maximum ADC value
+ */
+static inline float ADC_GetMaxVal(void)
+{
+  uint8_t bs = 0;  // bitshift for adc resolution
+  switch (hadc.Init.Resolution) {
+    case ADC_RESOLUTION_12B:
+      bs = 12;
+      break;
+    case ADC_RESOLUTION_10B:
+      bs = 10;
+      break;
+    case ADC_RESOLUTION_8B:
+      bs = 8;
+      break;
+    case ADC_RESOLUTION_6B:
+      bs = 6;
+      break;
+    default:
+      Error_Handler();
+  }
+  return (float)(1U<<bs) - 1;
+}
+
+/**
  * @brief Convert I2C Data to Accelerometer Reading
  * @note See hardware.h accelerometer section for details.
  * @param d length-2 uint8 accelerometer data
  * @retval Acceleration in counts
  */
-static inline uint16_t accVal(uint8_t*d)
+static inline uint16_t accVal(uint8_t const * const d)
 {
   return ((*d)<<ACC_BIT0_SHIFT) + (*(d+1)<<ACC_BIT1_SHIFT);
 }

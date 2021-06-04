@@ -1,4 +1,5 @@
 EESchema Schematic File Version 4
+LIBS:KyberBoard-cache
 EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
@@ -204,7 +205,7 @@ F 3 "" H 4100 2450 50  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 Wire Wire Line
-	2350 2600 2650 2600
+	2350 2600 2550 2600
 Wire Wire Line
 	2350 2500 2850 2500
 $Comp
@@ -224,18 +225,15 @@ Wire Wire Line
 $Comp
 L power:PWR_FLAG #FLG02
 U 1 1 60932971
-P 2650 2600
-F 0 "#FLG02" H 2650 2675 50  0001 C CNN
-F 1 "PWR_FLAG" H 2650 2774 50  0000 C CNN
-F 2 "" H 2650 2600 50  0001 C CNN
-F 3 "~" H 2650 2600 50  0001 C CNN
-	1    2650 2600
+P 2550 2600
+F 0 "#FLG02" H 2550 2675 50  0001 C CNN
+F 1 "PWR_FLAG" H 2550 2774 50  0000 C CNN
+F 2 "" H 2550 2600 50  0001 C CNN
+F 3 "~" H 2550 2600 50  0001 C CNN
+	1    2550 2600
 	1    0    0    -1  
 $EndComp
-Connection ~ 2650 2600
-Wire Wire Line
-	2650 2600 2850 2600
-Text Notes 8300 2300 0    50   ~ 0
+Text Notes 8250 2300 0    50   ~ 0
 mcu uses internal\npull-ups for i2c
 $Comp
 L Mechanical:MountingHole_Pad H1
@@ -474,47 +472,47 @@ F 3 "" H 5600 7550 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	5600 7500 5600 7550
-Text Label 1500 5800 2    50   ~ 0
+Text Label 1350 6100 2    50   ~ 0
 BTN+
-Text Label 1500 5900 2    50   ~ 0
+Text Label 1350 6200 2    50   ~ 0
 ENC+
-Text Label 1500 6000 2    50   ~ 0
+Text Label 1350 6300 2    50   ~ 0
 ENC-
 Wire Wire Line
-	1500 5800 1600 5800
+	1350 6100 1450 6100
 Wire Wire Line
-	1600 5800 1600 5900
+	1450 6100 1450 6200
 Wire Wire Line
-	1600 5900 1500 5900
+	1450 6200 1350 6200
 Wire Wire Line
-	1600 5800 1600 5750
-Connection ~ 1600 5800
+	1450 6100 1450 6050
+Connection ~ 1450 6100
 $Comp
 L power:+3V3 #PWR05
 U 1 1 60BBEEDD
-P 1600 5750
-F 0 "#PWR05" H 1600 5600 50  0001 C CNN
-F 1 "+3V3" H 1615 5923 50  0000 C CNN
-F 2 "" H 1600 5750 50  0001 C CNN
-F 3 "" H 1600 5750 50  0001 C CNN
-	1    1600 5750
+P 1450 6050
+F 0 "#PWR05" H 1450 5900 50  0001 C CNN
+F 1 "+3V3" H 1465 6223 50  0000 C CNN
+F 2 "" H 1450 6050 50  0001 C CNN
+F 3 "" H 1450 6050 50  0001 C CNN
+	1    1450 6050
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:GND #PWR06
 U 1 1 60BBEF7A
-P 1600 6050
-F 0 "#PWR06" H 1600 5800 50  0001 C CNN
-F 1 "GND" H 1605 5877 50  0000 C CNN
-F 2 "" H 1600 6050 50  0001 C CNN
-F 3 "" H 1600 6050 50  0001 C CNN
-	1    1600 6050
+P 1450 6350
+F 0 "#PWR06" H 1450 6100 50  0001 C CNN
+F 1 "GND" H 1455 6177 50  0000 C CNN
+F 2 "" H 1450 6350 50  0001 C CNN
+F 3 "" H 1450 6350 50  0001 C CNN
+	1    1450 6350
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1500 6000 1600 6000
+	1350 6300 1450 6300
 Wire Wire Line
-	1600 6000 1600 6050
+	1450 6300 1450 6350
 Wire Wire Line
 	4050 7050 4200 7050
 Wire Wire Line
@@ -577,77 +575,77 @@ Wire Wire Line
 $Comp
 L Device:D_Zener D13
 U 1 1 60A90646
-P 2750 5550
-F 0 "D13" H 2750 5650 50  0000 C CNN
-F 1 "BZT585B4V3T-7" H 2750 5450 50  0000 C CNN
-F 2 "Diode_SMD:D_SOD-523" H 2750 5550 50  0001 C CNN
-F 3 "https://www.diodes.com/assets/Datasheets/BZT585BxVxT.pdf" H 2750 5550 50  0001 C CNN
-	1    2750 5550
+P 2600 5850
+F 0 "D13" H 2600 5950 50  0000 C CNN
+F 1 "BZT585B3V6T" H 2600 5750 50  0000 C CNN
+F 2 "Diode_SMD:D_SOD-523" H 2600 5850 50  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/BZT585BxVxT.pdf" H 2600 5850 50  0001 C CNN
+	1    2600 5850
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:GND #PWR0103
 U 1 1 60AB3A5C
-P 3100 6250
-F 0 "#PWR0103" H 3100 6000 50  0001 C CNN
-F 1 "GND" H 3105 6077 50  0000 C CNN
-F 2 "" H 3100 6250 50  0001 C CNN
-F 3 "" H 3100 6250 50  0001 C CNN
-	1    3100 6250
+P 2950 6550
+F 0 "#PWR0103" H 2950 6300 50  0001 C CNN
+F 1 "GND" H 2955 6377 50  0000 C CNN
+F 2 "" H 2950 6550 50  0001 C CNN
+F 3 "" H 2950 6550 50  0001 C CNN
+	1    2950 6550
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2900 6150 3100 6150
+	2750 6450 2950 6450
 Wire Wire Line
-	3100 6150 3100 6250
+	2950 6450 2950 6550
 Wire Wire Line
-	2900 5850 3100 5850
+	2750 6150 2950 6150
 Wire Wire Line
-	3100 5850 3100 6150
-Connection ~ 3100 6150
+	2950 6150 2950 6450
+Connection ~ 2950 6450
 Wire Wire Line
-	2900 5550 3100 5550
+	2750 5850 2950 5850
 Wire Wire Line
-	3100 5550 3100 5850
-Connection ~ 3100 5850
-Text Label 2400 5550 2    50   ~ 0
+	2950 5850 2950 6150
+Connection ~ 2950 6150
+Text Label 2250 5850 2    50   ~ 0
 BTN
-Text Label 2400 5850 2    50   ~ 0
+Text Label 2250 6150 2    50   ~ 0
 ENC_A
-Text Label 2400 6150 2    50   ~ 0
+Text Label 2250 6450 2    50   ~ 0
 ENC_B
 Wire Wire Line
-	2400 6150 2600 6150
+	2250 6450 2450 6450
 Wire Wire Line
-	2400 5850 2600 5850
+	2250 6150 2450 6150
 Wire Wire Line
-	2400 5550 2600 5550
-Text Notes 2200 5300 0    50   ~ 0
-Input overvoltage protection
-Text Notes 1200 5300 0    50   ~ 0
+	2250 5850 2450 5850
+Text Notes 2050 5550 0    50   ~ 0
+Input Overvoltage Protections
+Text Notes 1050 5550 0    50   ~ 0
 GPIO Power Supply
-Text Notes 1150 6650 0    50   ~ 0
-BTN+ENC are tied directly to micro - protect/run at 3V3
+Text Notes 1100 7250 0    50   ~ 0
+BTN+ENC are tied directly to micro - protect/run at 3V3\n\nZener Sizing:\n>3V3 logic\n<4V max rating
 $Comp
 L Device:D_Zener D14
 U 1 1 60B0F03F
-P 2750 5850
-F 0 "D14" H 2750 5950 50  0000 C CNN
-F 1 "BZT585B4V3T-7" H 2750 5750 50  0000 C CNN
-F 2 "Diode_SMD:D_SOD-523" H 2750 5850 50  0001 C CNN
-F 3 "https://www.diodes.com/assets/Datasheets/BZT585BxVxT.pdf" H 2750 5850 50  0001 C CNN
-	1    2750 5850
+P 2600 6150
+F 0 "D14" H 2600 6250 50  0000 C CNN
+F 1 "BZT585B3V6T" H 2600 6050 50  0000 C CNN
+F 2 "Diode_SMD:D_SOD-523" H 2600 6150 50  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/BZT585BxVxT.pdf" H 2600 6150 50  0001 C CNN
+	1    2600 6150
 	1    0    0    -1  
 $EndComp
 $Comp
 L Device:D_Zener D15
 U 1 1 60B124A2
-P 2750 6150
-F 0 "D15" H 2750 6250 50  0000 C CNN
-F 1 "BZT585B4V3T-7" H 2750 6050 50  0000 C CNN
-F 2 "Diode_SMD:D_SOD-523" H 2750 6150 50  0001 C CNN
-F 3 "https://www.diodes.com/assets/Datasheets/BZT585BxVxT.pdf" H 2750 6150 50  0001 C CNN
-	1    2750 6150
+P 2600 6450
+F 0 "D15" H 2600 6550 50  0000 C CNN
+F 1 "BZT585B3V6T" H 2600 6350 50  0000 C CNN
+F 2 "Diode_SMD:D_SOD-523" H 2600 6450 50  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/BZT585BxVxT.pdf" H 2600 6450 50  0001 C CNN
+	1    2600 6450
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -662,4 +660,7 @@ Wire Wire Line
 	8150 2900 9050 2900
 Wire Wire Line
 	6950 2500 5850 2500
+Connection ~ 2550 2600
+Wire Wire Line
+	2550 2600 2850 2600
 $EndSCHEMATC

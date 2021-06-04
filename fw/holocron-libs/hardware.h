@@ -19,19 +19,19 @@
  ****************************************************************************/
 extern I2C_HandleTypeDef hi2c1;
 #define ACC_I2C hi2c1
-#define ACC_ADDR 0x1D
+#define ACC_ADDR 0x1DU
 // reading
-#define ACC_X_MSB_ADDR 0x01
+#define ACC_X_MSB_ADDR 0x01U
 // control registers
-#define ACC_CTRL_REG1 0x2A
-#define ACC_CTRL_REG2 0x2B
-#define ACC_CTRL_REG3 0x2C
-#define ACC_CTRL_REG4 0x2D
-#define ACC_CTRL_REG5 0x2E
+#define ACC_CTRL_REG1 0x2AU
+#define ACC_CTRL_REG2 0x2BU
+#define ACC_CTRL_REG3 0x2CU
+#define ACC_CTRL_REG4 0x2DU
+#define ACC_CTRL_REG5 0x2EU
 // data
-#define COUNTS_PER_G 1024
-#define ACC_BIT0_SHIFT 4
-#define ACC_BIT1_SHIFT 0
+#define COUNTS_PER_G 1024U
+#define ACC_BIT0_SHIFT 4U
+#define ACC_BIT1_SHIFT 0U
 /*****************************************************************************
  * Button IO
  ****************************************************************************/
@@ -46,8 +46,8 @@ float counts2volt(uint32_t);
  * MOTOR
  ****************************************************************************/
 // sensing
-#define MRSENSE 1500  // Ohms
-#define MIGAIN 11000  // VNHD7008AY datasheet p15
+#define MRSENSE 1500U  // Ohms
+#define MIGAIN 11000U  // VNHD7008AY datasheet p15
 static const uint32_t MTR_I_MULT = MRSENSE*MIGAIN;
 // control gains
 #define K0 ((float) 1)
