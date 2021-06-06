@@ -81,8 +81,8 @@ Wire Wire Line
 	1950 3550 1950 3600
 Text HLabel 2050 3800 0    50   Input ~ 0
 INA
-Text Notes 1450 4950 0    50   ~ 0
-Separate logic return for time being\n\nAlways current monitoring mode \nwhen SEL0=INA,SEL1=0,MS_EN=1\n\n(datasheet p.22,table12)
+Text Notes 1150 4900 0    50   ~ 0
+Prepared to have separate logic return if needed\n\nAlways current monitoring mode \nwhen SEL0=INA,SEL1=0,MS_EN=1\n\n(datasheet p.22,table12)
 Wire Wire Line
 	3700 2200 3600 2200
 Wire Wire Line
