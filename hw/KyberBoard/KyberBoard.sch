@@ -569,7 +569,7 @@ F 3 "https://www.digikey.com/en/products/detail/on-shore-technology-inc/OSTVN12A
 	-1   0    0    -1  
 $EndComp
 Text Notes 5700 1750 0    118  ~ 0
-TODO: \n- add solder mask to acc traces for assembly\n- mcu current io current budget\n- double check 200uF hbridge cap\n- (LAST THING) swap passives labels to comp values
+TODO: \n- double check 200uF hbridge cap\n- (LAST THING) swap passives labels to comp values
 Wire Wire Line
 	700  650  700  1050
 $Comp
