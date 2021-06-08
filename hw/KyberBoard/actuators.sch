@@ -5,14 +5,14 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 4 6
-Title ""
+Title "KyberBoard"
 Date ""
 Rev "1"
 Comp ""
-Comment1 ""
-Comment2 ""
+Comment1 "2021"
+Comment2 "Marion Anderson"
 Comment3 ""
-Comment4 "Marion Anderson"
+Comment4 "Actuator Drivers"
 $EndDescr
 Text HLabel 2200 5450 0    50   Input ~ 0
 SIG_SOL
@@ -1045,4 +1045,6 @@ Connection ~ 5850 4800
 Wire Wire Line
 	5850 5150 5850 5200
 Connection ~ 5850 5200
+Text Notes 3200 6350 0    50   ~ 0
+Low-side switching for lower component count
 $EndSCHEMATC

@@ -5,14 +5,14 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 2 6
-Title ""
+Title "KyberBoard"
 Date ""
 Rev "1"
 Comp ""
-Comment1 ""
-Comment2 ""
+Comment1 "2021"
+Comment2 "Marion Anderson"
 Comment3 ""
-Comment4 "Marion Anderson"
+Comment4 "Microcontroller and Support Circuitry"
 $EndDescr
 Text HLabel 4250 4900 0    50   BiDi ~ 0
 SDA
