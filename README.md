@@ -1,5 +1,12 @@
 # kyber
-Building the toy lightsaber I always wanted as a kid
+The toy lightsaber I always wanted as a kid.
+
+## Status
+* KyberBoard Rev 1 sent out for fabrication.
+* Found Luke Skywalker lightsaber CAD for 3D printing by [CaseStudyno8](https://www.thingiverse.com/thing:1263192/files).
+* Circuit design complete and subcircuit interfaces frozen.
+* Subcircuits passed breadboard feasibility tests.
+* First pass on firmware architecture complete.
 
 ## Goals
 - Build a lightsaber that extends/retracts, lights up, and makes sound
@@ -8,7 +15,9 @@ Building the toy lightsaber I always wanted as a kid
 - Maybe have a Luke Skywalker costume by Halloween 2021?
 
 ## [fw](fw/)
-I am writing code for the [STM32L051K8Tx](hw/KyberBoard/symbol-datasheets/stm32l051t8.pdf) microcontroller, but it should be translatable to anything else in the STM32 ecosystem. Broadly speaking, all the fancy bits are done in firmware, and I will upload a state diagram sometime in June.
+Written for the [STM32L051K8T6](hw/KyberBoard/symbol-datasheets/stm32l051t8.pdf) microcontroller. Code should work on any STM32 micrcontroller, and most interfaces are abstracted into header files.
+
+TODO: state diagram
 
 ### Configuring STM32CubeIde
 Edit project settings to include the multi-project libraries and make the compiler optimize for size. TODO: change saber-libs to holocron-libs
@@ -16,17 +25,16 @@ Edit project settings to include the multi-project libraries and make the compil
 ![Configure the compiler to optimize for size](images-for-docs/compiler-settings.png)
 
 ## [hw](hw/)
-Simulation, schematics, and layout.
+A mildly overdesigned PCB to allow flexibility in mechanical design. Designed for test, assembly, and reconfigurability.
 
 ### Component Selection Rules
-Try to use parts I can take off the breakout boards I have lying around, but also try to have the thing work on the first rev.
+Keep It Simple, Stupid. Stick to driving circuits that have readily available and easily solderable components. If necessary, target components that have in-stock evaluation boards and take the scrap.
 
 ### Current (A) Budget
-To size my battery protections further down.
 |Component  |Amperage  |Reasoning                        |
 |-----------|----------|---------------------------------|
 |motor      |10A       |stall current of on-hand dc motor|
-|solenoid   |1A        |12V/13Ohms rounded up            |
+|solenoid   |1A        |12 V/13 Ohms rounded up          |
 |3V3 bus    |1A        |typical LDO rating               |
 |waste      |0.5A      |safety factor                    |
 |-----------|----------|---------------------------------|
@@ -45,24 +53,27 @@ Current resolution: use ST's [VNHD7008AY eval board example design](reference-ma
 #### Reverse Polarity Protection
 Use the built-in protection of the hbridge. Need to characterise I<sup>2</sup>R losses. This will help prevent the Big Dumb<sup>TM</sup> since I plan to use terminal blocks for my main connector.
 #### Low-Voltage Shutoff
-Simple Zener-NMOS-PMOS circuit I designed for a student club a while back. Zener triggers NMOS, which in turn drives the PMOS. It has decent switching characteristics. PMOS here should match the RPP PMOS.
-
-TODO:add schematic + sim plots
+Grocery store batteries can't drive the actuators, so I'm looking at using a LiPo. This simple Zener-NMOS-PMOS circuit I designed for a student club will should prevent battery over-discharge.
+![UV Protection Circuit](images-for-docs/uv-ckt.png)
+![UV Protection Sim result](images-for-docs/uv-sim.png)
+When the voltage is above Vthresh, the Zener conducts, so the NMOS conducts, which makes the PMOS conduct.
 #### 3V3 Bus
-LDO; I do not want to deal with buck converters today. I am not being paid for this design.
-### Accelerometer/Gyro
-for that sweet, sweet _zwooom_
+LDO; I do not want to deal with buck converters. I am not being paid for this design.
+#### Accelerometer/Gyro
+For that sweet, sweet _zwoom_. Use I2C/SPI to make routing a little easier. I have a still-in-stock breakout board for the no-longer-produced [MMA84252QT](https://www.digikey.com/catalog/en/partgroup/mma8452q/11242).
 #### Motor Current Sensing
-I want to use torque control to retract the saber. I'm planning to extend it with a spring, so I have a better known "retracted torque" than "retracted position".
+I may use torque control to retract the saber. Currently planning to extend it with a spring, so the "retracted torque" is theoretically better characterized than the "retracted position".
 #### HBridge
-I found a high-current hbridge IC that does not require complementary PWM (thank you ST). I have limited PWM capabilities atm. I am using ST's low-power MCU line due to the current semiconductor shortage and wanting a small (as opposed to high-density) package
+I found a high-current hbridge IC that does not require complementary PWM (thank you ST). I have limited PWM capabilities due to only low-power ST micros being in stock.
+#### Actuators
+Low-side switches that do not require inrush-limiting resistors to reduce component count. The [SSM3K337R,LF](https://www.digikey.com/en/products/detail/toshiba-semiconductor-and-storage/SSM3K337R-LF/5056502?s=N4IgTCBcDaIMpwLIGYDSzkHYBKIC6AvkA) stays well under the maximum drive current and well-preserves a 20kHz square wave.
+![PWM Simulation Result](images-for-docs/pwm-sim.png)
 
 ### Non-electrical considerations
 - Cost: 4 layers. 2-sided board gives me the needed density, and routing isn't that awful
 - I'm not sure I want to hand-solder QFN packages
-- Size: Needs to fit inside a saber hilt along with batteries, springs, and other fun odds&ends
+- Size: Maximize density to maximize mechanical design flexibility.
 - Power budget: Meh, I can increase resistances after fab if it's a battery killer
 
-
 ## [cad](cad/)
-This is a TODO, but I will likely modify some open-source/compatibly-licensed STL from thingiverse/gradCAD. I also need to figure out spring sizing.
+Found a Luke Skywalker lightsaber CAD for 3D printing by [CaseStudyno8](https://www.thingiverse.com/thing:1263192/files). Was also pointed to Disney's [new lightsaber](https://mashable.com/article/real-lightsaber-star-wars-hotel-disney-world/), which shows some novel mechanical design for retraction. Although I would prefer to be able to fence with my design, the tape measure strategy does show promise.
