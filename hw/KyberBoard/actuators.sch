@@ -7,7 +7,7 @@ encoding utf-8
 Sheet 4 6
 Title "KyberBoard"
 Date ""
-Rev "1"
+Rev "2"
 Comp ""
 Comment1 "2021"
 Comment2 "Marion Anderson"
@@ -129,7 +129,7 @@ L Device:Q_NMOS_GSD Q6
 U 1 1 60ECB138
 P 5750 5450
 F 0 "Q6" H 5956 5496 50  0000 L CNN
-F 1 "SSM3K337R" H 5956 5405 50  0000 L CNN
+F 1 "SSM3K337R,LF" H 5956 5405 50  0000 L CNN
 F 2 "Package_TO_SOT_SMD:SOT-23" H 5950 5550 50  0001 C CNN
 F 3 "https://toshiba.semicon-storage.com/info/docget.jsp?did=14758&prodName=SSM3K337R" H 5750 5450 50  0001 C CNN
 	1    5750 5450
@@ -949,7 +949,7 @@ L Device:Q_NMOS_GSD Q5
 U 1 1 608FADAE
 P 2450 5450
 F 0 "Q5" H 2656 5496 50  0000 L CNN
-F 1 "SSM3K337R" H 2656 5405 50  0000 L CNN
+F 1 "SSM3K337R,LF" H 2656 5405 50  0000 L CNN
 F 2 "Package_TO_SOT_SMD:SOT-23" H 2650 5550 50  0001 C CNN
 F 3 "https://toshiba.semicon-storage.com/info/docget.jsp?did=14758&prodName=SSM3K337R" H 2450 5450 50  0001 C CNN
 	1    2450 5450
@@ -960,7 +960,7 @@ L Device:Q_NMOS_GSD Q7
 U 1 1 608FB298
 P 8850 5450
 F 0 "Q7" H 9056 5496 50  0000 L CNN
-F 1 "SSM3K337R" H 9056 5405 50  0000 L CNN
+F 1 "SSM3K337R,LF" H 9056 5405 50  0000 L CNN
 F 2 "Package_TO_SOT_SMD:SOT-23" H 9050 5550 50  0001 C CNN
 F 3 "https://toshiba.semicon-storage.com/info/docget.jsp?did=14758&prodName=SSM3K337R" H 8850 5450 50  0001 C CNN
 	1    8850 5450

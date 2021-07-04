@@ -1,0 +1,5 @@
+(fp_lib_table
+  (lib (name STL120N4F6AG)(type KiCad)(uri ${KIPRJMOD}/footprints/STL120N4F6AG)(options "")(descr ""))
+  (lib (name STL76DN4LF7AG)(type KiCad)(uri ${KIPRJMOD}/footprints/STL76DN4LF7AG)(options "")(descr ""))
+  (lib (name MMA8452)(type KiCad)(uri ${KIPRJMOD}/footprints/MMA8452)(options "")(descr ""))
+)

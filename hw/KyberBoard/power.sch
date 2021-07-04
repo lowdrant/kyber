@@ -7,7 +7,7 @@ encoding utf-8
 Sheet 5 6
 Title "KyberBoard"
 Date ""
-Rev "1"
+Rev "2"
 Comp ""
 Comment1 "2021"
 Comment2 "Marion Anderson"
@@ -196,7 +196,7 @@ AR Path="/60C2EECE" Ref="R?"  Part="1"
 AR Path="/609455AB/60C2EECE" Ref="R?"  Part="1" 
 AR Path="/60A0541C/60C2EECE" Ref="R8"  Part="1" 
 F 0 "R8" H 2520 2696 50  0000 L CNN
-F 1 "10k" H 2520 2605 50  0000 L CNN
+F 1 "1k" H 2520 2605 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 2380 2650 50  0001 C CNN
 F 3 "~" H 2450 2650 50  0001 C CNN
 	1    2450 2650
@@ -252,8 +252,8 @@ Wire Wire Line
 Connection ~ 2450 2900
 Wire Wire Line
 	2450 2900 2450 3000
-Text Notes 1650 5800 0    50   ~ 0
-divider allows bring-up tuning of\ncut-out voltage. sims indicate\nnot needed for BZT52C8V2S-7-F
+Text Notes 1700 5900 0    50   ~ 0
+divider allows bring-up tuning of\ncut-out voltage. sims indicate\nnot needed for BZT52C8V2S-7-F\n\nUse strong PMOS pullup ~1k
 $Comp
 L Device:R R?
 U 1 1 60C2EEF6
@@ -261,7 +261,7 @@ P 4400 3450
 AR Path="/609455AB/60C2EEF6" Ref="R?"  Part="1" 
 AR Path="/60A0541C/60C2EEF6" Ref="R11"  Part="1" 
 F 0 "R11" H 4470 3496 50  0000 L CNN
-F 1 "0" H 4470 3405 50  0000 L CNN
+F 1 "10k" H 4470 3405 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 4330 3450 50  0001 C CNN
 F 3 "~" H 4400 3450 50  0001 C CNN
 	1    4400 3450
@@ -307,8 +307,8 @@ F 3 "https://www.vishay.com/docs/63262/sis413dn.pdf" H 2750 2500 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	4400 3600 4400 3700
-Text Notes 3750 5800 0    50   ~ 0
-PMOS pullup does current limiting\nUse 0-ohm for layout aesthetics
+Text Notes 3750 5750 0    50   ~ 0
+Use 10k for additional current limiting
 $Comp
 L power:PWR_FLAG #FLG0101
 U 1 1 60C4D9CC
@@ -328,8 +328,6 @@ Text HLabel 10250 2100 2    118  Output ~ 0
 12V
 Text Notes 2050 1900 0    50   ~ 0
 Undervoltage Protection
-Wire Wire Line
-	4400 2400 4400 3300
 Connection ~ 7650 5400
 Wire Wire Line
 	2950 2400 4400 2400
@@ -412,4 +410,9 @@ Connection ~ 2100 2400
 Wire Wire Line
 	2100 5400 1550 5400
 Connection ~ 2100 5400
+Wire Wire Line
+	2750 2900 4400 2900
+Connection ~ 2750 2900
+Wire Wire Line
+	4400 2900 4400 3300
 $EndSCHEMATC

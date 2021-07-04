@@ -7,7 +7,7 @@ encoding utf-8
 Sheet 1 6
 Title "KyberBoard"
 Date ""
-Rev "1"
+Rev "2"
 Comp ""
 Comment1 "2021"
 Comment2 "Marion Anderson"
@@ -230,7 +230,7 @@ U 1 1 60B333C6
 P 850 650
 F 0 "H1" V 804 800 50  0000 L CNN
 F 1 "MountingHole_Pad" V 895 800 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.2mm_M3_Pad_Via" H 850 650 50  0001 C CNN
+F 2 "MountingHole:MountingHole_2.7mm_M2.5_ISO7380_Pad" H 850 650 50  0001 C CNN
 F 3 "~" H 850 650 50  0001 C CNN
 	1    850  650 
 	0    1    1    0   
@@ -241,7 +241,7 @@ U 1 1 60B5D6C8
 P 850 1050
 F 0 "H3" V 804 1200 50  0000 L CNN
 F 1 "MountingHole_Pad" V 895 1200 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.2mm_M3_Pad_Via" H 850 1050 50  0001 C CNN
+F 2 "MountingHole:MountingHole_2.7mm_M2.5_ISO7380_Pad" H 850 1050 50  0001 C CNN
 F 3 "~" H 850 1050 50  0001 C CNN
 	1    850  1050
 	0    1    1    0   
@@ -252,7 +252,7 @@ U 1 1 60B6140A
 P 850 1250
 F 0 "H4" V 804 1400 50  0000 L CNN
 F 1 "MountingHole_Pad" V 895 1400 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.2mm_M3_Pad_Via" H 850 1250 50  0001 C CNN
+F 2 "MountingHole:MountingHole_2.7mm_M2.5_ISO7380_Pad" H 850 1250 50  0001 C CNN
 F 3 "~" H 850 1250 50  0001 C CNN
 	1    850  1250
 	0    1    1    0   
@@ -515,13 +515,13 @@ $EndComp
 $Comp
 L Connector:Screw_Terminal_01x12 J3
 U 1 1 609C7A7B
-P 2150 3900
-F 0 "J3" H 2275 4000 50  0000 C CNN
-F 1 "OSTVN12A150" H 2475 3900 50  0000 C CNN
-F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-12-2.54_1x12_P2.54mm_Horizontal" H 2150 3900 50  0001 C CNN
-F 3 "https://www.digikey.com/en/products/detail/on-shore-technology-inc/OSTVN12A150/1588872" H 2150 3900 50  0001 C CNN
-	1    2150 3900
-	-1   0    0    -1  
+P 2150 4000
+F 0 "J3" H 2275 4100 50  0000 C CNN
+F 1 "OSTVN12A150" H 2475 4000 50  0000 C CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-12-2.54_1x12_P2.54mm_Horizontal" H 2150 4000 50  0001 C CNN
+F 3 "https://www.digikey.com/en/products/detail/on-shore-technology-inc/OSTVN12A150/1588872" H 2150 4000 50  0001 C CNN
+	1    2150 4000
+	-1   0    0    1   
 $EndComp
 Wire Wire Line
 	700  650  700  1050

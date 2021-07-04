@@ -7,7 +7,7 @@ encoding utf-8
 Sheet 6 6
 Title "KyberBoard"
 Date ""
-Rev "1"
+Rev "2"
 Comp ""
 Comment1 "2021"
 Comment2 "Marion Anderson"
@@ -171,7 +171,7 @@ AR Path="/609F046F" Ref="U4"  Part="1"
 AR Path="/60AC9516/609F046F" Ref="U4"  Part="1" 
 F 0 "U4" H 5300 3800 50  0000 C CNN
 F 1 "MMA8452QT" H 5450 3700 50  0000 C CNN
-F 2 "Package_DFN_QFN:QFN-16-1EP_3x3mm_P0.5mm_EP1.8x1.8mm" H 5100 3750 50  0001 C CNN
+F 2 "MMA8452:MMA8452Q" H 5100 3750 50  0001 C CNN
 F 3 "${KIPRJMOD}/symbol-datasheets/MMA8452Q-rev8.1.pdf" H 5100 3750 50  0001 C CNN
 	1    5100 3750
 	1    0    0    -1  

@@ -7,7 +7,7 @@ encoding utf-8
 Sheet 3 6
 Title "KyberBoard"
 Date ""
-Rev "1"
+Rev "2"
 Comp ""
 Comment1 "2021"
 Comment2 "Marion Anderson"
