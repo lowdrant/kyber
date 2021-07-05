@@ -24,6 +24,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "hardware.h"
+//#include "hardware.c"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -33,8 +34,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define DO_HBEAT
-#define DO_IMTR
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -48,6 +48,7 @@ ADC_HandleTypeDef hadc;
 I2C_HandleTypeDef hi2c1;
 
 TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim6;
 TIM_HandleTypeDef htim21;
 TIM_HandleTypeDef htim22;
 
@@ -75,10 +76,9 @@ static void MX_TIM2_Init(void);
 static void MX_TIM21_Init(void);
 static void MX_TIM22_Init(void);
 static void MX_ADC_Init(void);
+static void MX_TIM6_Init(void);
 /* USER CODE BEGIN PFP */
 static inline void nextState_USER(void);
-static inline void execSaberExtend(void);
-static inline void execSaberRetract(void);
 static inline uint32_t Period2Ticks(float);
 static inline uint16_t accVal(uint8_t const * const);
 static inline float ADC_GetMaxVal(void);
@@ -99,17 +99,12 @@ int main(void)
   __disable_irq();  // wait for setup
 
   // static locals
-  static const uint8_t accRaw[10] = {0,0,0,0,0,0,0,0,0,0};  // TODO: why 10, not 8?
-  static const uint8_t accTxPacket[1] = {ACC_X_MSB_ADDR};
+//  static const uint8_t accRaw[10] = {0,0,0,0,0,0,0,0,0,0};  // TODO: why 10, not 8?
+//  static const uint8_t accTxPacket[1] = {ACC_X_MSB_ADDR};
 
   // dynamic locals
-  uint16_t xacc,yacc,zacc;
-  uint16_t imtrs[3] = {0,0,0};  // TODO: programmatically setup lpf buffer
-
-  // timing vars
-  uint32_t lastTick_HBEAT = 0;  // reset ticks
-  uint32_t lastTick_ACC = 0;
-  uint32_t lastTick_IMTR = 0;
+//  uint16_t xacc,yacc,zacc;
+//  uint16_t imtrs[3] = {0,0,0};  // TODO: programmatically setup lpf buffer
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -124,13 +119,8 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
   HAL_SetTickFreq(HAL_TICK_FREQ_1KHZ);
-  uint32_t ticks_HBEAT = Period2Ticks(T_HBEAT);
-  uint32_t ticks_ACC = Period2Ticks(T_ACC);
-  uint32_t ticks_IMTR = Period2Ticks(T_IMTR);
   ticksDEBOUNCE = Period2Ticks(T_DEBOUNCE);
-
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -140,86 +130,58 @@ int main(void)
   MX_TIM21_Init();
   MX_TIM22_Init();
   MX_ADC_Init();
+  MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
+  MtrBrakeLo();
 
-  // adc post-config
-  float adcRes = ADC_GetMaxVal();
+  // heartbeat
+  htim6.Instance->ARR = (uint32_t) 32 * T_HBEAT;  // 2.097MHz / (65535+1) / 32 = 1Hz
+  HAL_TIM_Base_Start_IT(&htim6);
+
+  // encoder
+  HAL_TIM_Encoder_Start(&htim22,TIM_CHANNEL_ALL);
+
+  // pwm
+  htim2.Instance->CCR1 = 0;  // 0% duty cycle
+  HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1);
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  // motor current startup
-  //  HAL_StatusTypeDef calret = HAL_ADCEx_Calibration_Start(&hadc,1);
-  //  uint32_t calval = HAL_ADC_GetValue(&hadc);
-  //  uint32_t test = calret | calval;
-  HAL_ADC_Start(&hadc);
-
-  // speaker pwm
-  htim21.Instance->CCR1 = htim21.Instance->ARR >> 1;  // 50% duty cycle
-  HAL_TIM_PWM_Start(&htim21,TIM_CHANNEL_1);
-
-  // start program
   __enable_irq();
   while (1) {
-    // State Behavior
-//    switch (SaberState) {
-//      case SABER_OFF:
-//        break;
-//      case SABER_EXTEND:
-//        execSaberExtend();
-//        SaberState = SABER_ON;
-//        break;
-//      case SABER_RETRACT:
-//        execSaberRetract();
-//        SaberState = SABER_OFF;
-//        break;
-//      case SABER_ON:
-//        break;  // TODO: accelerometer noises
-//      default:
-//        Error_Handler();
-//        break;
-//    }
-
-    #ifdef DO_HBEAT
-    // Heartbeat
-    if (uwTick - lastTick_HBEAT > ticks_HBEAT) {
-      HAL_GPIO_TogglePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin);
-      lastTick_HBEAT = uwTick;
+    // State Machine
+    switch (SaberState) {
+      case SABER_OFF:
+        break;
+      case SABER_EXTEND:
+        MtrCW();
+        if ( !checkExtend() ) {  // TODO: actual control loop
+          htim2.Instance->CCR1 = htim2.Instance->ARR;
+        } else {
+          MtrBrakeLo();
+          SaberState = SABER_ON;
+        }
+        break;
+      case SABER_RETRACT:
+        MtrCCW();
+        if ( !checkRetract() ) {  // TODO: actual control loop
+          htim2.Instance->CCR1 = htim2.Instance->ARR;
+        } else {
+          MtrBrakeLo();
+          SaberState = SABER_OFF;
+        }
+        break;
+      case SABER_ON:
+        // TODO: saber noises
+        // TODO: blinky lights
+        HAL_GPIO_WritePin(SIG_LED_GPIO_Port, SIG_LED_Pin, GPIO_PIN_RESET);
+        break;
+      default:
+        Error_Handler();
+        break;
     }
-    #endif  // DO_HBEAT
-
-    #ifdef DO_IMTR  // TODO: combine with motor control
-                    // TODO: dma
-    if (uwTick - lastTick_IMTR > ticks_IMTR) {
-      rethal = HAL_ADC_PollForConversion(&hadc,1);
-      if (rethal==HAL_OK) {
-        imtrs[0] = imtrs[1]; imtrs[1] = imtrs[2];  // push through queue
-        imtrs[2] = HAL_ADC_GetValue(&hadc);
-        imtr = (uint16_t) (imtrs[0]+imtrs[1]+imtrs[2]) / 3.0;
-        htim21.Instance->ARR = (uint32_t) (1U<<16)*(imtr/adcRes);
-        htim21.Instance->CCR1 = htim21.Instance->ARR >> 1;
-        lastTick_IMTR = uwTick;
-      }
-    }
-    #endif  // DO_IMTR
-
-    #ifdef DO_ACC
-    // Accelerometer
-    if ( (uwTick - lastTick_ACC > ticks_ACC) ) {
-      rethal = HAL_OK;
-      __disable_irq();
-      rethal |= HAL_I2C_Master_Transmit(&ACC_I2C, ACC_ADDR<<1, accTxPacket, 1, HAL_MAX_DELAY);  // TODO: reduce delay
-      rethal |= HAL_I2C_Master_Receive(&ACC_I2C, ACC_ADDR<<1, accRaw, 10, HAL_MAX_DELAY);  // TODO: programmatically enforce length match w/buffer
-      if (rethal == HAL_OK) {
-        xacc = accVal(accRaw);
-        yacc = accVal(accRaw+2);
-        zacc = accVal(accRaw+4);
-        lastTick_ACC = uwTick;
-      }
-      __enable_irq();
-    }
-    #endif  // DO_ACC
   }
     /* USER CODE END WHILE */
 
@@ -397,11 +359,11 @@ static void MX_TIM2_Init(void)
 
   /* USER CODE END TIM2_Init 1 */
   htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 0;
+  htim2.Init.Prescaler = 255;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim2.Init.Period = 0;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
   {
     Error_Handler();
@@ -424,6 +386,44 @@ static void MX_TIM2_Init(void)
 
   /* USER CODE END TIM2_Init 2 */
   HAL_TIM_MspPostInit(&htim2);
+
+}
+
+/**
+  * @brief TIM6 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM6_Init(void)
+{
+
+  /* USER CODE BEGIN TIM6_Init 0 */
+
+  /* USER CODE END TIM6_Init 0 */
+
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM6_Init 1 */
+
+  /* USER CODE END TIM6_Init 1 */
+  htim6.Instance = TIM6;
+  htim6.Init.Prescaler = 65535;
+  htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim6.Init.Period = 32;
+  htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim6, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM6_Init 2 */
+
+  /* USER CODE END TIM6_Init 2 */
 
 }
 
@@ -595,9 +595,28 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI4_15_IRQn, 1, 0);
+  HAL_NVIC_EnableIRQ(EXTI4_15_IRQn);
+
 }
 
 /* USER CODE BEGIN 4 */
+
+/**
+  * @brief  Heartbeat timer interrupt implementation
+  * @param  htim TIM handle
+  * @retval None
+  */
+__weak void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  __disable_irq();
+  if (htim == &htim6) {  // only use htim6
+    HAL_GPIO_TogglePin(LED_HBEAT_GPIO_Port, LED_HBEAT_Pin);
+  }
+  __enable_irq();
+}
+
 
 /*****************************************************************************
  * STATE BEHAVIOR
@@ -609,7 +628,6 @@ static void MX_GPIO_Init(void)
   */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-//  btnPresses++;
   __disable_irq();
   switch (GPIO_Pin) {
     case BTN_Pin:
@@ -651,30 +669,6 @@ static inline void nextState_USER(void)
       Error_Handler();
       break;
   }
-}
-
-/**
-  * @brief  Execute Saber Extension Sequence
-  * @retval None
-  *
-  * TODO: blink lights
-  * TODO: play extension noise
-  */
-static inline void execSaberExtend(void)
-{
-  HAL_GPIO_WritePin(SIG_LED_GPIO_Port, SIG_LED_Pin, GPIO_PIN_SET);
-}
-
-/**
-  * @brief  Execute Saber Retraction Sequence
-  * @retval None
-  *
-  * TODO: blink lights
-  * TODO: play retraction noise
-  */
-static inline void execSaberRetract(void)
-{
-  HAL_GPIO_WritePin(SIG_LED_GPIO_Port, SIG_LED_Pin, GPIO_PIN_RESET);
 }
 
 /*****************************************************************************

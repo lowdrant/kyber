@@ -66,12 +66,15 @@ static const float DERVQUOTIENT = ND * T_CTL;
 #define MD 1   // Friction Constant
 // goal params (metric!!)
 #define TDES 5  // desired torque (Nm)
-const int16_t tgt = 10;
+//const int16_t tgt = 10;
 // functions
 void MtrCW(void);
 void MtrCCW(void);
-void MtrBrake(void);
+void MtrBrakeHi(void);
+void MtrBrakeLo(void);
 void MtrCtl(float);  // TODO: set channel compare preload?
 float CtlLaw(int16_t);
 void Ctl(void);
+uint8_t checkExtend(void);
+uint8_t checkRetract(void);
 #endif /* INC_HARDWARE_H_ */

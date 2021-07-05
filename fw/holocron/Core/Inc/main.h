@@ -51,7 +51,7 @@ typedef enum
 /* USER CODE BEGIN EC */
 
 // Program Timing
-#define T_HBEAT (float) 0.5         // LED Heartbeat Period
+#define T_HBEAT (float) 0.3         // LED Heartbeat Period
 #define T_ACC (float) 0.1         // Accelerometer Update Period
 #define T_BATT (float) 600        // Voltage Update Period
 #define T_EXTEND (float) 0.1      // Saber Extension Time
@@ -93,6 +93,7 @@ void Error_Handler(void);
 #define SIG_LED_GPIO_Port GPIOB
 #define BTN_Pin GPIO_PIN_9
 #define BTN_GPIO_Port GPIOA
+#define BTN_EXTI_IRQn EXTI4_15_IRQn
 #define ENC_A_Pin GPIO_PIN_4
 #define ENC_A_GPIO_Port GPIOB
 #define ENC_B_Pin GPIO_PIN_5
