@@ -65,6 +65,7 @@ uint32_t ticksDEBOUNCE;
 
 // Debugging Globals
 volatile uint16_t imtr;
+volatile const int16_t * encTicks;
 
 /* USER CODE END PV */
 
@@ -140,10 +141,13 @@ int main(void)
 
   // encoder
   HAL_TIM_Encoder_Start(&htim22,TIM_CHANNEL_ALL);
+  encTicks = &(htim22.Instance->CNT);
 
   // pwm
   htim2.Instance->CCR1 = 0;  // 0% duty cycle
   HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1);
+  MtrCW();
+  htim2.Instance->CCR1 = 100;
 
   /* USER CODE END 2 */
 
@@ -156,18 +160,18 @@ int main(void)
       case SABER_OFF:
         break;
       case SABER_EXTEND:
-        MtrCW();
         if ( !checkExtend() ) {  // TODO: actual control loop
-          htim2.Instance->CCR1 = htim2.Instance->ARR;
+          MtrCW();
+          htim2.Instance->CCR1 = 100;
         } else {
           MtrBrakeLo();
           SaberState = SABER_ON;
         }
         break;
       case SABER_RETRACT:
-        MtrCCW();
         if ( !checkRetract() ) {  // TODO: actual control loop
-          htim2.Instance->CCR1 = htim2.Instance->ARR;
+          MtrCCW();
+          htim2.Instance->CCR1 = 100;
         } else {
           MtrBrakeLo();
           SaberState = SABER_OFF;
@@ -359,9 +363,9 @@ static void MX_TIM2_Init(void)
 
   /* USER CODE END TIM2_Init 1 */
   htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 255;
+  htim2.Init.Prescaler = 0;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 0;
+  htim2.Init.Period = 200;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
@@ -507,18 +511,18 @@ static void MX_TIM22_Init(void)
   htim22.Instance = TIM22;
   htim22.Init.Prescaler = 0;
   htim22.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim22.Init.Period = 0;
+  htim22.Init.Period = 65535;
   htim22.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim22.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
-  sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
+  sConfig.IC1Polarity = TIM_ICPOLARITY_FALLING;
   sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
-  sConfig.IC1Filter = 0;
-  sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
+  sConfig.IC1Filter = 2;
+  sConfig.IC2Polarity = TIM_ICPOLARITY_FALLING;
   sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
-  sConfig.IC2Filter = 0;
+  sConfig.IC2Filter = 2;
   if (HAL_TIM_Encoder_Init(&htim22, &sConfig) != HAL_OK)
   {
     Error_Handler();
