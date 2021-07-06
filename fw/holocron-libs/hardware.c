@@ -11,6 +11,8 @@
 
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim22;
+extern const int16_t tgt;
+extern const int16_t * const encTicks;
 
 /**
  * @brief Set hbridge direction pins to Clockwise Rotation.
@@ -55,13 +57,12 @@ void MtrBrakeLo(void)
 void MtrCtl(float u)
 {
   if (u<0) {
-    MtrCW();
-  } else if (u>0) {
     MtrCCW();
+  } else if (u>0) {
+    MtrCW();
   }
   u = (u>0) ? u : -u;
-  uint16_t d = htim2.Init.Period * u / MV;
-  TIM2->CCR2 = d;
+  htim2.Instance->CCR1 = htim2.Init.Period * u / MV;
 }
 
 /**
@@ -74,16 +75,15 @@ float CtlLaw(int16_t err)
 {
   static int32_t erri = 0;
   erri += err;
-  return (KP*err + KI*erri*T_CTL);
+  return (KP*err + KI*erri*T_MTR);
 }
 
-extern const int16_t tgt;
 void Ctl(void)
 {
   static int32_t erri = 0;
-  int16_t err = tgt - ((int16_t)TIM22->CNT);
+  int16_t err = tgt - *encTicks;
   erri += err;
-  MtrCtl(KP*err + KI*erri*T_CTL);
+  MtrCtl(KP*err + KI*erri*T_MTR);
 }
 
 

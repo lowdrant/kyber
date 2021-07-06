@@ -56,7 +56,7 @@ typedef enum
 #define T_BATT (float) 600        // Voltage Update Period
 #define T_EXTEND (float) 0.1      // Saber Extension Time
 #define T_RETRACT (float) 0.3     // Saber Retraction Time
-#define T_IMTR (float) 0.01      // adc polling time
+#define T_MTR (float) 0.01      // motor polling time
 
 /* USER CODE END EC */
 

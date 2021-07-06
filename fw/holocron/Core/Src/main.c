@@ -34,7 +34,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define LOGLEN 500  // umber of data points
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -61,11 +61,19 @@ HAL_StatusTypeDef rethal = HAL_OK;
 // Timing Globals
 uint32_t ticksPerSec = 1000;  // for timing: stm32l0xx_hal.h, period2ticks
 uint32_t lastTick_DEBOUNCE = 0;
+uint32_t lastTick_MTR = 0;
 uint32_t ticksDEBOUNCE;
+uint32_t ticksMTR;
 
 // Debugging Globals
 volatile uint16_t imtr;
 volatile const int16_t * encTicks;
+int16_t tgt = 20000;
+int16_t err = 0;
+volatile float u;
+float ulog[LOGLEN];
+int16_t errlog[LOGLEN];
+uint16_t logndx = 0;
 
 /* USER CODE END PV */
 
@@ -121,6 +129,7 @@ int main(void)
 
   /* USER CODE BEGIN SysInit */
   HAL_SetTickFreq(HAL_TICK_FREQ_1KHZ);
+  ticksMTR = Period2Ticks(T_MTR);
   ticksDEBOUNCE = Period2Ticks(T_DEBOUNCE);
   /* USER CODE END SysInit */
 
@@ -133,6 +142,7 @@ int main(void)
   MX_ADC_Init();
   MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
+
   MtrBrakeLo();
 
   // heartbeat
@@ -140,52 +150,55 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim6);
 
   // encoder
-  HAL_TIM_Encoder_Start(&htim22,TIM_CHANNEL_ALL);
+  HAL_TIM_Encoder_Start(&htim22, TIM_CHANNEL_ALL);
   encTicks = &(htim22.Instance->CNT);
 
   // pwm
   htim2.Instance->CCR1 = 0;  // 0% duty cycle
-  HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1);
-  MtrCW();
-  htim2.Instance->CCR1 = 100;
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  uint32_t lastMtrTick = uwTick;
   __enable_irq();
   while (1) {
-    // State Machine
-    switch (SaberState) {
-      case SABER_OFF:
-        break;
-      case SABER_EXTEND:
-        if ( !checkExtend() ) {  // TODO: actual control loop
-          MtrCW();
-          htim2.Instance->CCR1 = 100;
-        } else {
-          MtrBrakeLo();
-          SaberState = SABER_ON;
-        }
-        break;
-      case SABER_RETRACT:
-        if ( !checkRetract() ) {  // TODO: actual control loop
-          MtrCCW();
-          htim2.Instance->CCR1 = 100;
-        } else {
-          MtrBrakeLo();
-          SaberState = SABER_OFF;
-        }
-        break;
-      case SABER_ON:
-        // TODO: saber noises
-        // TODO: blinky lights
-        HAL_GPIO_WritePin(SIG_LED_GPIO_Port, SIG_LED_Pin, GPIO_PIN_RESET);
-        break;
-      default:
-        Error_Handler();
-        break;
+    if (uwTick - lastTick_MTR > ticksMTR) {
+      // TODO: read motor current
+      err = *encTicks - tgt;
+      if (logndx < LOGLEN) {
+        ulog[logndx] = u;
+        errlog[logndx] = err;
+        logndx++;
+      }
+      u = CtlLaw(err);
+      MtrCtl(u);
+      lastMtrTick = uwTick;
+
     }
+    // State Machine
+//    switch (SaberState) {
+//      case SABER_OFF:
+//        break;
+//      case SABER_EXTEND:
+//        if ( !checkExtend() ) {  // TODO: actual control loop
+//          MtrCtl(u);
+//        }
+//        break;
+//      case SABER_RETRACT:
+//        if ( !checkRetract() ) {  // TODO: actual control loop
+//        }
+//        break;
+//      case SABER_ON:
+//        // TODO: saber noises
+//        // TODO: blinky lights
+//        HAL_GPIO_WritePin(SIG_LED_GPIO_Port, SIG_LED_Pin, GPIO_PIN_RESET);
+//        break;
+//      default:
+//        Error_Handler();
+//        break;
+//    }
   }
     /* USER CODE END WHILE */
 
@@ -726,18 +739,6 @@ static inline uint16_t accVal(uint8_t const * const d)
 {
   return ((*d)<<ACC_BIT0_SHIFT) + (*(d+1)<<ACC_BIT1_SHIFT);
 }
-/*****************************************************************************
- * MOTOR CONTROL
- ****************************************************************************/
-#ifdef DO_MTR
-static inline void mtrCtl(void)
-{
-  asm("NOOP");  // TODO: remove
-  // TODO: update PWM
-  // TODO: compute motor dir
-  // TODO: compute motor torque
-}
-#endif  // DO_MTR
 
 /* USER CODE END 4 */
 
@@ -754,8 +755,7 @@ void Error_Handler(void)
   {
     // Turn off motor
     HAL_GPIO_WritePin(PWM_MTR_GPIO_Port,PWM_MTR_Pin,GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(INA_GPIO_Port,INA_Pin,GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(INB_GPIO_Port,INB_Pin,GPIO_PIN_RESET);
+    MtrBrakeLo();
     // Disable speaker
     HAL_GPIO_WritePin(PWM_SPKR_GPIO_Port,PWM_SPKR_Pin,GPIO_PIN_RESET);
     // Disable power led

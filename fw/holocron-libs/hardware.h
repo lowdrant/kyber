@@ -13,6 +13,7 @@
 #include "stm32l0xx_hal_gpio.h"
 #include "stm32l0xx_hal_tim.h"
 #include "math.h"
+#include "main.h"
 
 /*****************************************************************************
  * Accelerometer IO - MMA8452 Addresses & Helper Functions
@@ -49,14 +50,15 @@ float counts2volt(uint32_t);
 #define MRSENSE 1500U  // Ohms
 #define MIGAIN 11000U  // VNHD7008AY datasheet p15
 static const uint32_t MTR_I_MULT = MRSENSE*MIGAIN;
+
 // control gains
 #define K0 ((float) 1)
 #define KP ((float) 1)
 #define KI ((float) 0)
 #define KD ((float) 0)
 #define ND 3  // derivative averager length
-#define T_CTL ((float) 0.001)  // control period
-static const float DERVQUOTIENT = ND * T_CTL;
+static const float DERVQUOTIENT = ND * T_MTR;
+
 // motor params (metric!!)
 #define ML 100 // uH
 #define MR 2   // Ohms
@@ -64,9 +66,7 @@ static const float DERVQUOTIENT = ND * T_CTL;
 #define MJ 1   // Inertia
 #define MK 1   // Torque Constant
 #define MD 1   // Friction Constant
-// goal params (metric!!)
-#define TDES 5  // desired torque (Nm)
-//const int16_t tgt = 10;
+
 // functions
 void MtrCW(void);
 void MtrCCW(void);
@@ -77,4 +77,5 @@ float CtlLaw(int16_t);
 void Ctl(void);
 uint8_t checkExtend(void);
 uint8_t checkRetract(void);
+
 #endif /* INC_HARDWARE_H_ */
