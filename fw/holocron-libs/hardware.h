@@ -53,7 +53,7 @@ static const uint32_t MTR_I_MULT = MRSENSE*MIGAIN;
 
 // control gains
 #define K0 ((float) 1)
-#define KP ((float) 1)
+#define KP ((float) 0.5)
 #define KI ((float) 0)
 #define KD ((float) 0)
 #define ND 3  // derivative averager length
@@ -72,10 +72,14 @@ void MtrCW(void);
 void MtrCCW(void);
 void MtrBrakeHi(void);
 void MtrBrakeLo(void);
-void MtrCtl(float);  // TODO: set channel compare preload?
-float CtlLaw(int16_t);
-void Ctl(void);
+void MtrCtl(void);  // TODO: set channel compare preload?
+void CtlLaw(int16_t);
 uint8_t checkExtend(void);
 uint8_t checkRetract(void);
+
+/*****************************************************************************
+ * Speaker
+ ****************************************************************************/
+void SetSpkrFreq(uint16_t);
 
 #endif /* INC_HARDWARE_H_ */

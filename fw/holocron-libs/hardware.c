@@ -10,9 +10,15 @@
 #include "math.h"
 
 extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim21;
 extern TIM_HandleTypeDef htim22;
 extern const int16_t tgt;
 extern const int16_t * const encTicks;
+extern float u;
+
+/*****************************************************************************
+ * Motor Actuation - Direction & PWM
+ ****************************************************************************/
 
 /**
  * @brief Set hbridge direction pins to Clockwise Rotation.
@@ -52,9 +58,9 @@ void MtrBrakeLo(void)
 
 /**
  * @brief Set all hbridge GPIO according to motor input voltage u
- * @param u Motor input voltage
+ * @param (global) u Motor input voltage
  */
-void MtrCtl(float u)
+void SetMtrPWM(float u)
 {
   if (u<0) {
     MtrCCW();
@@ -62,48 +68,51 @@ void MtrCtl(float u)
     MtrCW();
   }
   u = (u>0) ? u : -u;
-  htim2.Instance->CCR1 = htim2.Init.Period * u / MV;
+  htim2.Instance->CCR1 = htim2.Instance->ARR * u / MV;
 }
+
+
+/**
+ * Set Speaker PWM Frequency
+ * @param freq Frequency in Hz (up to 20,000).
+ */
+const float freq2arr = 3.3; // 0<->0, 20,000 <-> 2^16-1
+void SetSpkrFreq(uint16_t freq)
+{
+  htim21.Instance->ARR = (uint16_t) freq * freq2arr;
+  htim21.Instance->CCR1 = htim21.Instance->ARR >> 2;
+}
+
+
+/*****************************************************************************
+ * Motor Control
+ ****************************************************************************/
 
 /**
  * @brief Motor control law
  * @param err System error
- * @retval Output voltage
+ * @retval (global update) Output voltage
  * TODO: integrator windup prevention
  */
-float CtlLaw(int16_t err)
+
+void CtlLaw(int16_t err)
 {
   static int32_t erri = 0;
-  erri += err;
-  return (KP*err + KI*erri*T_MTR);
-}
-
-void Ctl(void)
-{
-  static int32_t erri = 0;
-  int16_t err = tgt - *encTicks;
-  erri += err;
-  MtrCtl(KP*err + KI*erri*T_MTR);
-}
-
-
-/** TODO: implement
- * @brief Check if saber is in extended state
- * @param None
- * @retval 1 if retracted, 0 else
- */
-uint8_t checkExtend(void)
-{
-  return ((int32_t) htim22.Instance->CNT) < 100;  // TODO: meaningful limit switch
-}
-
-
-/** TODO: implement
- * @brief Check if saber is in retracted state
- * @param None
- * @retval 1 if retracted, 0 else
- */
-uint8_t checkRetract(void)
-{
-  return ((int32_t) htim22.Instance->CNT) > 0;  // TODO: meaningful limit switch
+  static uint32_t errd = 0;
+  static float errbuf[ND] = {0};
+  static uint32_t i = 0;  // iteration var
+  // derivative term
+  errd = 0;
+  for (i=1;i<ND;i++) {
+    errbuf[i-1] = errbuf[i];
+    errd += errbuf[i];
+  }
+  errbuf[ND-1] = err;
+  errd += err;
+  // integral term
+  if (fabs(u) < MV) {  // anti-windup
+    erri += err;
+  }
+  // computation
+  u = KP*err + KI*erri*T_MTR + KD*errd/T_MTR/3;
 }

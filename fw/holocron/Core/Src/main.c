@@ -73,6 +73,7 @@ int16_t err = 0;
 volatile float u;
 float ulog[LOGLEN];
 int16_t errlog[LOGLEN];
+uint16_t ilog[LOGLEN];
 uint16_t logndx = 0;
 
 /* USER CODE END PV */
@@ -142,8 +143,10 @@ int main(void)
   MX_ADC_Init();
   MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
-
+  // enforce off
   MtrBrakeLo();
+  HAL_GPIO_WritePin(SIG_SOL_GPIO_Port,SIG_SOL_Pin,0);
+  HAL_GPIO_WritePin(SIG_LED_GPIO_Port,SIG_LED_Pin,0);
 
   // heartbeat
   htim6.Instance->ARR = (uint32_t) 32 * T_HBEAT;  // 2.097MHz / (65535+1) / 32 = 1Hz
@@ -151,7 +154,7 @@ int main(void)
 
   // encoder
   HAL_TIM_Encoder_Start(&htim22, TIM_CHANNEL_ALL);
-  encTicks = &(htim22.Instance->CNT);
+  encTicks = &(htim22.Instance->CNT);  // signed encoder count
 
   // pwm
   htim2.Instance->CCR1 = 0;  // 0% duty cycle
@@ -161,21 +164,23 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  uint32_t lastMtrTick = uwTick;
   __enable_irq();
   while (1) {
-    if (uwTick - lastTick_MTR > ticksMTR) {
-      // TODO: read motor current
-      err = *encTicks - tgt;
-      if (logndx < LOGLEN) {
-        ulog[logndx] = u;
-        errlog[logndx] = err;
-        logndx++;
-      }
-      u = CtlLaw(err);
-      MtrCtl(u);
-      lastMtrTick = uwTick;
-
+//    if (uwTick - lastTick_MTR > ticksMTR) {
+//      // TODO: read motor current
+//      err = *encTicks - tgt;
+//      if (logndx < LOGLEN) {
+//        ulog[logndx] = u;
+//        errlog[logndx] = err;
+//        logndx++;
+//      }
+//      CtlLaw(err);
+//      SetMtrPWM(u);
+//      lastTick_MTR = uwTick;
+//    }
+    for (int i=0;i<10;i++) {
+      SetSpkrFreq(i*2000);
+      HAL_Delay(1000);
     }
     // State Machine
 //    switch (SaberState) {
@@ -464,9 +469,9 @@ static void MX_TIM21_Init(void)
 
   /* USER CODE END TIM21_Init 1 */
   htim21.Instance = TIM21;
-  htim21.Init.Prescaler = 0;
+  htim21.Init.Prescaler = 104;
   htim21.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim21.Init.Period = 0xFF;
+  htim21.Init.Period = 0;
   htim21.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim21.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim21) != HAL_OK)
@@ -491,7 +496,7 @@ static void MX_TIM21_Init(void)
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
   sConfigOC.Pulse = 0;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_ENABLE;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim21, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
   {
     Error_Handler();
@@ -596,7 +601,7 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pins : SIG_SOL_Pin SIG_LED_Pin */
   GPIO_InitStruct.Pin = SIG_SOL_Pin|SIG_LED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
