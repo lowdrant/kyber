@@ -22,8 +22,6 @@ Text HLabel 5450 3900 2    50   Output ~ 0
 PWM_MTR_MCU
 Text HLabel 5450 3800 2    50   Input ~ 0
 ADC_imtr
-Text HLabel 4250 4400 0    50   Output ~ 0
-SIG_LED_MCU
 $Comp
 L power:+3V3 #PWR?
 U 1 1 608E4D1E
@@ -100,8 +98,6 @@ Wire Wire Line
 	5450 4300 5400 4300
 Text Notes 7700 5750 0    50   ~ 0
 VDDA (Pin 5) - 1u + 100n cap (C19+C18)\nVSS (Pin 1)  - 10u + 100n cap (C3+C4)\nVSS (Pin 17) - 100n (C5)\nNRST (pin 4) - Cap for AN4467 p30 (C2)
-Wire Wire Line
-	4250 4400 4300 4400
 Text Notes 4800 2800 0    50   ~ 0
 Micro
 Text Notes 8100 2800 0    50   ~ 0
@@ -166,8 +162,6 @@ Text Label 5450 4800 0    50   ~ 0
 SWCLK
 Wire Wire Line
 	5450 4800 5400 4800
-Text HLabel 4250 4300 0    50   Output ~ 0
-SIG_SOL_MCU
 Text HLabel 5450 4300 2    50   Input ~ 0
 BTN
 $Comp
@@ -449,10 +443,10 @@ NoConn ~ 4300 4500
 NoConn ~ 4300 4100
 NoConn ~ 4300 4000
 Wire Wire Line
-	4300 4300 4250 4300
-Wire Wire Line
 	6900 3950 7100 3950
 Connection ~ 7100 3950
 Wire Wire Line
 	7100 3950 7300 3950
+NoConn ~ 4300 4300
+NoConn ~ 4300 4400
 $EndSCHEMATC

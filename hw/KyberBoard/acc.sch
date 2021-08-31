@@ -164,7 +164,7 @@ Wire Wire Line
 Wire Wire Line
 	5650 4200 5600 4200
 $Comp
-L KyberBoard:MMA8452Q U4
+L KyberBoard-rescue:MMA8452Q-KyberBoard U4
 U 1 1 609F046F
 P 5100 3750
 AR Path="/609F046F" Ref="U4"  Part="1" 

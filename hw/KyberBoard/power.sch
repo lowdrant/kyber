@@ -7,7 +7,7 @@ encoding utf-8
 Sheet 5 6
 Title "KyberBoard"
 Date ""
-Rev "2"
+Rev "1"
 Comp ""
 Comment1 "2021"
 Comment2 "Marion Anderson"
@@ -293,7 +293,7 @@ $EndComp
 Wire Wire Line
 	2750 2700 2750 2900
 $Comp
-L KyberBoard:SIS413DN-T1-GE3 Q?
+L KyberBoard-rescue:SIS413DN-T1-GE3-KyberBoard Q?
 U 1 1 60C2EF11
 P 2750 2500
 AR Path="/609455AB/60C2EF11" Ref="Q?"  Part="1" 

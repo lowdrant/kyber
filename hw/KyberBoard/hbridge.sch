@@ -7,7 +7,7 @@ encoding utf-8
 Sheet 3 6
 Title "KyberBoard"
 Date ""
-Rev "2"
+Rev "1"
 Comp ""
 Comment1 "2021"
 Comment2 "Marion Anderson"
@@ -304,7 +304,7 @@ Wire Wire Line
 Wire Wire Line
 	4450 6600 4450 6700
 $Comp
-L KyberBoard:VNHD7008AY U?
+L KyberBoard-rescue:VNHD7008AY-KyberBoard U?
 U 1 1 609467F4
 P 3600 2950
 AR Path="/60835C30/609467F4" Ref="U?"  Part="1" 
@@ -321,7 +321,7 @@ Wire Wire Line
 Wire Wire Line
 	3850 3600 4000 3600
 $Comp
-L KyberBoard:STL120N4F6AG Q1
+L KyberBoard-rescue:STL120N4F6AG-KyberBoard Q1
 U 1 1 60998AA7
 P 5800 2300
 F 0 "Q1" V 6150 2250 50  0000 L CNN
@@ -409,7 +409,7 @@ Wire Wire Line
 Wire Wire Line
 	6550 3800 6650 3800
 $Comp
-L KyberBoard:STL76DN4LF7AG Q4
+L KyberBoard-rescue:STL76DN4LF7AG-KyberBoard Q4
 U 1 1 60B389D1
 P 5300 3800
 F 0 "Q4" H 5500 3750 50  0000 L CNN
@@ -420,7 +420,7 @@ F 3 "${KIPRJMOD}/symbol-datasheets/stl76dn4lf7ag-1.pdf" H 5500 3800 50  0001 C C
 	1    0    0    -1  
 $EndComp
 $Comp
-L KyberBoard:STL76DN4LF7AG Q4
+L KyberBoard-rescue:STL76DN4LF7AG-KyberBoard Q4
 U 2 1 60B38B38
 P 6350 3800
 F 0 "Q4" H 6550 3950 50  0000 L CNN
